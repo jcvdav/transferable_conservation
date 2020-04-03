@@ -7,6 +7,7 @@
 -- data
 -- docs
 -- raw_data
+-- README.md
 -- renv
 -- renv.lock
    |__activate.R
@@ -14,6 +15,8 @@
    |__settings.dcf
    |__staging
 -- scripts
+   |__1_functions.R
+   |__2_scenario_bau.R
 -- transferable_conservation.Rproj
 ```
 
