@@ -10,7 +10,7 @@ sample_patch <- function(vector, proportion) {
   vector %in% sample(vector, size = n, replace = F)
 }
 
-top_n <- function(matrix, p)
+top_n <- function(matrix, p) {}
 
 # Define wrapper that conserves a given proportion
 conserve <- function(matrix, proportion, tactic) {

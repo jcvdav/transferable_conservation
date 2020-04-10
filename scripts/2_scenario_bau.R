@@ -9,7 +9,7 @@ gb_bau <- gb_ran_c <- gb_ran_g <- gb_mkt <- matrix(nrow = 10, ncol = 100)
 
 for (k in 1:100) {
   
-  benefit <- matrix(runif(n = 100, min = 0, max = 10), ncol = 10)
+  benefit <- matrix(runif(n = 100, min = 0, max = 100) ^ 2.5, ncol = 10)
   colnames(benefit) <- LETTERS[1:10]
   
   j <- 1
