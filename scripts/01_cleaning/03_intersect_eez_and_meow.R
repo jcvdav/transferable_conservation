@@ -48,18 +48,10 @@ eez_meow <- st_intersection(eez, meow) %>%                # Intersect features
          province, pro_code, area_province, province_div_eez,
          realm, rlm_code, area_realm, realm_div_eez)
 
-# mapview::mapview(select(eez_meow, ecoregion_div_eez))
-
-
 ## Export
-# File name
-intersected_eez_and_meow_fn <- here("data", "intersected_eez_and_meow.gpkg")
-
-# Remove any existing files
-file.remove(intersected_eez_and_meow_fn)
-
-# Write geopackage
-st_write(obj = eez_meow, dsn = intersected_eez_and_meow_fn)
+intersected_eez_and_meow_fn <- here("data", "intersected_eez_and_meow.gpkg") # File name
+file.remove(intersected_eez_and_meow_fn)                                     # Remove any existing files
+st_write(obj = eez_meow, dsn = intersected_eez_and_meow_fn)                  # Write geopackage to disk
 
 
 

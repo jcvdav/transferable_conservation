@@ -50,13 +50,8 @@ meow <- st_read(dsn = here("raw_data", "MEOW"),
          realm, rlm_code)
 
 ## Export
-# Define filename
-meow_fn <- here("data", "clean_meow.gpkg")
-
-# Remove them if file exists
-file.remove(meow_fn)
-
-# Export
-st_write(obj = meow, dsn = meow_fn)
+meow_fn <- here("data", "clean_meow.gpkg")      # Define filename
+file.remove(meow_fn)                            # Remove them if file exists
+st_write(obj = meow, dsn = meow_fn)             # Save file to disk
 
 # END OF SCRIPT #

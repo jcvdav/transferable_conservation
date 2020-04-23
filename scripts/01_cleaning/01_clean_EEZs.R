@@ -33,7 +33,7 @@ eez <- st_read(dsn = here("raw_data",
                layer = "eez_v11",
                stringsAsFactors = F) %>%              # Make sure strings are not read in as factors
   clean_names() %>%                                   # Use janitor to clean the names
-  filter(pol_type %in% c("200NM", "200 NM")) %>%      # Keep only polygons that make reference to EEZs (no joint regimes or disputed areas)
+  filter(str_detect(geoname, "Exclusive")) %>%        # Keep only polygons that make reference to EEZs (no joint regimes). This assings EEZs to Western Sahara and Ukraine
   select(mrgid, geoname, iso_3 = iso_ter1) %>%        # Select relevant columns
   ms_simplify(sys = T, keep_shapes = T) %>%           # Simplify the geometries for computation
   st_make_valid()
