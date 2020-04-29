@@ -37,6 +37,7 @@ wdi_indicators <- WDI(indicator = c("NY.GDP.PCAP.KD",                           
                       start = 2010,                                                # Data for 2010 only
                       end = 2010) 
 
+## Process
 # Clear the data
 wdi_indicators_clean <- wdi_indicators %>% 
   rename(per_capita_gdp = NY.GDP.PCAP.KD,                                          # Rename columns
