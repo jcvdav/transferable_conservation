@@ -2,7 +2,7 @@
 ################### 03_intersect_eez_and_meow ##################
 ################################################################
 # 
-# This script reads teh clean EEZ and MEOW data and intersects 
+# This script reads the clean EEZ and MEOW data and intersects 
 # the spatial features in them. I then calculate the area
 # of each polygon (eez-realm-province-ecoregion), so that
 # I can know how much of each habitat is available each grouping
