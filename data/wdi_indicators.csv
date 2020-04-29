@@ -1,0 +1,216 @@
+"iso3","country","region","gdp_impute","per_capita_gdp","population"
+"AND","Andorra","Europe & Central Asia",FALSE,39.7363540626699,84.449
+"ARE","United Arab Emirates","Middle East & North Africa",FALSE,33.893303514039,8549.988
+"AFG","Afghanistan","South Asia",FALSE,0.543303041863931,29185.507
+"ATG","Antigua and Barbuda","Latin America & Caribbean",FALSE,13.0492570545735,88.028
+"ALB","Albania","Europe & Central Asia",FALSE,4.09436211924475,2913.021
+"ARM","Armenia","Europe & Central Asia",FALSE,3.21837270660563,2877.319
+"AGO","Angola","Sub-Saharan Africa",FALSE,3.58788379824396,23356.246
+"ARG","Argentina","Latin America & Caribbean",FALSE,10.3859644319555,40788.453
+"ASM","American Samoa","East Asia & Pacific",FALSE,10.2712245225485,56.079
+"AUT","Austria","Europe & Central Asia",FALSE,46.8580432733717,8363.404
+"AUS","Australia","East Asia & Pacific",FALSE,52.0221255961876,22031.75
+"ABW","Aruba","Latin America & Caribbean",FALSE,23.5126025956397,101.669
+"AZE","Azerbaijan","Europe & Central Asia",FALSE,5.84280578358576,9054.332
+"BIH","Bosnia and Herzegovina","Europe & Central Asia",FALSE,4.63551777931783,3705.472
+"BRB","Barbados","Latin America & Caribbean",FALSE,16.0561168393406,282.131
+"BGD","Bangladesh","South Asia",FALSE,0.781153593557047,147575.43
+"BEL","Belgium","Europe & Central Asia",FALSE,44.1418781415734,10895.586
+"BFA","Burkina Faso","Sub-Saharan Africa",FALSE,0.575446452687734,15605.217
+"BGR","Bulgaria","Europe & Central Asia",FALSE,6.84326694975885,7395.599
+"BHR","Bahrain","Middle East & North Africa",FALSE,20.7221372891348,1240.86
+"BDI","Burundi","Sub-Saharan Africa",FALSE,0.234235646874999,8675.602
+"BEN","Benin","Sub-Saharan Africa",FALSE,0.758435082889989,9199.259
+"BMU","Bermuda","North America",FALSE,88.2073275597322,65.124
+"BRN","Brunei Darussalam","East Asia & Pacific",FALSE,35.2695531076448,388.646
+"BOL","Bolivia","Latin America & Caribbean",FALSE,1.95546155736098,10048.59
+"BRA","Brazil","Latin America & Caribbean",FALSE,11.2862430162457,195713.635
+"BHS","Bahamas, The","Latin America & Caribbean",FALSE,28.4434076553352,354.942
+"BTN","Bhutan","South Asia",FALSE,2.25818314084562,685.503
+"BWA","Botswana","Sub-Saharan Africa",FALSE,6.43481565688465,1987.105
+"BLR","Belarus","Europe & Central Asia",FALSE,6.18139991568753,9490.583
+"BLZ","Belize","Latin America & Caribbean",FALSE,4.27079964683667,322.464
+"CAN","Canada","North America",FALSE,47.4503184700703,34004.889
+"COD","Congo, Dem. Rep.","Sub-Saharan Africa",FALSE,0.334021572573152,64563.854
+"CAF","Central African Republic","Sub-Saharan Africa",FALSE,0.487945383289614,4386.768
+"COG","Congo, Rep.","Sub-Saharan Africa",FALSE,2.80969495708158,4273.731
+"CHE","Switzerland","Europe & Central Asia",FALSE,74.6057745091454,7824.909
+"CIV","Cote d'Ivoire","Sub-Saharan Africa",FALSE,1.21193033804477,20532.95
+"CHL","Chile","Latin America & Caribbean",FALSE,12.808034586422,17062.536
+"CMR","Cameroon","Sub-Saharan Africa",FALSE,1.28526172565588,20341.241
+"CHN","China","East Asia & Pacific",FALSE,4.55045359583857,1337705
+"COL","Colombia","Latin America & Caribbean",FALSE,6.32654946861963,45222.7
+"CRI","Costa Rica","Latin America & Caribbean",FALSE,8.14191312675461,4577.378
+"CUB","Cuba","Latin America & Caribbean",FALSE,5.73035477459488,11225.832
+"CPV","Cabo Verde","Sub-Saharan Africa",FALSE,3.37825485950035,492.654
+"CUW","Curacao","Latin America & Caribbean",TRUE,8.0597507128924,148.703
+"CYP","Cyprus","Europe & Central Asia",FALSE,31.0236383309791,1112.612
+"CZE","Czech Republic","Europe & Central Asia",FALSE,19.8080710912518,10474.41
+"DEU","Germany","Europe & Central Asia",FALSE,41.5319341978689,81776.93
+"DJI","Djibouti","Middle East & North Africa",FALSE,1.34326872994437,840.198
+"DNK","Denmark","Europe & Central Asia",FALSE,58.0413984363385,5547.683
+"DMA","Dominica","Latin America & Caribbean",FALSE,6.96724522993605,70.878
+"DOM","Dominican Republic","Latin America & Caribbean",FALSE,5.55539094900238,9695.121
+"DZA","Algeria","Middle East & North Africa",FALSE,4.48072453900113,35977.455
+"ECU","Ecuador","Latin America & Caribbean",FALSE,4.63359035839904,15011.117
+"EST","Estonia","Europe & Central Asia",FALSE,14.7843810806949,1331.475
+"EGY","Egypt, Arab Rep.","Middle East & North Africa",FALSE,2.64481703909751,82761.235
+"ERI","Eritrea","Sub-Saharan Africa",FALSE,0.667744177753249,3170.435
+"ESP","Spain","Europe & Central Asia",FALSE,30.5027197080776,46576.897
+"ETH","Ethiopia","Sub-Saharan Africa",FALSE,0.341554114905179,87639.964
+"FIN","Finland","Europe & Central Asia",FALSE,46.4599732548543,5363.352
+"FJI","Fiji","East Asia & Pacific",FALSE,3.65252743714193,859.818
+"FSM","Micronesia, Fed. Sts.","East Asia & Pacific",FALSE,2.88544589035841,102.911
+"FRO","Faroe Islands","Europe & Central Asia",FALSE,48.5302338492813,47.814
+"FRA","France","Europe & Central Asia",FALSE,40.63833400426,65027.507
+"GAB","Gabon","Sub-Saharan Africa",FALSE,8.84073066379785,1624.14
+"GBR","United Kingdom","Europe & Central Asia",FALSE,39.4358399018505,62766.365
+"GRD","Grenada","Latin America & Caribbean",FALSE,7.25775662232319,106.233
+"GEO","Georgia","Europe & Central Asia",FALSE,3.23329594347421,3786.695
+"GHA","Ghana","Sub-Saharan Africa",FALSE,1.29843695159215,24779.619
+"GIB","Gibraltar","Europe & Central Asia",TRUE,21.1533809749538,33.585
+"GRL","Greenland","Europe & Central Asia",FALSE,43.9883324931946,56.905
+"GMB","Gambia, The","Sub-Saharan Africa",FALSE,0.860637873688125,1793.196
+"GIN","Guinea","Sub-Saharan Africa",FALSE,0.672424402562443,10192.176
+"GNQ","Equatorial Guinea","Sub-Saharan Africa",FALSE,17.2720097706819,943.639
+"GRC","Greece","Europe & Central Asia",FALSE,26.9177589787254,11121.341
+"GTM","Guatemala","Latin America & Caribbean",FALSE,2.82548396349692,14630.417
+"GUM","Guam","East Asia & Pacific",FALSE,30.7004340081784,159.444
+"GNB","Guinea-Bissau","Sub-Saharan Africa",FALSE,0.557632132626126,1522.599
+"GUY","Guyana","Latin America & Caribbean",FALSE,3.03324772490536,749.436
+"HKG","Hong Kong SAR, China","East Asia & Pacific",FALSE,32.549998231121,7024.2
+"HND","Honduras","Latin America & Caribbean",FALSE,1.90434646496881,8317.47
+"HRV","Croatia","Europe & Central Asia",FALSE,13.9236370524478,4295.427
+"HTI","Haiti","Latin America & Caribbean",FALSE,0.665627419493396,9949.322
+"HUN","Hungary","Europe & Central Asia",FALSE,13.1135259617277,10000.023
+"IDN","Indonesia","East Asia & Pacific",FALSE,3.12236281521649,241834.215
+"IRL","Ireland","Europe & Central Asia",FALSE,48.7151768553933,4560.155
+"ISR","Israel","Middle East & North Africa",FALSE,30.6935930786871,7623.6
+"IMN","Isle of Man","Europe & Central Asia",FALSE,69.7665211886388,84.857
+"IND","India","South Asia",FALSE,1.35756371913262,1234281.17
+"IRQ","Iraq","Middle East & North Africa",FALSE,4.65728042580536,29741.976
+"IRN","Iran, Islamic Rep.","Middle East & North Africa",FALSE,6.60321226914401,73762.519
+"ISL","Iceland","Europe & Central Asia",FALSE,43.0249238377351,318.041
+"ITA","Italy","Europe & Central Asia",FALSE,36.0005201179254,59277.417
+"JAM","Jamaica","Latin America & Caribbean",FALSE,4.70405445468166,2810.46
+"JOR","Jordan","Middle East & North Africa",FALSE,3.69011326778672,7261.539
+"JPN","Japan","East Asia & Pacific",FALSE,44.5076763859172,128070
+"KEN","Kenya","Sub-Saharan Africa",FALSE,0.951687961116879,42030.676
+"KGZ","Kyrgyz Republic","Europe & Central Asia",FALSE,0.880037775119109,5447.9
+"KHM","Cambodia","East Asia & Pacific",FALSE,0.785502282874113,14312.212
+"KIR","Kiribati","East Asia & Pacific",FALSE,1.51681186907787,102.927
+"COM","Comoros","Sub-Saharan Africa",FALSE,1.31521480648394,689.692
+"KNA","St. Kitts and Nevis","Latin America & Caribbean",FALSE,15.508616989766,49.016
+"PRK","Korea, Dem. People’s Rep.","East Asia & Pacific",TRUE,3.65473980000684,24548.836
+"KOR","Korea, Rep.","East Asia & Pacific",FALSE,22.0869529193201,49554.112
+"KWT","Kuwait","Middle East & North Africa",FALSE,38.5773816572031,2991.884
+"CYM","Cayman Islands","Latin America & Caribbean",FALSE,73.3507848219067,56.672
+"KAZ","Kazakhstan","Europe & Central Asia",FALSE,9.07048825285747,16321.872
+"LAO","Lao PDR","East Asia & Pacific",FALSE,1.14059920478703,6249.165
+"LBN","Lebanon","Middle East & North Africa",FALSE,7.75674406876812,4953.061
+"LCA","St. Lucia","Latin America & Caribbean",FALSE,8.03747296712228,174.085
+"LIE","Liechtenstein","Europe & Central Asia",FALSE,141.200380010278,35.994
+"LKA","Sri Lanka","South Asia",FALSE,2.79964887619972,20261.737
+"LBR","Liberia","Sub-Saharan Africa",FALSE,0.513445698620224,3891.356
+"LSO","Lesotho","Sub-Saharan Africa",FALSE,1.19995176611775,1995.581
+"LTU","Lithuania","Europe & Central Asia",FALSE,11.9539384416891,3097.282
+"LUX","Luxembourg","Europe & Central Asia",FALSE,104.965306078267,506.953
+"LVA","Latvia","Europe & Central Asia",FALSE,11.3446933695837,2097.555
+"LBY","Libya","Middle East & North Africa",FALSE,12.0647806924218,6197.663
+"MAR","Morocco","Middle East & North Africa",FALSE,2.83992516805933,32343.389
+"MCO","Monaco","Europe & Central Asia",FALSE,150.585448911112,35.612
+"MDA","Moldova","Europe & Central Asia",FALSE,1.95813371987623,2861.487
+"MNE","Montenegro","Europe & Central Asia",FALSE,6.68228115774575,619.428
+"MAF","St. Martin (French part)","Latin America & Caribbean",TRUE,8.0597507128924,37.582
+"MDG","Madagascar","Sub-Saharan Africa",FALSE,0.471959211584451,21151.64
+"MHL","Marshall Islands","East Asia & Pacific",FALSE,2.876994996984,56.366
+"MKD","North Macedonia",NA,FALSE,4.54289971678317,2070.741
+"MLI","Mali","Sub-Saharan Africa",FALSE,0.709581964584771,15049.353
+"MMR","Myanmar","East Asia & Pacific",FALSE,0.979051630004942,50600.818
+"MNG","Mongolia","East Asia & Pacific",FALSE,2.64329291416763,2719.896
+"MAC","Macao SAR, China","East Asia & Pacific",FALSE,52.2531553117325,538.219
+"MNP","Northern Mariana Islands","East Asia & Pacific",FALSE,14.8042467250931,53.971
+"MRT","Mauritania","Sub-Saharan Africa",FALSE,1.24142875621618,3494.195
+"MLT","Malta","Middle East & North Africa",FALSE,21.1073644349639,414.508
+"MUS","Mauritius","Sub-Saharan Africa",FALSE,8.00037643182154,1250.4
+"MDV","Maldives","South Asia",FALSE,7.07666242320238,365.734
+"MWI","Malawi","Sub-Saharan Africa",FALSE,0.478668589704525,14539.612
+"MEX","Mexico","Latin America & Caribbean",FALSE,9.27139823324639,114092.963
+"MYS","Malaysia","East Asia & Pacific",FALSE,9.04056625117172,28208.035
+"MOZ","Mozambique","Sub-Saharan Africa",FALSE,0.471181692645893,23531.574
+"NAM","Namibia","Sub-Saharan Africa",FALSE,5.3246170395396,2118.874
+"NCL","New Caledonia","East Asia & Pacific",TRUE,3.65473980000684,249.75
+"NER","Niger","Sub-Saharan Africa",FALSE,0.347343040654604,16464.025
+"NGA","Nigeria","Sub-Saharan Africa",FALSE,2.29244515619082,158503.197
+"NIC","Nicaragua","Latin America & Caribbean",FALSE,1.50387042323136,5824.065
+"NLD","Netherlands","Europe & Central Asia",FALSE,50.9500343435181,16615.394
+"NOR","Norway","Europe & Central Asia",FALSE,87.6937900658099,4889.252
+"NPL","Nepal","South Asia",FALSE,0.592401097450929,27013.212
+"NRU","Nauru","East Asia & Pacific",FALSE,4.92111911101615,10.005
+"NZL","New Zealand","East Asia & Pacific",FALSE,33.6920108346543,4350.7
+"OMN","Oman","Middle East & North Africa",FALSE,19.2811656336502,3041.434
+"PAN","Panama","Latin America & Caribbean",FALSE,8.08202845866252,3642.687
+"PER","Peru","Latin America & Caribbean",FALSE,5.08235475666351,29027.674
+"PYF","French Polynesia","East Asia & Pacific",TRUE,3.65473980000684,266.455
+"PNG","Papua New Guinea","East Asia & Pacific",FALSE,1.94935251706997,7310.507
+"PHL","Philippines","East Asia & Pacific",FALSE,2.12405676974627,93966.78
+"PAK","Pakistan","South Asia",FALSE,0.987409723043923,179424.641
+"POL","Poland","Europe & Central Asia",FALSE,12.5995335818707,38042.794
+"PRI","Puerto Rico","Latin America & Caribbean",FALSE,26.43574878578,3721.525
+"PSE","West Bank and Gaza","Middle East & North Africa",FALSE,2.35412598671847,3786.161
+"PRT","Portugal","Europe & Central Asia",FALSE,22.4986908586557,10573.1
+"PLW","Palau","East Asia & Pacific",FALSE,10.2199275967697,17.955
+"PRY","Paraguay","Latin America & Caribbean",FALSE,4.35593493867734,6248.02
+"QAT","Qatar","Middle East & North Africa",FALSE,67.4031602978106,1856.327
+"ROU","Romania","Europe & Central Asia",FALSE,8.2099194562169,20246.871
+"SRB","Serbia","Europe & Central Asia",FALSE,5.73542285659849,7291.436
+"RUS","Russian Federation","Europe & Central Asia",FALSE,10.6749972024184,142849.449
+"RWA","Rwanda","Sub-Saharan Africa",FALSE,0.582694119127261,10039.338
+"SAU","Saudi Arabia","Middle East & North Africa",FALSE,19.2625476811757,27421.461
+"SLB","Solomon Islands","East Asia & Pacific",FALSE,1.29039878585913,527.861
+"SYC","Seychelles","Sub-Saharan Africa",FALSE,10.8046844747547,89.77
+"SDN","Sudan","Sub-Saharan Africa",FALSE,1.48987691083872,34545.013
+"SWE","Sweden","Europe & Central Asia",FALSE,52.817441365794,9378.126
+"SGP","Singapore","East Asia & Pacific",FALSE,47.2369602345421,5076.732
+"SVN","Slovenia","Europe & Central Asia",FALSE,23.5095433941493,2048.583
+"SVK","Slovak Republic","Europe & Central Asia",FALSE,16.7272913264619,5391.428
+"SLE","Sierra Leone","Sub-Saharan Africa",FALSE,0.401835001366837,6415.634
+"SMR","San Marino","Europe & Central Asia",FALSE,68.4963606802049,31.229
+"SEN","Senegal","Sub-Saharan Africa",FALSE,1.27897775413162,12678.148
+"SOM","Somalia","Sub-Saharan Africa",TRUE,0.951687961116879,12043.883
+"SUR","Suriname","Latin America & Caribbean",FALSE,8.2557968587048,529.131
+"SSD","South Sudan","Sub-Saharan Africa",FALSE,1.53570818548721,9508.364
+"STP","Sao Tome and Principe","Sub-Saharan Africa",FALSE,1.09471063611153,180.371
+"SLV","El Salvador","Latin America & Caribbean",FALSE,2.98324270784904,6183.875
+"SXM","Sint Maarten (Dutch part)","Latin America & Caribbean",TRUE,8.0597507128924,34.056
+"SYR","Syrian Arab Republic","Middle East & North Africa",TRUE,7.17997816895607,21362.529
+"SWZ","Eswatini","Sub-Saharan Africa",FALSE,4.16850518307998,1064.837
+"TCA","Turks and Caicos Islands","Latin America & Caribbean",FALSE,21.0284081445193,32.66
+"TCD","Chad","Sub-Saharan Africa",FALSE,0.891698817391114,11952.136
+"TGO","Togo","Sub-Saharan Africa",FALSE,0.533508791977233,6421.679
+"THA","Thailand","East Asia & Pacific",FALSE,5.07634299245077,67195.028
+"TJK","Tajikistan","Europe & Central Asia",FALSE,0.749552711015842,7527.394
+"TLS","Timor-Leste","East Asia & Pacific",FALSE,3.65695216287175,1093.523
+"TKM","Turkmenistan","Europe & Central Asia",FALSE,4.43920038235805,5087.213
+"TUN","Tunisia","Middle East & North Africa",FALSE,4.14197635336459,10635.244
+"TON","Tonga","East Asia & Pacific",FALSE,3.55322061448636,103.986
+"TUR","Turkey","Europe & Central Asia",FALSE,10.6723892452162,72326.988
+"TTO","Trinidad and Tobago","Latin America & Caribbean",FALSE,16.6833553787376,1328.147
+"TUV","Tuvalu","East Asia & Pacific",FALSE,3.02228882031784,10.53
+"TZA","Tanzania","Sub-Saharan Africa",FALSE,0.743403784726004,44346.525
+"UKR","Ukraine","Europe & Central Asia",FALSE,2.96514236549771,45870.7
+"UGA","Uganda","Sub-Saharan Africa",FALSE,0.622498845744984,32428.167
+"USA","United States","North America",FALSE,48.4668233750801,309321.666
+"URY","Uruguay","Latin America & Caribbean",FALSE,11.9920166266335,3359.275
+"UZB","Uzbekistan","Europe & Central Asia",FALSE,1.63431209539718,28562.4
+"VCT","St. Vincent and the Grenadines","Latin America & Caribbean",FALSE,6.29278982922694,108.255
+"VEN","Venezuela, RB","Latin America & Caribbean",FALSE,13.8253580883312,28439.94
+"VGB","British Virgin Islands","Latin America & Caribbean",TRUE,8.0597507128924,27.794
+"VIR","Virgin Islands (U.S.)","Latin America & Caribbean",FALSE,40.0431901659314,108.358
+"VNM","Vietnam","East Asia & Pacific",FALSE,1.31789070617836,87967.651
+"VUT","Vanuatu","East Asia & Pacific",FALSE,2.96685711598678,236.211
+"WSM","Samoa","East Asia & Pacific",FALSE,3.56636243488815,185.949
+"YEM","Yemen, Rep.","Middle East & North Africa",FALSE,1.33478484461341,23154.855
+"ZAF","South Africa","Sub-Saharan Africa",FALSE,7.32861562893966,51216.964
+"ZMB","Zambia","Sub-Saharan Africa",FALSE,1.48945906989027,13605.984
+"ZWE","Zimbabwe","Sub-Saharan Africa",FALSE,0.94833185445926,12697.723
