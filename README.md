@@ -56,6 +56,22 @@ Intersect_EEZ_IHO_v4_2020: Flanders Marine Institute (2020). The intersect of th
 MEOW: https://www.worldwildlife.org/publications/marine-ecoregions-of-the-world-a-bioregionalization-of-coastal-and-shelf-areas
 
 ne_10m_geography_marine_polys: https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-ocean/
+
+Cumulative Human Impacts (2013): https://knb.ecoinformatics.org/view/doi:10.5063/F12B8WBS
+
 --------- 
+
+
+# TO DO
+- Get mean CHI for each country / meow intersection
+- Create the following allocations:
+  - 30% of what you have
+  - 30% of total meow / number of countries
+  - 30% of total meow, weighing by GDP
+  - 30% of total meow, weighing by population size
+  - 30% of total meow, weighing by CHI
+
+
+--------
 
 <a href="https://orcid.org/0000-0003-1245-589X" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">orcid.org/0000-0003-1245-589X</a>
