@@ -18,7 +18,7 @@
 # 
 ################################################################
 
-## Set up
+## Set up ################################################################################################################################################################
 # Load packages
 library(here)
 library(janitor)
@@ -26,8 +26,8 @@ library(rmapshaper)
 library(sf)
 library(tidyverse)
 
-## Process
-# Read in the shapefiles
+## Process ###############################################################################################################################################################
+# Read in the shapefiles -------------------------------------------------------------------------------------------------------------------------------------------------
 eez <- st_read(dsn = here("raw_data",
                           "World_EEZ_v11_20191118"),
                layer = "eez_v11",
@@ -41,9 +41,9 @@ eez <- st_read(dsn = here("raw_data",
   ms_simplify(sys = T, keep_shapes = T) %>%           # Simplify the geometries for computation
   st_make_valid()                                     # Esure all polygons are valid
 
-## Export
-eez_fn <- here("data", "clean_world_eez_v11.gpkg")     # Create a filename
-file.remove(eez_fn)                                    # Remove any preexisting data to avoid binding
-st_write(obj = eez, dsn = eez_fn)                      # Save file to disk
+## Export ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+eez_fn <- here("data", "clean_world_eez_v11.gpkg")    # Create a filename
+file.remove(eez_fn)                                   # Remove any preexisting data to avoid binding
+st_write(obj = eez, dsn = eez_fn)                     # Save file to disk
 
-# END OF SCRIPT #
+# END OF SCRIPT ##########################################################################################################################################################
