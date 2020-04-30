@@ -23,7 +23,7 @@
 # 
 ################################################################
 
-## Set up
+## Set up ##############################################################################################################
 # Load packages
 library(startR)
 library(here)
@@ -37,8 +37,8 @@ wdi_indicators <- WDI(indicator = c("NY.GDP.PCAP.KD",                           
                       start = 2010,                                                # Data for 2010 only
                       end = 2010) 
 
-## Process
-# Clear the data
+## Process ##############################################################################################################
+# Clear the data --------------------------------------------------------------------------------------------------------
 wdi_indicators_clean <- wdi_indicators %>% 
   rename(per_capita_gdp = NY.GDP.PCAP.KD,                                          # Rename columns
          population = SP.POP.TOTL) %>% 
@@ -60,7 +60,7 @@ wdi_indicators_clean <- wdi_indicators %>%
          population = population / 1e3) %>% 
   select(iso3, country, region, gdp_impute, per_capita_gdp, population)            # Select relevant columns only
 
-# Visualize post-imputation
+# Visualize post-imputation ----------------------------------------------------------------------------------------------
 ggplot(data = wdi_indicators_clean,
        mapping = aes(x = population,
                      y = per_capita_gdp,
@@ -76,10 +76,13 @@ ggplot(data = wdi_indicators_clean,
        x = "log10(Population)",
        y = "log10(GDP per capita (constant 2010 1000s US$))")
 
-# Export
+# Export -----------------------------------------------------------------------------------------------------------------
 write.csv(x = wdi_indicators_clean,
           file = here("data", "wdi_indicators.csv"),
           row.names = F)
+
+
+# END OF SCRIPT ##########################################################################################################
 
 
 
