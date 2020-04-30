@@ -32,15 +32,15 @@
 # BioScience 57.7 (2007): 573-583.
 ################################################################
 
-## Set up
+## Set up ##########################################################################
 # Load packages
 library(here)
 library(janitor)
 library(sf)
 library(tidyverse)
 
-## Process
-# Load shapefile
+## Process #########################################################################
+# Load shapefile -------------------------------------------------------------------
 meow <- st_read(dsn = here("raw_data", "MEOW"),
                 layer = "meow_ecos") %>% 
   clean_names() %>%                             # Clean column names
@@ -49,9 +49,9 @@ meow <- st_read(dsn = here("raw_data", "MEOW"),
          province, pro_code = prov_code,
          realm, rlm_code)
 
-## Export
+## Export ###########################################################################
 meow_fn <- here("data", "clean_meow.gpkg")      # Define filename
 file.remove(meow_fn)                            # Remove them if file exists
 st_write(obj = meow, dsn = meow_fn)             # Save file to disk
 
-# END OF SCRIPT #
+# END OF SCRIPT ####################################################################
