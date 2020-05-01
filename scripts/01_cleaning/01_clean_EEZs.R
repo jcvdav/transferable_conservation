@@ -37,8 +37,12 @@ eez <- st_read(dsn = here("raw_data",
   mutate(iso3 = ifelse(is.na(iso_ter1),               # Replace missing territory ids with sovereign ids
                         iso_sov1,
                         iso_ter1)) %>% 
-  select(mrgid, geoname, iso3) %>%                    # Select relevant columns
+  select(iso3) %>%                                    # Select relevant columns
   ms_simplify(sys = T, keep_shapes = T) %>%           # Simplify the geometries for computation
+  group_by(iso3) %>%                                  # Union geometries
+  summarize(geometry = st_union(geometry)) %>% 
+  ungroup() %>% 
+  st_transform("ESRI:54009") %>%                      # Reproject to moll
   st_make_valid()                                     # Esure all polygons are valid
 
 ## Export ----------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -37,10 +37,10 @@ eez_meow <- st_intersection(eez, meow) %>%                    # Intersect featur
   mutate(eco_div_eez = area_eco / area_eez,                   # Calculate ratio of polygon area to EEZ area
          pro_div_eez = area_pro / area_eez,
          rea_div_eez = area_rea / area_eez) %>% 
-  select(mrgid, geoname, iso3, area_eez,                      # Keep only rlevant columns
+  select(iso3, area_eez,                                      # Keep only rlevant columns
          ecoregion, area_eco, eco_div_eez,
          province, area_pro, pro_div_eez,
-         realm, area_rea, rea_div_eez) 
+         realm, area_rea, rea_div_eez)
 
 ## Export -----------------------------------------------------------------------------------------------------------
 intersected_eez_and_meow_fn <- here("data", "intersected_eez_and_meow.gpkg") # File name

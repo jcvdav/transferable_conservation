@@ -44,6 +44,7 @@ library(tidyverse)
 meow <- st_read(dsn = here("raw_data", "MEOW"),
                 layer = "meow_ecos") %>% 
   clean_names() %>%                             # Clean column names
+  st_transform("ESRI:54009") %>%                # Reproject to Moll
   st_make_valid() %>%                           # Make sure all elements are valid
   select(ecoregion, eco_code,                   # Select relevant colmns
          province, pro_code = prov_code,
