@@ -1,0 +1,657 @@
+"iso3","realm","province","ecoregion","chi_eco","chi_pro","chi_rea"
+"ZAF","Temperate Southern Africa","Agulhas","Agulhas Bank",0.858643293081646,0.915392156429951,0.842775958173261
+"RUS","Temperate Northern Pacific","Cold Temperate Northeast Pacific","Aleutian Islands",1.57775937517484,1.57775937517484,1.61539041328487
+"USA","Temperate Northern Pacific","Cold Temperate Northeast Pacific","Aleutian Islands",1.2789482794028,1.08729388083055,1.08324700838473
+"BRA","Tropical Atlantic","North Brazil Shelf","Amazonia",1.38288357271358,1.38575618008098,1.11077518330206
+"GUF","Tropical Atlantic","North Brazil Shelf","Amazonia",NA,1.63692466815856,1.63692466815856
+"ATF","Temperate Southern Africa","Amsterdam-St Paul","Amsterdam-St Paul",0.753658339848318,0.753658339848318,0.753658339848318
+"IDN","Western Indo-Pacific","Andaman","Andaman and Nicobar Islands",1.11421951034521,0.749909084552794,0.749909084552794
+"IND","Western Indo-Pacific","Andaman","Andaman and Nicobar Islands",1.07443784642394,1.07443784642394,1.17224005146875
+"MMR","Western Indo-Pacific","Andaman","Andaman and Nicobar Islands",1.14561878193438,1.32645547001068,1.29713271550627
+"THA","Western Indo-Pacific","Andaman","Andaman and Nicobar Islands",0.986797456364883,1.2621587705741,1.2621587705741
+"MMR","Western Indo-Pacific","Andaman","Andaman Sea Coral Coast",1.44333905053556,1.32645547001068,1.29713271550627
+"MYS","Western Indo-Pacific","Andaman","Andaman Sea Coral Coast",1.69156225323677,1.69156225323677,1.69156225323677
+"THA","Western Indo-Pacific","Andaman","Andaman Sea Coral Coast",1.28422685610045,1.2621587705741,1.2621587705741
+"ARE","Western Indo-Pacific","Somali/Arabian","Arabian (Persian) Gulf",0.972785480374837,1.0246371143627,1.0246371143627
+"BHR","Western Indo-Pacific","Somali/Arabian","Arabian (Persian) Gulf",1.63046452071932,1.63046452071932,1.63046452071932
+"IRN","Western Indo-Pacific","Somali/Arabian","Arabian (Persian) Gulf",1.35167444769138,1.37849359474381,1.37849359474381
+"IRQ","Western Indo-Pacific","Somali/Arabian","Arabian (Persian) Gulf",2.15824372493304,2.15824372493304,2.15824372493304
+"KWT","Western Indo-Pacific","Somali/Arabian","Arabian (Persian) Gulf",1.30829452211037,1.30829452211037,1.30829452211037
+"OMN","Western Indo-Pacific","Somali/Arabian","Arabian (Persian) Gulf",1.61384812328551,1.29455333626661,1.2891789433965
+"QAT","Western Indo-Pacific","Somali/Arabian","Arabian (Persian) Gulf",1.17488716724846,1.17488716724846,1.17488716724846
+"SAU","Western Indo-Pacific","Somali/Arabian","Arabian (Persian) Gulf",1.47578123933876,1.47578123933876,1.44122088323662
+"CHL","Temperate South America","Warm Temperate Southeastern Pacific","Araucanian",0.680746671674745,0.712804621345348,0.75678003031485
+"AUS","Central Indo-Pacific","Sahul Shelf","Arnhem Coast to Gulf of Carpenteria",0.550101916708813,0.636399388647822,0.955895277764987
+"IDN","Central Indo-Pacific","Sahul Shelf","Arnhem Coast to Gulf of Carpenteria",0.624474257914996,0.637164839816024,1.16371746005976
+"PNG","Central Indo-Pacific","Sahul Shelf","Arnhem Coast to Gulf of Carpenteria",0.329424655685822,0.600296758511705,0.91437623994107
+"AUS","Central Indo-Pacific","Sahul Shelf","Arafura Sea",0.583891139143989,0.636399388647822,0.955895277764987
+"IDN","Central Indo-Pacific","Sahul Shelf","Arafura Sea",0.622552175014655,0.637164839816024,1.16371746005976
+"PNG","Central Indo-Pacific","Sahul Shelf","Arafura Sea",0.645640499100896,0.600296758511705,0.91437623994107
+"NZL","Southern Ocean","Subantarctic New Zealand","Auckland Island",1.14506359986151,1.07415503979188,1.07415503979188
+"ESH","Temperate Northern Atlantic","Lusitanian","Azores Canaries Madeira",1.74376156926155,1.99248863630915,1.99248863630915
+"ESP","Temperate Northern Atlantic","Lusitanian","Azores Canaries Madeira",1.6719924387975,1.62980372212167,1.65608263898197
+"MAR","Temperate Northern Atlantic","Lusitanian","Azores Canaries Madeira",1.47421534359455,1.83723564706054,1.83431762445483
+"PRT","Temperate Northern Atlantic","Lusitanian","Azores Canaries Madeira",1.23505878378587,1.28751409274859,1.28751409274859
+"CAN","Arctic","Arctic","Baffin Bay - Davis Strait",1.60760441720233,1.37536559492745,1.37536559492745
+"GRL","Arctic","Arctic","Baffin Bay - Davis Strait",1.92779369764431,1.66375980363252,1.66375980363252
+"BHS","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",0.969918791771701,0.970505143663188,0.970505143663188
+"CUB","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",1.2593922047388,1.20506642104926,1.20506642104926
+"DOM","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",1.26669024947488,1.54627396118435,1.54627396118435
+"HTI","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",1.18018877506256,1.50188391894428,1.50188391894428
+"PRI","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",1.62155816865013,1.75855486661898,1.75855486661898
+"TCA","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",1.04834314948402,1.04834314948402,1.04834314948402
+"USA","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",0.866905058878234,1.13441768537608,1.13441768537608
+"VGB","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",1.45343892140822,1.51936167380849,1.51936167380849
+"VIR","Tropical Atlantic","Tropical Northwestern Atlantic","Bahamian",1.67197689414024,1.7402351409947,1.7402351409947
+"DEU","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.29337336686479,1.33385816334949,1.33385816334949
+"DNK","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.29245152787158,1.3376347388889,1.3376347388889
+"EST","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.36515364181705,1.36515364181705,1.36515364181705
+"FIN","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.31876792739755,1.31876792739755,1.31876792739755
+"LTU","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.66046858760151,1.66046858760151,1.66046858760151
+"LVA","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.55218879151635,1.55218879151635,1.55218879151635
+"POL","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.68013249372327,1.68013249372327,1.68013249372327
+"RUS","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.47915402419037,1.84635726792132,2.48326953568723
+"SWE","Temperate Northern Atlantic","Northern European Seas","Baltic Sea",1.4145622357889,1.43614715491051,1.43614715491051
+"IDN","Central Indo-Pacific","Western Coral Triangle","Banda Sea",0.987713486363903,1.14890244712274,1.16371746005976
+"TLS","Central Indo-Pacific","Western Coral Triangle","Banda Sea",0.688142466194489,0.862865605905029,0.884562279682811
+"AUS","Temperate Australasia","Southeast Australian Shelf","Bassian",1.20672811577492,1.44449141342712,1.72732945266572
+"CAN","Arctic","Arctic","Beaufort-Amundsen-Viscount Melville-Queen Maud",1.07707125887011,1.37536559492745,1.37536559492745
+"CAN","Arctic","Arctic","Beaufort Sea - continental coast and shelf",1.29748831530412,1.37536559492745,1.37536559492745
+"USA","Arctic","Arctic","Beaufort Sea - continental coast and shelf",1.67598460375343,1.02462723530826,1.02462723530826
+"BMU","Tropical Atlantic","Tropical Northwestern Atlantic","Bermuda",1.02335732600049,1.02335732600049,1.02335732600049
+"PNG","Central Indo-Pacific","Eastern Coral Triangle","Bismarck Sea",0.92471811644855,0.92748352715709,0.91437623994107
+"BGR","Temperate Northern Atlantic","Black Sea","Black Sea",2.86394695788622,2.86394695788622,2.86394695788622
+"GEO","Temperate Northern Atlantic","Black Sea","Black Sea",3.30994742816349,3.30994742816349,3.30994742816349
+"ROU","Temperate Northern Atlantic","Black Sea","Black Sea",2.74573216487817,2.74573216487817,2.74573216487817
+"RUS","Temperate Northern Atlantic","Black Sea","Black Sea",3.03183862232312,3.03183862232312,2.48326953568723
+"TUR","Temperate Northern Atlantic","Black Sea","Black Sea",3.4175153594268,3.4175153594268,3.17507415539548
+"UKR","Temperate Northern Atlantic","Black Sea","Black Sea",2.81255442933603,2.81255442933603,2.81255442933603
+"AUS","Central Indo-Pacific","Sahul Shelf","Bonaparte Coast",0.798334845859637,0.636399388647822,0.955895277764987
+"IDN","Central Indo-Pacific","Sahul Shelf","Bonaparte Coast",0.786294085891158,0.637164839816024,1.16371746005976
+"TLS","Central Indo-Pacific","Sahul Shelf","Bonaparte Coast",0.915658874797561,0.915658874797561,0.884562279682811
+"NZL","Southern Ocean","Subantarctic New Zealand","Bounty and Antipodes Islands",0.903908692401765,1.07415503979188,1.07415503979188
+"NZL","Southern Ocean","Subantarctic New Zealand","Campbell Island",1.11075194339392,1.07415503979188,1.07415503979188
+"AUS","Temperate Australasia","Southeast Australian Shelf","Cape Howe",1.09595507693744,1.44449141342712,1.72732945266572
+"CPV","Tropical Atlantic","West African Transition","Cape Verde",2.00595857965989,2.00168700166835,2.00168700166835
+"MUS","Western Indo-Pacific","Western Indian Ocean","Cargados Carajos/Tromelin Island",0.949030123220208,1.17977175683305,1.05741829517427
+"SYC","Western Indo-Pacific","Western Indian Ocean","Cargados Carajos/Tromelin Island",1.00666025457353,1.05048034599623,1.05048034599623
+"USA","Temperate Northern Atlantic","Warm Temperate Northwest Atlantic","Carolinian",1.09693170862126,1.23220272877182,1.38091101125582
+"FRA","Temperate Northern Atlantic","Northern European Seas","Celtic Seas",1.71489681378703,1.66763115368592,1.64331150280577
+"FRO","Temperate Northern Atlantic","Northern European Seas","Celtic Seas",2.17938496669134,2.04489512106495,2.04489512106495
+"GBR","Temperate Northern Atlantic","Northern European Seas","Celtic Seas",1.80242415475283,1.87532985857743,1.87532985857743
+"GGY","Temperate Northern Atlantic","Northern European Seas","Celtic Seas",1.33035231324343,1.33035231324343,1.33035231324343
+"IRL","Temperate Northern Atlantic","Northern European Seas","Celtic Seas",1.67228527947819,1.67228527947819,1.67228527947819
+"JEY","Temperate Northern Atlantic","Northern European Seas","Celtic Seas",0.722735032439232,0.722735032439232,0.722735032439232
+"CHL","Temperate South America","Warm Temperate Southeastern Pacific","Central Chile",0.729503421707726,0.712804621345348,0.75678003031485
+"JPN","Temperate Northern Pacific","Warm Temperate Northwest Pacific","Central Kuroshio Current",1.36311825448354,1.33579210372811,1.39024851677529
+"NZL","Temperate Australasia","Southern New Zealand","Central New Zealand",0.804413166645122,0.835281538069323,0.892799294663267
+"PER","Temperate South America","Warm Temperate Southeastern Pacific","Central Peru",0.666491307221128,0.65841029656965,0.65841029656965
+"SOM","Western Indo-Pacific","Somali/Arabian","Central Somali Coast",1.00260546374362,1.00260546374362,1.0264573676538
+"YEM","Western Indo-Pacific","Somali/Arabian","Central Somali Coast",0.442804791281621,0.951284626096541,0.976041619750699
+"MDV","Western Indo-Pacific","Central Indian Ocean Islands","Chagos",0.831920007864634,0.891326001694097,0.892711536293405
+"MUS","Western Indo-Pacific","Central Indian Ocean Islands","Chagos",0.825714876270895,0.826012854563168,1.05741829517427
+"ARG","Temperate South America","Magellanic","Channels and Fjords of Southern Chile",0.794874996544425,0.952615486130234,0.965284834542195
+"CHL","Temperate South America","Magellanic","Channels and Fjords of Southern Chile",0.774355907975706,0.768960202226976,0.75678003031485
+"NZL","Temperate Australasia","Southern New Zealand","Chatham Island",1.17463008975715,0.835281538069323,0.892799294663267
+"CRI","Tropical Eastern Pacific","Tropical East Pacific","Chiapas-Nicaragua",0.820582310358683,0.431052243630599,0.42823046906578
+"GTM","Tropical Eastern Pacific","Tropical East Pacific","Chiapas-Nicaragua",0.642798689582262,0.642798689582262,0.642798689582262
+"HND","Tropical Eastern Pacific","Tropical East Pacific","Chiapas-Nicaragua",2.01183665792147,2.01183665792147,2.01183665792147
+"MEX","Tropical Eastern Pacific","Tropical East Pacific","Chiapas-Nicaragua",0.880146104311906,0.871603969327434,0.871603969327434
+"NIC","Tropical Eastern Pacific","Tropical East Pacific","Chiapas-Nicaragua",0.840331770374741,0.841328179007063,0.841328179007063
+"SLV","Tropical Eastern Pacific","Tropical East Pacific","Chiapas-Nicaragua",0.802641096015046,0.802641096015046,0.802641096015046
+"CHL","Temperate South America","Magellanic","Chiloense",0.755955082866315,0.768960202226976,0.75678003031485
+"RUS","Arctic","Arctic","Chukchi Sea",1.17164743088932,1.20373223603573,1.20373223603573
+"USA","Arctic","Arctic","Chukchi Sea",1.15866629725847,1.02462723530826,1.02462723530826
+"FRA","Tropical Eastern Pacific","Tropical East Pacific","Clipperton",0.639137199815465,0.639137199815465,0.639137199815465
+"CCK","Central Indo-Pacific","Java Transitional","Cocos-Keeling/Christmas Island",1.1116295732203,1.1116295732203,1.1144079672036
+"CXR","Central Indo-Pacific","Java Transitional","Cocos-Keeling/Christmas Island",1.14137198368559,1.14176798158626,1.14176798158626
+"IDN","Central Indo-Pacific","Java Transitional","Cocos-Keeling/Christmas Island",0.989707642055039,1.02879806796068,1.16371746005976
+"COL","Tropical Eastern Pacific","Tropical East Pacific","Cocos Islands",0.283169242570985,0.580455971125663,0.580455971125663
+"CRI","Tropical Eastern Pacific","Tropical East Pacific","Cocos Islands",0.27427190607812,0.431052243630599,0.42823046906578
+"ECU","Tropical Eastern Pacific","Tropical East Pacific","Cocos Islands",0.289571359753609,0.520150886139886,0.323124818310865
+"PAN","Tropical Eastern Pacific","Tropical East Pacific","Cocos Islands",0.250834584236145,0.802491187342026,0.802491187342026
+"AUS","Central Indo-Pacific","Tropical Southwestern Pacific","Coral Sea",0.882898443197038,1.01351492606386,0.955895277764987
+"NCL","Central Indo-Pacific","Tropical Southwestern Pacific","Coral Sea",0.79145903846151,0.842200165544333,0.842550603653917
+"MEX","Temperate Northern Pacific","Warm Temperate Northeast Pacific","Cortezian",0.947924292717043,0.834079651908126,0.834079651908126
+"ATF","Southern Ocean","Subantarctic Islands","Crozet Islands",1.00861714276962,1.24909935114744,1.24909935114744
+"ATF","Western Indo-Pacific","Western Indian Ocean","Delagoa",0.710701148043651,0.846670741448781,0.846670741448781
+"MOZ","Western Indo-Pacific","Western Indian Ocean","Delagoa",0.741110463268695,0.874686571021343,0.874686571021343
+"ZAF","Western Indo-Pacific","Western Indian Ocean","Delagoa",0.721061118732381,0.721061118732381,0.721061118732381
+"FSM","Central Indo-Pacific","Tropical Northwestern Pacific","East Caroline Islands",0.782352860526803,0.82051914287101,0.815865006981075
+"MHL","Central Indo-Pacific","Tropical Northwestern Pacific","East Caroline Islands",0.866713653422572,0.866713653422572,0.866713653422572
+"CHN","Temperate Northern Pacific","Warm Temperate Northwest Pacific","East China Sea",1.8032184079899,1.8032184079899,1.83829477941365
+"JPN","Temperate Northern Pacific","Warm Temperate Northwest Pacific","East China Sea",1.2214443178211,1.33579210372811,1.39024851677529
+"KOR","Temperate Northern Pacific","Warm Temperate Northwest Pacific","East China Sea",1.52046647732039,1.52046647732039,1.40392052532725
+"TWN","Temperate Northern Pacific","Warm Temperate Northwest Pacific","East China Sea",1.67075411831667,1.67075411831667,1.67075411831667
+"GRL","Arctic","Arctic","East Greenland Shelf",1.67418697913004,1.66375980363252,1.66375980363252
+"ISL","Arctic","Arctic","East Greenland Shelf",1.73808148032741,1.98122843619843,1.98122843619843
+"RUS","Arctic","Arctic","East Siberian Sea",0.800469408298698,1.20373223603573,1.20373223603573
+"CHL","Eastern Indo-Pacific","Easter Island","Easter Island",0.567452869325018,0.567452869325018,0.567452869325018
+"RUS","Arctic","Arctic","Eastern Bering Sea",1.30151155412272,1.20373223603573,1.20373223603573
+"USA","Arctic","Arctic","Eastern Bering Sea",0.834318898039216,1.02462723530826,1.02462723530826
+"BRA","Tropical Atlantic","Tropical Southwestern Atlantic","Eastern Brazil",0.914540708842833,1.0407952170038,1.11077518330206
+"AIA","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.54622706195238,1.54622706195238,1.54622706195238
+"ATG","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.81770035202934,1.81770035202934,1.81770035202934
+"BES","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.78178063078838,1.86889247356595,1.86889247356595
+"BLM","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.76561819265286,1.76561819265286,1.76561819265286
+"BRB","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.10109743623104,2.10109743623104,2.10109743623104
+"DMA","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.0816578059386,2.0816578059386,2.0816578059386
+"GLP","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.0511060500145,2.0511060500145,2.0511060500145
+"GRD","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.11321149684571,2.11194754252999,2.11194754252999
+"GUY","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.16269862651825,2.12050223350525,1.94301427303006
+"KNA","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.86390522204408,1.86390522204408,1.86390522204408
+"LCA","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.03117611313944,2.03117611313944,2.03117611313944
+"MAF","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.75841159545458,1.75841159545458,1.75841159545458
+"MSR","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.94803988232332,1.94803988232332,1.94803988232332
+"MTQ","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.04158568360309,2.04158568360309,2.04158568360309
+"PRI","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.94602835178375,1.75855486661898,1.75855486661898
+"SXM","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.10632727146149,2.10632727146149,2.10632727146149
+"TTO","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.09449088367923,2.11261866898297,2.06674843101782
+"VCT","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",2.12654760508583,2.12654760508583,2.12654760508583
+"VEN","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.97132679479543,1.85778883101028,1.83173639114922
+"VGB","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.52016383119389,1.51936167380849,1.51936167380849
+"VIR","Tropical Atlantic","Tropical Northwestern Atlantic","Eastern Caribbean",1.72820543882982,1.7402351409947,1.7402351409947
+"CRI","Tropical Eastern Pacific","Galapagos","Eastern Galapagos Islands",0.174906792413247,0.188611557732706,0.42823046906578
+"ECU","Tropical Eastern Pacific","Galapagos","Eastern Galapagos Islands",0.306213592444737,0.268064632288181,0.323124818310865
+"IND","Western Indo-Pacific","Bay of Bengal","Eastern India",1.16342779351313,1.18776844518301,1.17224005146875
+"LKA","Western Indo-Pacific","Bay of Bengal","Eastern India",1.17729043728775,1.17729043728775,0.999141335887725
+"IDN","Central Indo-Pacific","Western Coral Triangle","Eastern Philippines",1.27562771146022,1.14890244712274,1.16371746005976
+"PHL","Central Indo-Pacific","Western Coral Triangle","Eastern Philippines",1.36890764245558,1.32474175914967,1.26106412943622
+"PLW","Central Indo-Pacific","Western Coral Triangle","Eastern Philippines",1.15273626579179,1.19208112338351,1.08776062119784
+"AUS","Central Indo-Pacific","Northwest Australian Shelf","Exmouth to Broome",1.15011484039258,1.25396106000821,0.955895277764987
+"IDN","Central Indo-Pacific","Northwest Australian Shelf","Exmouth to Broome",0.894922691854564,0.894922691854564,1.16371746005976
+"FRO","Temperate Northern Atlantic","Northern European Seas","Faroe Plateau",2.05743372388458,2.04489512106495,2.04489512106495
+"GBR","Temperate Northern Atlantic","Northern European Seas","Faroe Plateau",2.08351335318192,1.87532985857743,1.87532985857743
+"ISL","Temperate Northern Atlantic","Northern European Seas","Faroe Plateau",1.73383903503418,2.41061355490123,2.41061355490123
+"BRA","Tropical Atlantic","Tropical Southwestern Atlantic","Fernando de Naronha and Atoll das Rocas",1.39902045763405,1.0407952170038,1.11077518330206
+"AGO","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.02196849140786,1.02196849140786,1.02196849140786
+"ASM","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.18394315382019,1.18394315382019,1.18394315382019
+"ATF","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.835791679402365,0.835791679402365,0.835791679402365
+"AUS","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.01484365777411,1.01351492606386,0.955895277764987
+"BRA","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.69499708065922,0.69499708065922,0.69499708065922
+"CCK","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.51400756275435,1.51400756275435,1.1144079672036
+"CHL","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.663445735846355,0.663445735846355,0.663445735846355
+"COK","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.20628060690542,1.20628060690542,1.20628060690542
+"COM","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.01900199179848,1.01900199179848,1.01900199179848
+"FJI","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.21952190310117,1.20495640531356,1.20495640531356
+"MDG","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.33568170577982,1.33568170577982,1.33568170577982
+"MOZ","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.958448948482459,0.958448948482459,0.958448948482459
+"MUS","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.28045254347675,1.28045254347675,1.28045254347675
+"NAM","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.943565920338653,0.943565920338653,0.943565920338653
+"NCL","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.839336122510077,0.842200165544333,0.842550603653917
+"NIU","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.5162448124156,1.5162448124156,1.5162448124156
+"PCN","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.561004392252277,0.561004392252277,0.561004392252277
+"PER","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.616303309062033,0.616303309062033,0.616303309062033
+"PNG","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.04393288587883,1.04393288587883,0.91437623994107
+"PYF","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.55801658739748,0.55801658739748,0.55801658739748
+"REU","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.88327289854287,1.88327289854287,1.88327289854287
+"SHN","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",0.564236964113424,0.564236964113424,0.564236964113424
+"SLB","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.14302358724251,1.08555191787845,1.0609871031792
+"TON","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.43251649314765,1.42472247341755,1.42472247341755
+"VUT","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.0821253427764,1.08729730987061,1.08729730987061
+"WLF","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.33759584329167,1.33759584329167,1.33759584329167
+"WSM","Central Indo-Pacific","Tropical Southwestern Pacific","Fiji Islands",1.27730188888559,1.27730188888559,1.27730188888559
+"BHS","Tropical Atlantic","Tropical Northwestern Atlantic","Floridian",1.33721828460693,0.970505143663188,0.970505143663188
+"USA","Tropical Atlantic","Tropical Northwestern Atlantic","Floridian",1.167767857332,1.13441768537608,1.13441768537608
+"AGO","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.567207649153811,0.567207649153811,0.567207649153811
+"ASM","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.898952067028772,0.898952067028772,1.03190438061813
+"AUS","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.732021038680635,0.732021038680635,0.732021038680635
+"BRA","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.26937377480324,1.26937377480324,1.26937377480324
+"CCK","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.02854983347056,1.02854983347056,1.02854983347056
+"COD","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.634425211327755,0.634425211327755,0.634425211327755
+"COG","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.538469703825699,0.538469703825699,0.538469703825699
+"COK","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.611072906538766,0.611072906538766,0.925543089028639
+"COM","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.04688129666689,1.04688129666689,1.04688129666689
+"CXR","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.14546822116864,1.14546822116864,1.14546822116864
+"ECU","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.351636811733547,0.351636811733547,0.351636811733547
+"FJI","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.35962036195363,1.35962036195363,1.36675778817953
+"GAB","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.585551714472933,0.585551714472933,0.585551714472933
+"GNQ","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.518499478658769,0.518499478658769,0.518499478658769
+"IDN","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.04363435407995,1.04363435407995,1.04363435407995
+"KEN","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.14245074165278,1.14245074165278,1.14245074165278
+"KIR","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.322147899971716,0.325527904533639,0.297079752427288
+"MDG","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.990612535928454,0.990612535928454,0.990612535928454
+"MDV","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.801477446824312,0.801477446824312,0.801477446824312
+"MHL","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.432214526138429,0.836358307657767,0.836358307657767
+"MOZ","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.984157682612771,0.984157682612771,0.984157682612771
+"MUS","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.868614856358658,0.868614856358658,0.868614856358658
+"NRU","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.473588015657277,0.473588015657277,0.473588015657277
+"PER","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.67967793059519,0.67967793059519,0.67967793059519
+"PNG","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.92872592709819,0.92872592709819,0.92872592709819
+"PYF","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.320335874291581,0.320335874291581,0.574953444547445
+"SHN","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.05621845392343,1.05621845392343,1.05621845392343
+"SLB","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.06278623100847,1.06278623100847,1.06278623100847
+"SYC","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.06812781822949,1.06812781822949,1.06812781822949
+"TKL","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.633887568141991,0.633887568141991,0.633887568141991
+"TLS","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.884562279682811,0.884562279682811,0.884562279682811
+"TUV","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.706119376261961,0.706119376261961,0.706119376261961
+"TZA","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.10747968313651,1.10747968313651,1.10747968313651
+"UMI","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.190792275833695,0.881904414758181,0.459189313750278
+"VUT","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.1155224025303,1.1155224025303,1.1155224025303
+"WLF","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",0.970043477571868,0.970043477571868,1.05151402375249
+"WSM","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Gilbert/Ellis Islands",1.00147530138219,1.00147530138219,1.07678442974594
+"AUS","Temperate Australasia","Southwest Australian Shelf","Great Australian Bight",2.14264089536503,2.15272304633781,1.72732945266572
+"ECU","Tropical Eastern Pacific","Tropical East Pacific","Guayaquil",0.489210469809965,0.520150886139886,0.323124818310865
+"PER","Tropical Eastern Pacific","Tropical East Pacific","Guayaquil",0.613992534134154,0.613992534134154,0.613992534134154
+"BRA","Tropical Atlantic","North Brazil Shelf","Guianan",1.73903164382164,1.38575618008098,1.11077518330206
+"GUF","Tropical Atlantic","North Brazil Shelf","Guianan",1.63692466815856,1.63692466815856,1.63692466815856
+"GUY","Tropical Atlantic","North Brazil Shelf","Guianan",1.94232141176601,1.94232141176601,1.94301427303006
+"SUR","Tropical Atlantic","North Brazil Shelf","Guianan",1.83031500091049,1.83031500091049,1.83031500091049
+"TTO","Tropical Atlantic","North Brazil Shelf","Guianan",1.93339999587135,1.93339999587135,2.06674843101782
+"VEN","Tropical Atlantic","North Brazil Shelf","Guianan",1.49409537429341,1.49409537429341,1.83173639114922
+"DJI","Western Indo-Pacific","Red Sea and Gulf of Aden","Gulf of Aden",0.702417683743295,0.702417683743295,0.702417683743295
+"ERI","Western Indo-Pacific","Red Sea and Gulf of Aden","Gulf of Aden",1.18483249545097,0.871586473549114,0.871586473549114
+"OMN","Western Indo-Pacific","Red Sea and Gulf of Aden","Gulf of Aden",1.02264401243954,1.02264401243954,1.2891789433965
+"SOM","Western Indo-Pacific","Red Sea and Gulf of Aden","Gulf of Aden",0.848506991263036,0.848506991263036,1.0264573676538
+"YEM","Western Indo-Pacific","Red Sea and Gulf of Aden","Gulf of Aden",0.977173115185989,0.981601474449473,0.976041619750699
+"USA","Temperate Northern Pacific","Cold Temperate Northeast Pacific","Gulf of Alaska",0.925136469221556,1.08729388083055,1.08324700838473
+"BEN","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Central",1.00051222635428,1.00051222635428,1.00051222635428
+"CMR","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Central",1.01940660282623,1.01940660282623,1.01940660282623
+"GAB","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Central",0.509463633407599,0.568048893332223,0.568048893332223
+"GHA","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Central",1.09216798366579,0.988910188906975,0.988910188906975
+"GNQ","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Central",0.691287480161442,0.575852418063908,0.575852418063908
+"NGA","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Central",1.24954470002552,1.24954470002552,1.24954470002552
+"STP","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Central",0.687258452177048,0.690905298849449,0.690905298849449
+"TGO","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Central",1.03706131155571,1.03706131155571,1.03706131155571
+"GAB","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Islands",0.540898296636404,0.568048893332223,0.568048893332223
+"GNQ","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Islands",0.551107711479738,0.575852418063908,0.575852418063908
+"STP","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Islands",0.690949473304431,0.690905298849449,0.690905298849449
+"CIV","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Upwelling",1.04178378980877,1.04178378980877,1.04178378980877
+"GHA","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Upwelling",0.954700797553954,0.988910188906975,0.988910188906975
+"LBR","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea Upwelling",0.895570674699224,1.07068492149929,1.07068492149929
+"CIV","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea West",1.74189225832621,1.04178378980877,1.04178378980877
+"GIN","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea West",1.4282524181101,1.4282524181101,1.4282524181101
+"GNB","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea West",1.39268582922849,1.39268582922849,1.39268582922849
+"LBR","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea West",1.0813696417096,1.07068492149929,1.07068492149929
+"SEN","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea West",1.46056706175324,1.46056706175324,1.70089553456221
+"SLE","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea West",1.35119811363053,1.35119811363053,1.35119811363053
+"CAN","Temperate Northern Atlantic","Cold Temperate Northwest Atlantic","Gulf of Maine/Bay of Fundy",2.08107512212046,1.77430487928695,1.77430487928695
+"USA","Temperate Northern Atlantic","Cold Temperate Northwest Atlantic","Gulf of Maine/Bay of Fundy",2.18907832751876,1.66532705529396,1.38091101125582
+"ARE","Western Indo-Pacific","Somali/Arabian","Gulf of Oman",1.60452885773717,1.0246371143627,1.0246371143627
+"IRN","Western Indo-Pacific","Somali/Arabian","Gulf of Oman",1.41954178926018,1.37849359474381,1.37849359474381
+"OMN","Western Indo-Pacific","Somali/Arabian","Gulf of Oman",1.4938757015918,1.29455333626661,1.2891789433965
+"PAK","Western Indo-Pacific","Somali/Arabian","Gulf of Oman",1.70876670817197,1.70876670817197,1.74523123388305
+"AUS","Central Indo-Pacific","Sahul Shelf","Gulf of Papua",0.783901663536721,0.636399388647822,0.955895277764987
+"PNG","Central Indo-Pacific","Sahul Shelf","Gulf of Papua",0.581527880011658,0.600296758511705,0.91437623994107
+"CAN","Temperate Northern Atlantic","Cold Temperate Northwest Atlantic","Gulf of St. Lawrence - Eastern Scotian Shelf",1.69018988913784,1.77430487928695,1.77430487928695
+"SPM","Temperate Northern Atlantic","Cold Temperate Northwest Atlantic","Gulf of St. Lawrence - Eastern Scotian Shelf",1.91902011916751,2.10790936095374,2.10790936095374
+"KHM","Central Indo-Pacific","Sunda Shelf","Gulf of Thailand",1.27983369732325,1.27983369732325,1.27983369732325
+"MYS","Central Indo-Pacific","Sunda Shelf","Gulf of Thailand",1.66591207442745,1.58300706895543,1.53260173028229
+"THA","Central Indo-Pacific","Sunda Shelf","Gulf of Thailand",1.50009967819058,1.49152087128196,1.49152087128196
+"VNM","Central Indo-Pacific","Sunda Shelf","Gulf of Thailand",1.28738523434315,1.51004363977327,1.45009162123695
+"CHN","Central Indo-Pacific","South China Sea","Gulf of Tonkin",1.88481012845741,1.79495706521087,1.79495706521087
+"VNM","Central Indo-Pacific","South China Sea","Gulf of Tonkin",1.48748732782302,1.39008407871959,1.45009162123695
+"IDN","Central Indo-Pacific","Western Coral Triangle","Halmahera",1.36480501025793,1.14890244712274,1.16371746005976
+"PLW","Central Indo-Pacific","Western Coral Triangle","Halmahera",1.24694170592687,1.19208112338351,1.08776062119784
+"UMI","Eastern Indo-Pacific","Hawaii","Hawaii",0.365247888237062,0.365247888237062,0.459189313750278
+"USA","Eastern Indo-Pacific","Hawaii","Hawaii",0.867547759557349,0.867547759557349,0.867547759557349
+"ATF","Southern Ocean","Subantarctic Islands","Heard and Macdonald Islands",1.77484237304842,1.24909935114744,1.24909935114744
+"HMD","Southern Ocean","Subantarctic Islands","Heard and Macdonald Islands",1.73739894327855,1.72963971930676,1.72963971930676
+"AUS","Temperate Australasia","West Central Australian Shelf","Houtman",1.89316150960035,1.8787943886456,1.72732945266572
+"CAN","Arctic","Arctic","Hudson Complex",1.38853271581083,1.37536559492745,1.37536559492745
+"CHL","Temperate South America","Warm Temperate Southeastern Pacific","Humboldtian",0.731036492504761,0.712804621345348,0.75678003031485
+"PER","Temperate South America","Warm Temperate Southeastern Pacific","Humboldtian",0.652195327396967,0.65841029656965,0.65841029656965
+"CHL","Temperate South America","Juan Fernandez and Desventuradas","Juan Fernandez and Desventuradas",0.788325305410719,0.788325305410719,0.75678003031485
+"RUS","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Kamchatka Shelf and Coast",1.47499066079655,1.6157129650401,1.61539041328487
+"USA","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Kamchatka Shelf and Coast",1.58590469830404,1.58590469830404,1.08324700838473
+"RUS","Arctic","Arctic","Kara Sea",1.25657422625044,1.20373223603573,1.20373223603573
+"ATF","Southern Ocean","Subantarctic Islands","Kerguelen Islands",1.5094270625515,1.24909935114744,1.24909935114744
+"HMD","Southern Ocean","Subantarctic Islands","Kerguelen Islands",1.63975405889283,1.72963971930676,1.72963971930676
+"NZL","Temperate Australasia","Northern New Zealand","Kermadec Island",1.20516904615935,0.997312115942689,0.892799294663267
+"CAN","Arctic","Arctic","Lancaster Sound",0.884706149439182,1.37536559492745,1.37536559492745
+"RUS","Arctic","Arctic","Laptev Sea",0.842219548430621,1.20373223603573,1.20373223603573
+"AUS","Temperate Australasia","Southwest Australian Shelf","Leeuwin",2.08528473015411,2.15272304633781,1.72732945266572
+"AUS","Central Indo-Pacific","Western Coral Triangle","Lesser Sunda",1.2919622220099,1.2919622220099,0.955895277764987
+"IDN","Central Indo-Pacific","Western Coral Triangle","Lesser Sunda",1.17518651523056,1.14890244712274,1.16371746005976
+"TLS","Central Indo-Pacific","Western Coral Triangle","Lesser Sunda",0.881625353537108,0.862865605905029,0.884562279682811
+"COK","Eastern Indo-Pacific","Central Polynesia","Line Islands",0.252334785958131,0.621246799212831,0.925543089028639
+"KIR","Eastern Indo-Pacific","Central Polynesia","Line Islands",0.255998999275123,0.252075749793796,0.297079752427288
+"UMI","Eastern Indo-Pacific","Central Polynesia","Line Islands",0.24131672450375,0.242302121441366,0.459189313750278
+"AUS","Central Indo-Pacific","Lord Howe and Norfolk Islands","Lord Howe and Norfolk Islands",1.18828921217998,1.18828921217998,0.955895277764987
+"NCL","Central Indo-Pacific","Lord Howe and Norfolk Islands","Lord Howe and Norfolk Islands",1.03600704173247,1.03600704173247,0.842550603653917
+"NFK","Central Indo-Pacific","Lord Howe and Norfolk Islands","Lord Howe and Norfolk Islands",0.852100706892896,0.852100706892896,0.852100706892896
+"NZL","Central Indo-Pacific","Lord Howe and Norfolk Islands","Lord Howe and Norfolk Islands",0.590459682439503,0.590459682439503,0.590459682439503
+"AUS","Southern Ocean","Subantarctic Islands","Macquarie Island",0.855369797050258,0.855369797050258,0.855369797050258
+"MEX","Temperate Northern Pacific","Warm Temperate Northeast Pacific","Magdalena Transition",0.706838246602376,0.834079651908126,0.834079651908126
+"IDN","Central Indo-Pacific","Sunda Shelf","Malacca Strait",1.60865280073622,1.46549630573282,1.16371746005976
+"MYS","Central Indo-Pacific","Sunda Shelf","Malacca Strait",1.99398259527584,1.58300706895543,1.53260173028229
+"SGP","Central Indo-Pacific","Sunda Shelf","Malacca Strait",4.02741847719465,4.02741847719465,4.02741847719465
+"THA","Central Indo-Pacific","Sunda Shelf","Malacca Strait",1.2380784043244,1.49152087128196,1.49152087128196
+"IND","Western Indo-Pacific","Central Indian Ocean Islands","Maldives",1.05483500120515,1.05483500120515,1.17224005146875
+"MDV","Western Indo-Pacific","Central Indian Ocean Islands","Maldives",0.891360570209563,0.891326001694097,0.892711536293405
+"MUS","Western Indo-Pacific","Central Indian Ocean Islands","Maldives",0.869961612078608,0.826012854563168,1.05741829517427
+"ARG","Temperate South America","Magellanic","Malvinas/Falklands",0.928905674173862,0.952615486130234,0.965284834542195
+"AUS","Temperate Australasia","East Central Australian Shelf","Manning-Hawkesbury",1.36229685883923,1.25273957333278,1.72732945266572
+"FSM","Central Indo-Pacific","Tropical Northwestern Pacific","Mariana Islands",1.19585129929855,0.82051914287101,0.815865006981075
+"GUM","Central Indo-Pacific","Tropical Northwestern Pacific","Mariana Islands",1.23647071809541,1.23647071809541,1.23647071809541
+"JPN","Central Indo-Pacific","Tropical Northwestern Pacific","Mariana Islands",0.689839368153896,0.823051038185694,0.815363025312103
+"MNP","Central Indo-Pacific","Tropical Northwestern Pacific","Mariana Islands",0.949409123864613,0.949409123864613,0.949409123864613
+"COK","Eastern Indo-Pacific","Southeast Polynesia","Tuamotus",0.38609429776942,1.23687258770715,0.925543089028639
+"KIR","Eastern Indo-Pacific","Southeast Polynesia","Tuamotus",0.313389216774612,0.313389216774612,0.297079752427288
+"PCN","Eastern Indo-Pacific","Southeast Polynesia","Tuamotus",0.312936685663281,0.433897051247199,0.433897051247199
+"PYF","Eastern Indo-Pacific","Southeast Polynesia","Tuamotus",0.437541030075115,0.642498705252164,0.574953444547445
+"KIR","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Marshall Islands",0.614120646982509,0.325527904533639,0.297079752427288
+"MHL","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Marshall Islands",0.840935604929418,0.836358307657767,0.836358307657767
+"UMI","Eastern Indo-Pacific","Marshall, Gilbert and Ellis Islands","Marshall Islands",1.06739840420732,0.881904414758181,0.459189313750278
+"MDG","Western Indo-Pacific","Western Indian Ocean","Mascarene Islands",1.62467405200005,1.22300265192691,1.22300265192691
+"MUS","Western Indo-Pacific","Western Indian Ocean","Mascarene Islands",1.36185228966624,1.17977175683305,1.05741829517427
+"REU","Western Indo-Pacific","Western Indian Ocean","Mascarene Islands",1.89013207430584,1.8899097349189,1.8899097349189
+"MEX","Tropical Eastern Pacific","Tropical East Pacific","Mexican Tropical Pacific",0.918502616328875,0.871603969327434,0.871603969327434
+"NAM","Temperate Southern Africa","Benguela","Namaqua",0.483800098579625,0.769776740547746,0.769776740547746
+"ZAF","Temperate Southern Africa","Benguela","Namaqua",0.626159538712976,0.626159538712976,0.842775958173261
+"AGO","Temperate Southern Africa","Benguela","Namib",1.10021721875706,1.10021721875706,1.10021721875706
+"NAM","Temperate Southern Africa","Benguela","Namib",0.926953049970536,0.769776740547746,0.769776740547746
+"ZAF","Temperate Southern Africa","Agulhas","Natal",0.979131821784932,0.915392156429951,0.842775958173261
+"AUS","Central Indo-Pacific","Tropical Southwestern Pacific","New Caledonia",0.813061123948638,1.01351492606386,0.955895277764987
+"NCL","Central Indo-Pacific","Tropical Southwestern Pacific","New Caledonia",0.83470040248174,0.842200165544333,0.842550603653917
+"SLB","Central Indo-Pacific","Tropical Southwestern Pacific","New Caledonia",1.18739227771759,1.08555191787845,1.0609871031792
+"VUT","Central Indo-Pacific","Tropical Southwestern Pacific","New Caledonia",0.821537882089615,1.08729730987061,1.08729730987061
+"COL","Tropical Eastern Pacific","Tropical East Pacific","Nicoya",0.253127751173452,0.580455971125663,0.580455971125663
+"CRI","Tropical Eastern Pacific","Tropical East Pacific","Nicoya",0.672712117943499,0.431052243630599,0.42823046906578
+"NIC","Tropical Eastern Pacific","Tropical East Pacific","Nicoya",0.885543812066317,0.841328179007063,0.841328179007063
+"PAN","Tropical Eastern Pacific","Tropical East Pacific","Nicoya",0.540299126878381,0.802491187342026,0.802491187342026
+"AUS","Central Indo-Pacific","Northwest Australian Shelf","Ningaloo",1.65469391453904,1.25396106000821,0.955895277764987
+"CAN","Temperate Northern Pacific","Cold Temperate Northeast Pacific","North American Pacific Fijordland",0.845582739443381,0.880390444328728,0.880390444328728
+"USA","Temperate Northern Pacific","Cold Temperate Northeast Pacific","North American Pacific Fijordland",0.898064067327403,1.08729388083055,1.08324700838473
+"CAN","Arctic","Arctic","North Greenland",1.38128463029861,1.37536559492745,1.37536559492745
+"GRL","Arctic","Arctic","North Greenland",1.1549677397809,1.66375980363252,1.66375980363252
+"ARG","Temperate South America","Magellanic","North Patagonian Gulfs",0.940204113121045,0.952615486130234,0.965284834542195
+"IDN","Central Indo-Pacific","Western Coral Triangle","Northeast Sulawesi",1.20384526956361,1.14890244712274,1.16371746005976
+"BRA","Tropical Atlantic","Tropical Southwestern Atlantic","Northeastern Brazil",1.26724046388348,1.0407952170038,1.11077518330206
+"JPN","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Northeastern Honshu",1.41711562437971,1.44333699689571,1.39024851677529
+"NZL","Temperate Australasia","Northern New Zealand","Northeastern New Zealand",0.862068564358944,0.997312115942689,0.892799294663267
+"EGY","Western Indo-Pacific","Red Sea and Gulf of Aden","Northern and Central Red Sea",1.94809456527305,1.94809456527305,1.94809456527305
+"ISR","Western Indo-Pacific","Red Sea and Gulf of Aden","Northern and Central Red Sea",4.03248643875122,4.03248643875122,4.03248643875122
+"JOR","Western Indo-Pacific","Red Sea and Gulf of Aden","Northern and Central Red Sea",2.81287384033203,2.81287384033203,2.81287384033203
+"SAU","Western Indo-Pacific","Red Sea and Gulf of Aden","Northern and Central Red Sea",1.65260648137129,1.43508665717641,1.44122088323662
+"SDN","Western Indo-Pacific","Red Sea and Gulf of Aden","Northern and Central Red Sea",1.62448294862302,1.39321394332712,1.39321394332712
+"BGD","Western Indo-Pacific","Bay of Bengal","Northern Bay of Bengal",1.40550683525604,1.40550683525604,1.40550683525604
+"IND","Western Indo-Pacific","Bay of Bengal","Northern Bay of Bengal",1.27509666820174,1.18776844518301,1.17224005146875
+"MMR","Western Indo-Pacific","Bay of Bengal","Northern Bay of Bengal",1.26969104336629,1.26969104336629,1.29713271550627
+"USA","Temperate Northern Pacific","Cold Temperate Northeast Pacific","Northern California",0.941004314344693,1.08729388083055,1.08324700838473
+"CRI","Tropical Eastern Pacific","Galapagos","Northern Galapagos Islands",0.203491017222404,0.188611557732706,0.42823046906578
+"ECU","Tropical Eastern Pacific","Galapagos","Northern Galapagos Islands",0.212751651827208,0.268064632288181,0.323124818310865
+"CAN","Arctic","Arctic","Northern Grand Banks - Southern Labrador",1.8906691851878,1.37536559492745,1.37536559492745
+"MEX","Temperate Northern Atlantic","Warm Temperate Northwest Atlantic","Northern Gulf of Mexico",1.48970169935823,1.48970169935823,1.48970169935823
+"USA","Temperate Northern Atlantic","Warm Temperate Northwest Atlantic","Northern Gulf of Mexico",1.32020406774818,1.23220272877182,1.38091101125582
+"CAN","Arctic","Arctic","Northern Labrador",1.75545653378662,1.37536559492745,1.37536559492745
+"JPN","Central Indo-Pacific","Tropical Northwestern Pacific","Ogasawara Islands",0.824209940395074,0.823051038185694,0.815363025312103
+"CAN","Temperate Northern Pacific","Cold Temperate Northeast Pacific","Oregon, Washington, Vancouver Coast and Shelf",0.923144707959649,0.880390444328728,0.880390444328728
+"USA","Temperate Northern Pacific","Cold Temperate Northeast Pacific","Oregon, Washington, Vancouver Coast and Shelf",0.995233348998156,1.08729388083055,1.08324700838473
+"JPN","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Oyashio Current",1.18212632665218,1.44333699689571,1.39024851677529
+"RUS","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Oyashio Current",1.55073410545116,1.6157129650401,1.61539041328487
+"BRN","Central Indo-Pacific","Western Coral Triangle","Palawan/North Borneo",1.26952301007343,1.26952301007343,1.09480313785148
+"IDN","Central Indo-Pacific","Western Coral Triangle","Palawan/North Borneo",1.23779861044425,1.14890244712274,1.16371746005976
+"MYS","Central Indo-Pacific","Western Coral Triangle","Palawan/North Borneo",1.69739146072742,1.67967395186939,1.53260173028229
+"PHL","Central Indo-Pacific","Western Coral Triangle","Palawan/North Borneo",1.31624752174087,1.32474175914967,1.26106412943622
+"COL","Tropical Eastern Pacific","Tropical East Pacific","Panama Bight",0.593435257433451,0.580455971125663,0.580455971125663
+"CRI","Tropical Eastern Pacific","Tropical East Pacific","Panama Bight",0.186012339260843,0.431052243630599,0.42823046906578
+"ECU","Tropical Eastern Pacific","Tropical East Pacific","Panama Bight",0.569818396564232,0.520150886139886,0.323124818310865
+"PAN","Tropical Eastern Pacific","Tropical East Pacific","Panama Bight",0.993840103191513,0.802491187342026,0.802491187342026
+"IDN","Central Indo-Pacific","Western Coral Triangle","Papua",1.10517548866496,1.14890244712274,1.16371746005976
+"PLW","Central Indo-Pacific","Western Coral Triangle","Papua",1.07262365449043,1.19208112338351,1.08776062119784
+"PNG","Central Indo-Pacific","Western Coral Triangle","Papua",0.992514148906425,0.992514148906425,0.91437623994107
+"ARG","Temperate South America","Magellanic","Patagonian Shelf",1.01478417452944,0.952615486130234,0.965284834542195
+"CHL","Temperate South America","Magellanic","Patagonian Shelf",0.980952888727188,0.768960202226976,0.75678003031485
+"ASM","Eastern Indo-Pacific","Central Polynesia","Phoenix/Tokelau/Northern Cook Islands",0.828384714789998,1.03038333960061,1.03190438061813
+"COK","Eastern Indo-Pacific","Central Polynesia","Phoenix/Tokelau/Northern Cook Islands",0.621454130805144,0.621246799212831,0.925543089028639
+"KIR","Eastern Indo-Pacific","Central Polynesia","Phoenix/Tokelau/Northern Cook Islands",0.246183454545043,0.252075749793796,0.297079752427288
+"TKL","Eastern Indo-Pacific","Central Polynesia","Phoenix/Tokelau/Northern Cook Islands",0.634347985177286,0.634347985177286,0.633887568141991
+"UMI","Eastern Indo-Pacific","Central Polynesia","Phoenix/Tokelau/Northern Cook Islands",0.243352849673296,0.242302121441366,0.459189313750278
+"WLF","Eastern Indo-Pacific","Central Polynesia","Phoenix/Tokelau/Northern Cook Islands",0.69804017411338,1.05430616223479,1.05151402375249
+"WSM","Eastern Indo-Pacific","Central Polynesia","Phoenix/Tokelau/Northern Cook Islands",0.845494138002396,1.07678442974594,1.07678442974594
+"ZAF","Southern Ocean","Subantarctic Islands","Prince Edward Islands",1.06658088725138,1.06658088725138,1.06658088725138
+"CAN","Temperate Northern Pacific","Cold Temperate Northeast Pacific","Puget Trough/Georgia Basin",1.35415662592704,0.880390444328728,0.880390444328728
+"USA","Temperate Northern Pacific","Cold Temperate Northeast Pacific","Puget Trough/Georgia Basin",2.3624039207186,1.08729388083055,1.08324700838473
+"PCN","Eastern Indo-Pacific","Southeast Polynesia","Rapa-Pitcairn",0.436197738315942,0.433897051247199,0.433897051247199
+"PYF","Eastern Indo-Pacific","Southeast Polynesia","Rapa-Pitcairn",1.10570265450008,0.642498705252164,0.574953444547445
+"MEX","Tropical Eastern Pacific","Tropical East Pacific","Revillagigedos",0.822010037846714,0.871603969327434,0.871603969327434
+"ARG","Temperate South America","Warm Temperate Southwestern Atlantic","Rio de la Plata",0.998578488340844,1.00100708705542,0.965284834542195
+"URY","Temperate South America","Warm Temperate Southwestern Atlantic","Rio de la Plata",0.945440721842978,0.89349075566832,0.89349075566832
+"BRA","Temperate South America","Warm Temperate Southwestern Atlantic","Rio Grande",0.853034624301342,0.952460087637624,0.952460087637624
+"URY","Temperate South America","Warm Temperate Southwestern Atlantic","Rio Grande",1.08394824266434,0.89349075566832,0.89349075566832
+"ESH","Temperate Northern Atlantic","Lusitanian","Saharan Upwelling",1.99410742620207,1.99248863630915,1.99248863630915
+"ESP","Temperate Northern Atlantic","Lusitanian","Saharan Upwelling",2.08734969082086,1.62980372212167,1.65608263898197
+"MAR","Temperate Northern Atlantic","Lusitanian","Saharan Upwelling",1.84125524903664,1.83723564706054,1.83431762445483
+"MRT","Temperate Northern Atlantic","Lusitanian","Saharan Upwelling",1.72494826489879,1.72494826489879,1.72494826489879
+"PRT","Temperate Northern Atlantic","Lusitanian","Saharan Upwelling",1.57758190773301,1.28751409274859,1.28751409274859
+"ASM","Eastern Indo-Pacific","Central Polynesia","Samoa Islands",1.13059415488991,1.03038333960061,1.03190438061813
+"FJI","Eastern Indo-Pacific","Central Polynesia","Samoa Islands",1.67961497108142,1.67961497108142,1.36675778817953
+"NIU","Eastern Indo-Pacific","Central Polynesia","Samoa Islands",1.32605740427971,1.32605740427971,1.32605740427971
+"TON","Eastern Indo-Pacific","Central Polynesia","Samoa Islands",1.38950073376939,1.38950073376939,1.38950073376939
+"TUV","Eastern Indo-Pacific","Central Polynesia","Samoa Islands",0.833318760312056,0.833318760312056,0.706119376261961
+"WLF","Eastern Indo-Pacific","Central Polynesia","Samoa Islands",1.05548977016875,1.05430616223479,1.05151402375249
+"WSM","Eastern Indo-Pacific","Central Polynesia","Samoa Islands",1.08477097296912,1.07678442974594,1.07678442974594
+"BRA","Tropical Atlantic","Tropical Southwestern Atlantic","Sao Pedro and Sao Paulo Islands",1.09875133887828,1.0407952170038,1.11077518330206
+"CAN","Temperate Northern Atlantic","Cold Temperate Northwest Atlantic","Scotian Shelf",1.69925663312037,1.77430487928695,1.77430487928695
+"JPN","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Sea of Japan/East Sea",1.47403285518509,1.44333699689571,1.39024851677529
+"KOR","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Sea of Japan/East Sea",1.3679041259482,1.36265021906985,1.40392052532725
+"PRK","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Sea of Japan/East Sea",0.626778725613876,0.713983664284351,0.713983664284351
+"RUS","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Sea of Japan/East Sea",1.65974405061195,1.6157129650401,1.61539041328487
+"JPN","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Sea of Okhotsk",2.01375348713259,1.44333699689571,1.39024851677529
+"RUS","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Sea of Okhotsk",1.74266480628033,1.6157129650401,1.61539041328487
+"COM","Western Indo-Pacific","Western Indian Ocean","Seychelles",0.948410158243654,1.04617623521606,1.04617623521606
+"MDG","Western Indo-Pacific","Western Indian Ocean","Seychelles",0.94428768585313,1.22300265192691,1.22300265192691
+"MUS","Western Indo-Pacific","Western Indian Ocean","Seychelles",1.00407518238961,1.17977175683305,1.05741829517427
+"SYC","Western Indo-Pacific","Western Indian Ocean","Seychelles",1.05329068821451,1.05048034599623,1.05048034599623
+"AUS","Temperate Australasia","West Central Australian Shelf","Shark Bay",1.86487250224404,1.8787943886456,1.72732945266572
+"NZL","Temperate Australasia","Southern New Zealand","Snares Island",0.776179965112225,0.835281538069323,0.892799294663267
+"PYF","Eastern Indo-Pacific","Southeast Polynesia","Society Islands",0.636727655119044,0.642498705252164,0.574953444547445
+"FSM","Central Indo-Pacific","Eastern Coral Triangle","Solomon Archipelago",0.578267826041594,0.578267826041594,0.815865006981075
+"PNG","Central Indo-Pacific","Eastern Coral Triangle","Solomon Archipelago",0.836424542054806,0.92748352715709,0.91437623994107
+"SLB","Central Indo-Pacific","Eastern Coral Triangle","Solomon Archipelago",1.05062688608443,1.0508193759116,1.0609871031792
+"AUS","Central Indo-Pacific","Eastern Coral Triangle","Solomon Sea",0.979893414624806,1.04879862144127,0.955895277764987
+"PNG","Central Indo-Pacific","Eastern Coral Triangle","Solomon Sea",1.00677785104073,0.92748352715709,0.91437623994107
+"SLB","Central Indo-Pacific","Eastern Coral Triangle","Solomon Sea",1.22081997493903,1.0508193759116,1.0609871031792
+"AUS","Temperate Australasia","Southwest Australian Shelf","South Australian Gulfs",2.365628343706,2.15272304633781,1.72732945266572
+"BRN","Central Indo-Pacific","South China Sea","South China Sea Oceanic Islands",0.915070810278908,0.915070810278908,1.09480313785148
+"CHN","Central Indo-Pacific","South China Sea","South China Sea Oceanic Islands",1.3930690580226,1.79495706521087,1.79495706521087
+"MYS","Central Indo-Pacific","South China Sea","South China Sea Oceanic Islands",1.11720099226157,1.11720099226157,1.53260173028229
+"PHL","Central Indo-Pacific","South China Sea","South China Sea Oceanic Islands",1.20364046772153,1.20364046772153,1.26106412943622
+"TWN","Central Indo-Pacific","South China Sea","South China Sea Oceanic Islands",1.31161074141606,1.3640344141377,1.31766131156495
+"VNM","Central Indo-Pacific","South China Sea","South China Sea Oceanic Islands",1.32101141453544,1.39008407871959,1.45009162123695
+"ESP","Temperate Northern Atlantic","Lusitanian","South European Atlantic Shelf",1.53026956862826,1.62980372212167,1.65608263898197
+"FRA","Temperate Northern Atlantic","Lusitanian","South European Atlantic Shelf",1.58904099238218,1.58904099238218,1.64331150280577
+"PRT","Temperate Northern Atlantic","Lusitanian","South European Atlantic Shelf",1.53896753859971,1.28751409274859,1.28751409274859
+"IND","Western Indo-Pacific","West and South Indian Shelf","South India and Sri Lanka",1.12924457389916,1.32259769895922,1.17224005146875
+"LKA","Western Indo-Pacific","West and South Indian Shelf","South India and Sri Lanka",0.993728297695286,0.993728297695286,0.999141335887725
+"MDV","Western Indo-Pacific","West and South Indian Shelf","South India and Sri Lanka",1.01921207134703,1.01921207134703,0.892711536293405
+"JPN","Central Indo-Pacific","South Kuroshio","South Kuroshio",0.803591237176689,0.803591237176689,0.815363025312103
+"PHL","Central Indo-Pacific","South Kuroshio","South Kuroshio",0.930839619834619,0.930839619834619,1.26106412943622
+"TWN","Central Indo-Pacific","South Kuroshio","South Kuroshio",1.15520586190685,1.15520586190685,1.31766131156495
+"MDG","Western Indo-Pacific","Western Indian Ocean","Southeast Madagascar",1.48280700056317,1.22300265192691,1.22300265192691
+"REU","Western Indo-Pacific","Western Indian Ocean","Southeast Madagascar",1.85441628369418,1.8899097349189,1.8899097349189
+"AUS","Central Indo-Pacific","Eastern Coral Triangle","Southeast Papua New Guinea",1.08759961168743,1.04879862144127,0.955895277764987
+"PNG","Central Indo-Pacific","Eastern Coral Triangle","Southeast Papua New Guinea",0.991160455946871,0.92748352715709,0.91437623994107
+"BRA","Temperate South America","Warm Temperate Southwestern Atlantic","Southeastern Brazil",1.02188429358536,0.952460087637624,0.952460087637624
+"MEX","Temperate Northern Pacific","Warm Temperate Northeast Pacific","Southern California Bight",0.817449232113668,0.834079651908126,0.834079651908126
+"USA","Temperate Northern Pacific","Warm Temperate Northeast Pacific","Southern California Bight",0.857308100402083,0.857308100402083,1.08324700838473
+"ABW","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.83357719234798,1.83357719234798,1.83357719234798
+"BES","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.94787387768428,1.86889247356595,1.86889247356595
+"COL","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.73066292855108,1.6153382759593,1.6153382759593
+"CUW","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.855883143277,1.855883143277,1.855883143277
+"DOM","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.77370379652296,1.54627396118435,1.54627396118435
+"GRD","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",2.0962630185214,2.11194754252999,2.11194754252999
+"GUY","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",2.12050223350525,2.12050223350525,1.94301427303006
+"HTI","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.88272142410278,1.50188391894428,1.50188391894428
+"JAM","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.8320739865303,1.44007390144298,1.44007390144298
+"PRI","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.94736854235331,1.75855486661898,1.75855486661898
+"TTO","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",2.11650558782814,2.11261866898297,2.06674843101782
+"VEN","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Caribbean",1.82775961211474,1.85778883101028,1.83173639114922
+"CHN","Central Indo-Pacific","South China Sea","Southern China",1.90023296215863,1.79495706521087,1.79495706521087
+"TWN","Central Indo-Pacific","South China Sea","Southern China",1.46836214167956,1.3640344141377,1.31766131156495
+"CAN","Temperate Northern Atlantic","Cold Temperate Northwest Atlantic","Southern Grand Banks - South Newfoundland",1.93833226930598,1.77430487928695,1.77430487928695
+"SPM","Temperate Northern Atlantic","Cold Temperate Northwest Atlantic","Southern Grand Banks - South Newfoundland",2.18886189314784,2.10790936095374,2.10790936095374
+"CUB","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Gulf of Mexico",1.26342765235345,1.20506642104926,1.20506642104926
+"MEX","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Gulf of Mexico",1.25761522988004,1.29938521149092,1.29938521149092
+"USA","Tropical Atlantic","Tropical Northwestern Atlantic","Southern Gulf of Mexico",1.34576054643142,1.13441768537608,1.13441768537608
+"NZL","Temperate Australasia","Southern New Zealand","South New Zealand",0.74087965749055,0.835281538069323,0.892799294663267
+"ERI","Western Indo-Pacific","Red Sea and Gulf of Aden","Southern Red Sea",0.864475326627391,0.871586473549114,0.871586473549114
+"SAU","Western Indo-Pacific","Red Sea and Gulf of Aden","Southern Red Sea",1.14890061729288,1.43508665717641,1.44122088323662
+"SDN","Western Indo-Pacific","Red Sea and Gulf of Aden","Southern Red Sea",1.19464364057948,1.39321394332712,1.39321394332712
+"YEM","Western Indo-Pacific","Red Sea and Gulf of Aden","Southern Red Sea",1.03036734271232,0.981601474449473,0.976041619750699
+"VNM","Central Indo-Pacific","Sunda Shelf","Southern Vietnam",1.45267476245284,1.51004363977327,1.45009162123695
+"COL","Tropical Atlantic","Tropical Northwestern Atlantic","Southwestern Caribbean",1.56998671435277,1.6153382759593,1.6153382759593
+"CRI","Tropical Atlantic","Tropical Northwestern Atlantic","Southwestern Caribbean",1.3006051631861,1.3006051631861,1.3006051631861
+"CYM","Tropical Atlantic","Tropical Northwestern Atlantic","Southwestern Caribbean",1.40248996019363,1.29193789538215,1.29193789538215
+"HND","Tropical Atlantic","Tropical Northwestern Atlantic","Southwestern Caribbean",1.42788192701751,1.46080413746713,1.46080413746713
+"JAM","Tropical Atlantic","Tropical Northwestern Atlantic","Southwestern Caribbean",1.51521865753742,1.44007390144298,1.44007390144298
+"NIC","Tropical Atlantic","Tropical Northwestern Atlantic","Southwestern Caribbean",1.53668415228389,1.53668415228389,1.53668415228389
+"PAN","Tropical Atlantic","Tropical Northwestern Atlantic","Southwestern Caribbean",1.49002121277763,1.49002121277763,1.49002121277763
+"SHN","Tropical Atlantic","St. Helena and Ascension Islands","St. Helena and Ascension Islands",0.851951890715716,0.851951890715716,0.851951890715716
+"IDN","Central Indo-Pacific","Western Coral Triangle","Sulawesi Sea/Makassar Strait",1.25707236749729,1.14890244712274,1.16371746005976
+"MYS","Central Indo-Pacific","Western Coral Triangle","Sulawesi Sea/Makassar Strait",1.03612830754249,1.67967395186939,1.53260173028229
+"PHL","Central Indo-Pacific","Western Coral Triangle","Sulawesi Sea/Makassar Strait",1.10206443851684,1.32474175914967,1.26106412943622
+"ATF","Western Indo-Pacific","Western Indian Ocean","East African Coral Coast",0.983229660276157,0.846670741448781,0.846670741448781
+"COM","Western Indo-Pacific","Western Indian Ocean","East African Coral Coast",1.10827887898836,1.04617623521606,1.04617623521606
+"KEN","Western Indo-Pacific","Western Indian Ocean","East African Coral Coast",1.17419350476682,1.17709544161727,1.17709544161727
+"MOZ","Western Indo-Pacific","Western Indian Ocean","East African Coral Coast",1.01148832373769,0.874686571021343,0.874686571021343
+"SYC","Western Indo-Pacific","Western Indian Ocean","East African Coral Coast",0.911798318227132,1.05048034599623,1.05048034599623
+"TZA","Western Indo-Pacific","Western Indian Ocean","East African Coral Coast",1.10720227393119,1.10720227393119,1.10720227393119
+"KEN","Western Indo-Pacific","Western Indian Ocean","Northern Monsoon Current Coast",1.18137951537373,1.17709544161727,1.17709544161727
+"SOM","Western Indo-Pacific","Western Indian Ocean","Northern Monsoon Current Coast",1.1918547592418,1.1918547592418,1.0264573676538
+"ATF","Western Indo-Pacific","Western Indian Ocean","Bight of Sofala/Swamp Coast",0.93664996242723,0.846670741448781,0.846670741448781
+"MOZ","Western Indo-Pacific","Western Indian Ocean","Bight of Sofala/Swamp Coast",0.946752512064978,0.874686571021343,0.874686571021343
+"NFK","Temperate Australasia","Northern New Zealand","Three Kings-North Cape",0.500130534172058,0.500130534172058,0.500130534172058
+"NZL","Temperate Australasia","Northern New Zealand","Three Kings-North Cape",0.838341749466118,0.997312115942689,0.892799294663267
+"ASM","Central Indo-Pacific","Tropical Southwestern Pacific","Tonga Islands",1.36932830275776,1.18394315382019,1.18394315382019
+"FJI","Central Indo-Pacific","Tropical Southwestern Pacific","Tonga Islands",1.46267062187195,1.20495640531356,1.20495640531356
+"NIU","Central Indo-Pacific","Tropical Southwestern Pacific","Tonga Islands",1.51429206815282,1.5162448124156,1.5162448124156
+"TON","Central Indo-Pacific","Tropical Southwestern Pacific","Tonga Islands",1.43247160151464,1.42472247341755,1.42472247341755
+"BRA","Tropical Atlantic","Tropical Southwestern Atlantic","Trindade and Martin Vaz Islands",0.455191636258716,1.0407952170038,1.11077518330206
+"SHN","Temperate South America","Tristan Gough","Tristan Gough",1.74607876595342,1.74607876595342,1.74607876595342
+"PYF","Eastern Indo-Pacific","Marquesas","Marquesas",0.282907424641099,0.282907424641099,0.574953444547445
+"AUS","Temperate Australasia","East Central Australian Shelf","Tweed-Moreton",1.1683424712282,1.25273957333278,1.72732945266572
+"ARG","Temperate South America","Warm Temperate Southwestern Atlantic","Uruguay-Buenos Aires Shelf",1.00116278815768,1.00100708705542,0.965284834542195
+"BRA","Temperate South America","Warm Temperate Southwestern Atlantic","Uruguay-Buenos Aires Shelf",1.57276421785355,0.952460087637624,0.952460087637624
+"URY","Temperate South America","Warm Temperate Southwestern Atlantic","Uruguay-Buenos Aires Shelf",0.885732260678547,0.89349075566832,0.89349075566832
+"FJI","Central Indo-Pacific","Tropical Southwestern Pacific","Vanuatu",1.1503877707808,1.20495640531356,1.20495640531356
+"NCL","Central Indo-Pacific","Tropical Southwestern Pacific","Vanuatu",0.930208668619234,0.842200165544333,0.842550603653917
+"SLB","Central Indo-Pacific","Tropical Southwestern Pacific","Vanuatu",1.07326406217098,1.08555191787845,1.0609871031792
+"VUT","Central Indo-Pacific","Tropical Southwestern Pacific","Vanuatu",1.08545073406049,1.08729730987061,1.08729730987061
+"USA","Temperate Northern Atlantic","Cold Temperate Northwest Atlantic","Virginian",1.4529465399499,1.66532705529396,1.38091101125582
+"FSM","Central Indo-Pacific","Tropical Northwestern Pacific","West Caroline Islands",0.974782270736664,0.82051914287101,0.815865006981075
+"IDN","Central Indo-Pacific","Tropical Northwestern Pacific","West Caroline Islands",1.11600958798305,1.11600958798305,1.16371746005976
+"PLW","Central Indo-Pacific","Tropical Northwestern Pacific","West Caroline Islands",1.0830254729173,1.0830254729173,1.08776062119784
+"CAN","Arctic","Arctic","West Greenland Shelf",1.7590999953887,1.37536559492745,1.37536559492745
+"GRL","Arctic","Arctic","West Greenland Shelf",2.04012187050701,1.66375980363252,1.66375980363252
+"ATF","Western Indo-Pacific","Western Indian Ocean","Western and Northern Madagascar",0.83113667642252,0.846670741448781,0.846670741448781
+"COM","Western Indo-Pacific","Western Indian Ocean","Western and Northern Madagascar",1.04414536648234,1.04617623521606,1.04617623521606
+"MDG","Western Indo-Pacific","Western Indian Ocean","Western and Northern Madagascar",1.07319151013842,1.22300265192691,1.22300265192691
+"MOZ","Western Indo-Pacific","Western Indian Ocean","Western and Northern Madagascar",0.937040038903554,0.874686571021343,0.874686571021343
+"SYC","Western Indo-Pacific","Western Indian Ocean","Western and Northern Madagascar",0.899224272684047,1.05048034599623,1.05048034599623
+"OMN","Western Indo-Pacific","Somali/Arabian","Western Arabian Sea",1.25569469238387,1.29455333626661,1.2891789433965
+"YEM","Western Indo-Pacific","Somali/Arabian","Western Arabian Sea",0.980563695279742,0.951284626096541,0.976041619750699
+"AUS","Temperate Australasia","Southeast Australian Shelf","Western Bassian",2.04159272935562,1.44449141342712,1.72732945266572
+"BLZ","Tropical Atlantic","Tropical Northwestern Atlantic","Western Caribbean",1.28731556229256,1.28731556229256,1.28731556229256
+"CUB","Tropical Atlantic","Tropical Northwestern Atlantic","Western Caribbean",1.58177309406215,1.20506642104926,1.20506642104926
+"CYM","Tropical Atlantic","Tropical Northwestern Atlantic","Western Caribbean",1.55983939435747,1.29193789538215,1.29193789538215
+"GTM","Tropical Atlantic","Tropical Northwestern Atlantic","Western Caribbean",1.71442640572786,1.71442640572786,1.71442640572786
+"HND","Tropical Atlantic","Tropical Northwestern Atlantic","Western Caribbean",1.49423406623452,1.46080413746713,1.46080413746713
+"MEX","Tropical Atlantic","Tropical Northwestern Atlantic","Western Caribbean",1.58626301926236,1.29938521149092,1.29938521149092
+"ECU","Tropical Eastern Pacific","Galapagos","Western Galapagos Islands",0.254211347172429,0.268064632288181,0.323124818310865
+"IND","Western Indo-Pacific","West and South Indian Shelf","Western India",1.36971579060007,1.32259769895922,1.17224005146875
+"PAK","Western Indo-Pacific","West and South Indian Shelf","Western India",1.79563908338994,1.79563908338994,1.74523123388305
+"CHN","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Yellow Sea",1.87044259430706,1.87044259430706,1.83829477941365
+"KOR","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Yellow Sea",1.3576764294633,1.36265021906985,1.40392052532725
+"PRK","Temperate Northern Pacific","Cold Temperate Northwest Pacific","Yellow Sea",1.01934976351953,0.713983664284351,0.713983664284351
+"CXR","Central Indo-Pacific","Java Transitional","Southern Java",1.51143202185631,1.14176798158626,1.14176798158626
+"IDN","Central Indo-Pacific","Java Transitional","Southern Java",1.03075456266561,1.02879806796068,1.16371746005976
+"IDN","Western Indo-Pacific","Andaman","Western Sumatra",0.740014556357666,0.749909084552794,0.749909084552794
+"THA","Western Indo-Pacific","Andaman","Western Sumatra",1.11200392246246,1.2621587705741,1.2621587705741
+"AUS","Central Indo-Pacific","Northeast Australian Shelf","Torres Strait Northern Great Barrier Reef",0.75504614477541,0.868286315465671,0.955895277764987
+"PNG","Central Indo-Pacific","Northeast Australian Shelf","Torres Strait Northern Great Barrier Reef",0.747537165880203,0.747537165880203,0.91437623994107
+"AUS","Central Indo-Pacific","Northeast Australian Shelf","Central and Southern Great Barrier Reef",0.96567850545717,0.868286315465671,0.955895277764987
+"IDN","Central Indo-Pacific","Sunda Shelf","Sunda Shelf/Java Sea",1.44984320648242,1.46549630573282,1.16371746005976
+"MYS","Central Indo-Pacific","Sunda Shelf","Sunda Shelf/Java Sea",1.49119648907258,1.58300706895543,1.53260173028229
+"THA","Central Indo-Pacific","Sunda Shelf","Sunda Shelf/Java Sea",3.4312150478363,1.49152087128196,1.49152087128196
+"VNM","Central Indo-Pacific","Sunda Shelf","Sunda Shelf/Java Sea",1.63248366206084,1.51004363977327,1.45009162123695
+"GRL","Arctic","Arctic","North and East Iceland",1.33500179464834,1.66375980363252,1.66375980363252
+"ISL","Arctic","Arctic","North and East Iceland",2.00729497183218,1.98122843619843,1.98122843619843
+"SJM","Arctic","Arctic","North and East Iceland",1.45507411522591,1.50545019887613,1.50545019887613
+"FRO","Temperate Northern Atlantic","Northern European Seas","South and West Iceland",2.43407066389062,2.04489512106495,2.04489512106495
+"ISL","Temperate Northern Atlantic","Northern European Seas","South and West Iceland",2.44158024108766,2.41061355490123,2.41061355490123
+"BEL","Temperate Northern Atlantic","Northern European Seas","North Sea",1.17260091188477,1.17260091188477,1.17260091188477
+"DEU","Temperate Northern Atlantic","Northern European Seas","North Sea",1.32838139197592,1.33385816334949,1.33385816334949
+"DNK","Temperate Northern Atlantic","Northern European Seas","North Sea",1.33479452685612,1.3376347388889,1.3376347388889
+"FRA","Temperate Northern Atlantic","Northern European Seas","North Sea",1.56441838571004,1.66763115368592,1.64331150280577
+"FRO","Temperate Northern Atlantic","Northern European Seas","North Sea",1.77908567948775,2.04489512106495,2.04489512106495
+"GBR","Temperate Northern Atlantic","Northern European Seas","North Sea",1.94393571176138,1.87532985857743,1.87532985857743
+"NLD","Temperate Northern Atlantic","Northern European Seas","North Sea",1.23885854418213,1.23885854418213,1.23885854418213
+"NOR","Temperate Northern Atlantic","Northern European Seas","North Sea",1.85849573080324,1.93270146555082,1.93270146555082
+"SWE","Temperate Northern Atlantic","Northern European Seas","North Sea",1.63879185691476,1.43614715491051,1.43614715491051
+"GBR","Temperate Northern Atlantic","Northern European Seas","Southern Norway",1.92608428001404,1.87532985857743,1.87532985857743
+"NOR","Temperate Northern Atlantic","Northern European Seas","Southern Norway",1.839655995082,1.93270146555082,1.93270146555082
+"NOR","Temperate Northern Atlantic","Northern European Seas","Northern Norway and Finnmark",2.04646691656762,1.93270146555082,1.93270146555082
+"RUS","Temperate Northern Atlantic","Northern European Seas","Northern Norway and Finnmark",2.10589882762644,1.84635726792132,2.48326953568723
+"NOR","Arctic","Arctic","North and East Barents Sea",1.96437267619232,1.96437267619232,1.96437267619232
+"RUS","Arctic","Arctic","North and East Barents Sea",1.67089352027963,1.20373223603573,1.20373223603573
+"SJM","Arctic","Arctic","North and East Barents Sea",1.51740252350864,1.50545019887613,1.50545019887613
+"RUS","Arctic","Arctic","White Sea",1.48411617023518,1.20373223603573,1.20373223603573
+"BHS","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.15287773907185,0.970505143663188,0.970505143663188
+"COL","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.87128065761767,1.6153382759593,1.6153382759593
+"CUB","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.19325435545477,1.20506642104926,1.20506642104926
+"CYM","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.28240488568487,1.29193789538215,1.29193789538215
+"DOM","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.74682003426061,1.54627396118435,1.54627396118435
+"HND","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.18660540878773,1.46080413746713,1.46080413746713
+"HTI","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.50183409387159,1.50188391894428,1.50188391894428
+"JAM","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.4149933066161,1.44007390144298,1.44007390144298
+"MEX","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.6282518307368,1.29938521149092,1.29938521149092
+"PRI","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.81504519213718,1.75855486661898,1.75855486661898
+"USA","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.25754298444567,1.13441768537608,1.13441768537608
+"VEN","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.81493120534079,1.85778883101028,1.83173639114922
+"VIR","Tropical Atlantic","Tropical Northwestern Atlantic","Greater Antilles",1.76767105781115,1.7402351409947,1.7402351409947
+"ASM","Eastern Indo-Pacific","Southeast Polynesia","Southern Cook/Austral Islands",1.17764776538719,1.17764776538719,1.03190438061813
+"COK","Eastern Indo-Pacific","Southeast Polynesia","Southern Cook/Austral Islands",1.25448269663294,1.23687258770715,0.925543089028639
+"PYF","Eastern Indo-Pacific","Southeast Polynesia","Southern Cook/Austral Islands",0.86750081429012,0.642498705252164,0.574953444547445
+"AGO","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea South",0.603064291246302,0.610359643691594,0.610359643691594
+"COD","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea South",0.651161405528691,0.634425211327755,0.634425211327755
+"COG","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea South",0.562633464594022,0.562633464594022,0.562633464594022
+"GAB","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea South",0.578497655830885,0.568048893332223,0.568048893332223
+"GNQ","Tropical Atlantic","Gulf of Guinea","Gulf of Guinea South",0.541806983947754,0.575852418063908,0.575852418063908
+"AGO","Tropical Atlantic","Gulf of Guinea","Angolan",0.6107249049101,0.610359643691594,0.610359643691594
+"COD","Tropical Atlantic","Gulf of Guinea","Angolan",0.398444873094559,0.634425211327755,0.634425211327755
+"CPV","Tropical Atlantic","West African Transition","Sahelian Upwelling",1.69566143043642,2.00168700166835,2.00168700166835
+"GMB","Tropical Atlantic","West African Transition","Sahelian Upwelling",1.61269001523033,1.61269001523033,1.61269001523033
+"MRT","Tropical Atlantic","West African Transition","Sahelian Upwelling",1.95125198546209,1.95125198546209,1.95125198546209
+"SEN","Tropical Atlantic","West African Transition","Sahelian Upwelling",1.74131583833321,1.74131583833321,1.70089553456221
+"ALB","Temperate Northern Atlantic","Mediterranean Sea","Adriatic Sea",1.92783822259813,1.95877952004472,1.95877952004472
+"BIH","Temperate Northern Atlantic","Mediterranean Sea","Adriatic Sea",3.56999437014262,3.56999437014262,3.56999437014262
+"HRV","Temperate Northern Atlantic","Mediterranean Sea","Adriatic Sea",2.01159352556196,2.01159352556196,2.01159352556196
+"ITA","Temperate Northern Atlantic","Mediterranean Sea","Adriatic Sea",2.29419921488858,1.87872474637097,1.87872474637097
+"MNE","Temperate Northern Atlantic","Mediterranean Sea","Adriatic Sea",1.95121205515332,1.95121205515332,1.95121205515332
+"SVN","Temperate Northern Atlantic","Mediterranean Sea","Adriatic Sea",2.57226904233297,2.57226904233297,2.57226904233297
+"CYP","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",2.47842982797809,2.47842982797809,2.47842982797809
+"EGY","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",2.40824699959985,2.40824699959985,2.40824699959985
+"GRC","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",2.6597474544209,2.65697071517692,2.65697071517692
+"ISR","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",2.31551025898007,2.31551025898007,2.31551025898007
+"LBN","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",2.31397266091195,2.31397266091195,2.31397266091195
+"LBY","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",1.98426975567855,2.19163821411121,2.19163821411121
+"PSE","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",2.18099618875063,2.18099618875063,2.18099618875063
+"SYR","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",2.26464031023138,2.26464031023138,2.26464031023138
+"TUR","Temperate Northern Atlantic","Mediterranean Sea","Levantine Sea",2.63803936753954,2.71443586773597,3.17507415539548
+"GRC","Temperate Northern Atlantic","Mediterranean Sea","Tunisian Plateau/Gulf of Sidra",2.45107352733612,2.65697071517692,2.65697071517692
+"ITA","Temperate Northern Atlantic","Mediterranean Sea","Tunisian Plateau/Gulf of Sidra",1.68937966085616,1.87872474637097,1.87872474637097
+"LBY","Temperate Northern Atlantic","Mediterranean Sea","Tunisian Plateau/Gulf of Sidra",2.19968091661106,2.19163821411121,2.19163821411121
+"MLT","Temperate Northern Atlantic","Mediterranean Sea","Tunisian Plateau/Gulf of Sidra",1.86335998545786,1.87158991984631,1.87158991984631
+"TUN","Temperate Northern Atlantic","Mediterranean Sea","Tunisian Plateau/Gulf of Sidra",1.80815306535754,1.85038489655598,1.85038489655598
+"ALB","Temperate Northern Atlantic","Mediterranean Sea","Ionian Sea",2.04508945502733,1.95877952004472,1.95877952004472
+"GRC","Temperate Northern Atlantic","Mediterranean Sea","Ionian Sea",2.49100061563345,2.65697071517692,2.65697071517692
+"ITA","Temperate Northern Atlantic","Mediterranean Sea","Ionian Sea",2.06987413107227,1.87872474637097,1.87872474637097
+"LBY","Temperate Northern Atlantic","Mediterranean Sea","Ionian Sea",2.55276911592484,2.19163821411121,2.19163821411121
+"MLT","Temperate Northern Atlantic","Mediterranean Sea","Ionian Sea",1.88037971371696,1.87158991984631,1.87158991984631
+"TUN","Temperate Northern Atlantic","Mediterranean Sea","Ionian Sea",1.82679777826582,1.85038489655598,1.85038489655598
+"GRC","Temperate Northern Atlantic","Mediterranean Sea","Aegean Sea",2.75080990126557,2.65697071517692,2.65697071517692
+"TUR","Temperate Northern Atlantic","Mediterranean Sea","Aegean Sea",2.81113819151403,2.71443586773597,3.17507415539548
+"DZA","Temperate Northern Atlantic","Mediterranean Sea","Alboran Sea",1.63815375269717,1.8002779340553,1.8002779340553
+"ESP","Temperate Northern Atlantic","Mediterranean Sea","Alboran Sea",1.71775017559178,1.72312463824964,1.65608263898197
+"GIB","Temperate Northern Atlantic","Mediterranean Sea","Alboran Sea",2.05119922161102,2.05119922161102,2.05119922161102
+"MAR","Temperate Northern Atlantic","Mediterranean Sea","Alboran Sea",1.79409846382321,1.79409846382321,1.83431762445483
+"DZA","Temperate Northern Atlantic","Mediterranean Sea","Western Mediterranean",1.83074853753023,1.8002779340553,1.8002779340553
+"ESP","Temperate Northern Atlantic","Mediterranean Sea","Western Mediterranean",1.72423248432393,1.72312463824964,1.65608263898197
+"FRA","Temperate Northern Atlantic","Mediterranean Sea","Western Mediterranean",1.73373366348327,1.73373366348327,1.64331150280577
+"ITA","Temperate Northern Atlantic","Mediterranean Sea","Western Mediterranean",1.70569676980815,1.87872474637097,1.87872474637097
+"MCO","Temperate Northern Atlantic","Mediterranean Sea","Western Mediterranean",1.77462017536163,1.77462017536163,1.77462017536163
+"TUN","Temperate Northern Atlantic","Mediterranean Sea","Western Mediterranean",1.93696563276085,1.85038489655598,1.85038489655598
+"CAN","Arctic","Arctic","High Arctic Archipelago",1.16519735313406,1.37536559492745,1.37536559492745
+"GRL","Arctic","Arctic","High Arctic Archipelago",1.18163112912859,1.66375980363252,1.66375980363252
