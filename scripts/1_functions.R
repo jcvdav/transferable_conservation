@@ -1,6 +1,7 @@
 
 # Define function that finds the top n in each vector
-which_max_n <- function(vector, n, dec) {
+which_max_n <- function(vector, prop, dec) {
+  n <- prop * length(vector)
   vector %in% head(sort(vector, decreasing = dec), n)
 }
 
@@ -21,8 +22,8 @@ conserve <- function(matrix, proportion, tactic, dec = dec) {
   # How are we conserving?
   if(tactic == "bau"){
     # Call the function to match the max n in each column
-    conserved <- apply(X = matrix, MARGIN = 2, FUN = which_max_n, n, dec)
-    
+    conserved <- apply(X = matrix, MARGIN = 2, FUN = which_max_n, proportion, dec)
+
   } else if (tactic == "random_c"){
     # browser()
     # Random patch-level conservation

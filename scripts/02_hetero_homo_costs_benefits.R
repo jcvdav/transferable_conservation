@@ -57,9 +57,6 @@ conserve(matrix = ben_het, proportion = 0.3, tactic = "bau", dec = T) %>% image(
 conserve(matrix = ben_het, proportion = 0.3, tactic = "random_c", dec = T) %>% image()
 
 sum(conserve(matrix = ben_het, proportion = 0.3, tactic = "mkt", dec = T) * ben_het)
-sum(which_max_n(ben_het, n = 300, T) * ben_het)
-
-apply(X = ben_het, MARGIN =  2, which_max_n, 30, T)
 
 
 
