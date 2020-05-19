@@ -34,16 +34,22 @@ eez <- st_read(dsn = here("raw_data",
                stringsAsFactors = F) %>%              # Make sure strings are not read in as factors
   clean_names() %>%                                   # Use janitor to clean the names
   filter(str_detect(geoname, "Exclusive")) %>%        # Keep only polygons that make reference to EEZs (no joint regimes). This assings EEZs to Western Sahara and Ukraine
+  st_make_valid() %>%                                 # Make all polygons valid
   mutate(iso3 = ifelse(is.na(iso_ter1),               # Replace missing territory ids with sovereign ids
                         iso_sov1,
                         iso_ter1)) %>% 
   select(iso3) %>%                                    # Select relevant columns
-  ms_simplify(sys = T, keep_shapes = T) %>%           # Simplify the geometries for computation
+  st_wrap_dateline() %>% 
+  st_make_valid() %>%                                 # Make all polygons valid
   group_by(iso3) %>%                                  # Union geometries
-  summarize(geometry = st_union(geometry)) %>% 
-  ungroup() %>% 
-  st_transform("ESRI:54009") %>%                      # Reproject to moll
-  st_make_valid()                                     # Esure all polygons are valid
+  summarize(a = 1) %>%
+  ungroup() %>%
+  select(-a) %>% 
+  st_make_valid() %>%
+  ms_simplify(keep_shapes = T, sys = T) %>% 
+  st_make_valid() %>% 
+  st_transform(crs = "ESRI:54009") %>%                 # Reproject to moll
+  st_make_valid()
 
 ## Export ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 eez_fn <- here("data", "clean_world_eez_v11.gpkg")    # Create a filename
