@@ -4,8 +4,12 @@ which_max_n <- function(vector, n, dec) {
   vector %in% head(sort(vector, decreasing = dec), n)
 }
 
-sample_patch <- function(vector, n) {
-  vector %in% sample(vector, size = n, replace = F)
+sample_patch <- function(vector, prop) {
+  n <- prop * length(vector)
+  where <- sample(1:length(vector), size = n, replace = F)
+  conserved <- numeric(length = length(vector))
+  conserved[where] <- 1
+  return(conserved)
 }
 
 # Define wrapper that conserves a given proportion
@@ -20,25 +24,25 @@ conserve <- function(matrix, proportion, tactic, dec = dec) {
     conserved <- apply(X = matrix, MARGIN = 2, FUN = which_max_n, n, dec)
     
   } else if (tactic == "random_c"){
+    # browser()
     # Random patch-level conservation
-    conserved <- apply(X = matrix, MARGIN = 2, FUN = sample_patch)
-    
+    conserved <- apply(X = matrix, MARGIN = 2, FUN = sample_patch, proportion)
+
   } else if(tactic == "mkt") {
     # market approach here
     conserved <- matrix %in% head(sort(matrix, decreasing = dec), n)
   }
   
-  
-  
   if(sum(conserved) == length(matrix)){
     fill_1 <- rep(1L, n)
     fill_0 <- rep(0L, length(matrix) - n)
     fill <- c(fill_1, fill_0)
-    if(length(fill) < length(matrix)){
-      c(tactic, proportion, dec, length(fill_1), length(fill_0), (length(matrix) - n)) %>% 
-        map(print)
-    }
     conserved <- matrix(fill, ncol = ncol(matrix), byrow = T)
+  }
+  
+  
+  if(!is.matrix(conserved)){
+    conserved <- matrix(conserved, ncol = ncol(matrix))
   }
     
   
