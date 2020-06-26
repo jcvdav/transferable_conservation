@@ -21,6 +21,7 @@
 ## Set up ################################################################################################################################################################
 # Load packages
 library(janitor)
+library(countrycode)
 library(rmapshaper)
 library(sf)
 library(tidyverse)
@@ -48,8 +49,10 @@ eez <- st_read(dsn = file.path(project_path,
   st_make_valid() %>%
   ms_simplify(keep_shapes = T, sys = T) %>% 
   st_make_valid() %>% 
-  st_transform(crs = "ESRI:54009") %>%                 # Reproject to moll
-  st_make_valid()
+  st_transform(crs = proj_moll) %>%                 # Reproject to moll
+  st_make_valid() %>% 
+  mutate(iso3n = countrycode(iso3, "iso3c", "iso3n")) %>% 
+  select(iso3, iso3n)
 
 ## Export ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 eez_fn <- file.path(project_path,

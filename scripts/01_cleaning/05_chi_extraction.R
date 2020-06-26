@@ -28,7 +28,7 @@ extract <- raster::extract
 
 # Load data
 chi_raster <- 
-  raster(file.path(project_path, "data", "cumulative_impact_2013.tif")) %>%           # Cumulative Human Impacts raster
+  raster(file.path(project_path, "raw_data", "cumulative_impact_2013.tif")) %>%           # Cumulative Human Impacts raster
   raster::aggregate(fact = 10)                                     # Aggregate by a factor of 10
 
 names(chi_raster) <- "chi_2013"

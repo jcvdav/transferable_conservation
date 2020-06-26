@@ -46,7 +46,7 @@ meow <- st_read(dsn = file.path(project_path,
   clean_names() %>%                             # Clean column names
   st_crop(xmin = -180L, xmax = 180L,
           ymin = -90L, ymax = 90L) %>% 
-  st_transform("ESRI:54009") %>%                # Reproject to Moll
+  st_transform(proj_moll) %>%                # Reproject to Moll
   st_make_valid() %>%                           # Make sure all elements are valid
   select(ecoregion, eco_code,                   # Select relevant colmns
          province, pro_code = prov_code,
