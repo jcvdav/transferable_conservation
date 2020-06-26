@@ -34,14 +34,14 @@
 
 ## Set up ##########################################################################
 # Load packages
-library(here)
 library(janitor)
 library(sf)
 library(tidyverse)
 
 ## Process #########################################################################
 # Load shapefile -------------------------------------------------------------------
-meow <- st_read(dsn = here("raw_data", "MEOW"),
+meow <- st_read(dsn = file.path(project_path,
+                                "raw_data", "MEOW"),
                 layer = "meow_ecos") %>% 
   clean_names() %>%                             # Clean column names
   st_crop(xmin = -180L, xmax = 180L,
@@ -53,7 +53,7 @@ meow <- st_read(dsn = here("raw_data", "MEOW"),
          realm, rlm_code)
 
 ## Export ###########################################################################
-meow_fn <- here("data", "clean_meow.gpkg")      # Define filename
+meow_fn <- file.path(project_path, "data", "clean_meow.gpkg")      # Define filename
 file.remove(meow_fn)                            # Remove them if file exists
 st_write(obj = meow, dsn = meow_fn)             # Save file to disk
 

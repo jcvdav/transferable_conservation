@@ -19,7 +19,6 @@
 ## Set up ############################################################################################
 # Load packages
 library(startR)
-library(here)
 library(raster)
 library(sf)
 library(tidyverse)
@@ -29,13 +28,13 @@ extract <- raster::extract
 
 # Load data
 chi_raster <- 
-  raster(here("data", "cumulative_impact_2013.tif")) %>%           # Cumulative Human Impacts raster
+  raster(file.path(project_path, "data", "cumulative_impact_2013.tif")) %>%           # Cumulative Human Impacts raster
   raster::aggregate(fact = 10)                                     # Aggregate by a factor of 10
 
 names(chi_raster) <- "chi_2013"
 
 polygons <- 
-  st_read(here("data", "intersected_eez_and_meow.gpkg"))           # Shapefiles intersected before
+  st_read(file.path(project_path, "data", "intersected_eez_and_meow.gpkg"))           # Shapefiles intersected before
 
 # Parallel processing parameters
 n_cores <- parallel::detectCores() - 1                             # Leave one free core for processes
@@ -110,7 +109,7 @@ chi_by_region <- eez_ecoregion_chi %>%
 
 # Export -------------------------------------------------------------------------------------------
 write.csv(x = chi_by_region,
-          file = here("data", "chi_by_eez_ecoregion.csv"),
+          file = file.path(project_path, "data", "chi_by_eez_ecoregion.csv"),
           row.names = F)
 
 # END OF SCRIPT ####################################################################################

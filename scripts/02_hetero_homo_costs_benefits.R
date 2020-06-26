@@ -49,7 +49,7 @@ cost_het_df <- cost_het %>%
 world <- left_join(ben_het_df, cost_het_df, by = c("pixel", "country")) %>% 
   mutate(cb = mb / mc) %>% 
   group_by(country) %>% 
-  arrange(desc(mb))%>%
+  arrange(cb)%>%
   mutate(tb = cumsum(mb),
          tc = cumsum(mc),
          percent = (1:ppc) / ppc,
@@ -65,10 +65,10 @@ tb_targets <- world %>%
 
 (target_benefit <- sum(tb_targets$tb))
 
-ggplot(world, aes(x = percent, y = mb, color = country)) +
+ggplot(world, aes(x = percent, y = cb, color = country)) +
   geom_line() +
   geom_vline(xintercept = target_percent, linetype = "dashed") +
-  ggtheme_plot() +
+  # ggtheme_plot() +
   scale_x_continuous(labels = scales::percent) +
   labs(x = "Percent protected",
        y = "Marginal conservation")
@@ -77,7 +77,7 @@ ggplot(world, aes(x = percent, y = tb, color = country)) +
   geom_line() +
   geom_vline(xintercept = target_percent, linetype = "dashed") +
   geom_segment(data = tb_targets, aes(x = 0, xend = target_percent, y = tb, yend = tb, color = country), linetype = "dashed") +
-  ggtheme_plot() +
+  # ggtheme_plot() +
   scale_x_continuous(labels = scales::percent) +
   labs(x = "Percent protected",
        y = "Total conservation")

@@ -20,7 +20,6 @@
 
 ## Set up ################################################################################################################################################################
 # Load packages
-library(here)
 library(janitor)
 library(rmapshaper)
 library(sf)
@@ -28,7 +27,8 @@ library(tidyverse)
 
 ## Process ###############################################################################################################################################################
 # Read in the shapefiles -------------------------------------------------------------------------------------------------------------------------------------------------
-eez <- st_read(dsn = here("raw_data",
+eez <- st_read(dsn = file.path(project_path,
+                               "raw_data",
                           "World_EEZ_v11_20191118"),
                layer = "eez_v11",
                stringsAsFactors = F) %>%              # Make sure strings are not read in as factors
@@ -52,7 +52,9 @@ eez <- st_read(dsn = here("raw_data",
   st_make_valid()
 
 ## Export ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-eez_fn <- here("data", "clean_world_eez_v11.gpkg")    # Create a filename
+eez_fn <- file.path(project_path,
+                    "data",
+                    "clean_world_eez_v11.gpkg")       # Create a filename
 file.remove(eez_fn)                                   # Remove any preexisting data to avoid binding
 st_write(obj = eez, dsn = eez_fn)                     # Save file to disk
 

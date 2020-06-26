@@ -78,7 +78,7 @@ ggplot(data = wdi_indicators_clean,
 
 # Export -----------------------------------------------------------------------------------------------------------------
 write.csv(x = wdi_indicators_clean,
-          file = here("data", "wdi_indicators_by_country.csv"),
+          file = file.path(project_path, "data", "wdi_indicators_by_country.csv"),
           row.names = F)
 
 
