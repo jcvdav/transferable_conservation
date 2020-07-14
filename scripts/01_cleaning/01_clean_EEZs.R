@@ -56,7 +56,7 @@ eez <- st_read(dsn = file.path(data_path,
 
 ## Export ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 eez_fn <- file.path(project_path,
-                    "data",
+                    "processed_data",
                     "clean_world_eez_v11.gpkg")       # Create a filename
 file.remove(eez_fn)                                   # Remove any preexisting data to avoid binding
 st_write(obj = eez, dsn = eez_fn)                     # Save file to disk

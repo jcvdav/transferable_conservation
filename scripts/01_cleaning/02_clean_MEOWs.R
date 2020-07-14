@@ -53,7 +53,7 @@ meow <- st_read(dsn = file.path(project_path,
          realm, rlm_code)
 
 ## Export ###########################################################################
-meow_fn <- file.path(project_path, "data", "clean_meow.gpkg")      # Define filename
+meow_fn <- file.path(project_path, "processed_data", "clean_meow.gpkg")      # Define filename
 file.remove(meow_fn)                            # Remove them if file exists
 st_write(obj = meow, dsn = meow_fn)             # Save file to disk
 

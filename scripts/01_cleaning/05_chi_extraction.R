@@ -34,7 +34,7 @@ chi_raster <-
 names(chi_raster) <- "chi_2013"
 
 polygons <- 
-  st_read(file.path(project_path, "data", "intersected_eez_and_meow.gpkg"))           # Shapefiles intersected before
+  st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg"))           # Shapefiles intersected before
 
 # Parallel processing parameters
 n_cores <- parallel::detectCores() - 1                             # Leave one free core for processes
@@ -109,7 +109,7 @@ chi_by_region <- eez_ecoregion_chi %>%
 
 # Export -------------------------------------------------------------------------------------------
 write.csv(x = chi_by_region,
-          file = file.path(project_path, "data", "chi_by_eez_ecoregion.csv"),
+          file = file.path(project_path, "processed_data", "chi_by_eez_ecoregion.csv"),
           row.names = F)
 
 # END OF SCRIPT ####################################################################################

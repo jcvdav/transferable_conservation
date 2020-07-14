@@ -65,7 +65,7 @@ effort <- effort_query %>%
   collect()                                                   # Force computation of the query (actually querying now)
 
 # Target raster
-benefits <- raster(file.path(ng_data_path, "/03_output/14_upgrade_weak_MPAs/ranking_raster.tif"))
+benefits <- raster(file.path(ng_data_path, "03_output/05_spp_wts_smts_provs_MPAs/ranking_raster.tif"))
 
 effort_raster <- rasterFromXYZ(effort, crs = proj_longlat) %>% 
   projectRaster(benefits, method = "bilinear")
@@ -74,7 +74,7 @@ names(effort_raster) <- "costs"
 
 # Export the raster
 writeRaster(x = effort_raster,
-            filename = file.path(project_path, "data", "fishing_days_as_costs.tif"),
+            filename = file.path(project_path, "processed_data", "fishing_days_as_costs.tif"),
             overwrite = TRUE)
 
 ## END OF SCRIPT ##
