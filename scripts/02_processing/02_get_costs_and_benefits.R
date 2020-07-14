@@ -7,10 +7,10 @@ library(tidyverse)
 
 # Load data
 # Benefits raster
-benefits_raster <- raster(file.path(ng_data_path, "/03_output/14_upgrade_weak_MPAs/ranking_raster.tif"))
+benefits_raster <- raster(file.path(ng_data_path, "03_output/05_spp_wts_smts_provs_MPAs/ranking_raster.tif"))
 
 # Costs raster
-costs_raster <- raster(file.path(project_path, "data", "fishing_days_as_costs.tif"))
+costs_raster <- -1 * raster(file.path(ng_data_path, "03_output/07_food/delta_v_raster_a2.tif"))
 
 # EEZ_MEOW raster
 eez_meow_raster <- raster(file.path(project_path, "data", "eez_meow_raster.tif"))
@@ -18,52 +18,59 @@ eez_meow_raster <- raster(file.path(project_path, "data", "eez_meow_raster.tif")
 eez_meow <- st_read(file.path(project_path, "data", "intersected_eez_and_meow.gpkg"))
 
 # Extract codes for each pixel
-
 cb <- stack(eez_meow_raster, benefits_raster, costs_raster) %>% 
   as.data.frame(xy = T) %>% 
   rename(lon = x, lat = y, iso3n = eez_meow_raster) %>% 
   drop_na()
 
+# Create a master dataset with all the metadata for eahc pixel
 master_data <- eez_meow %>% 
   # filter(iso3 %in% c("CAN")) %>%
   st_drop_geometry() %>% 
-  select(iso3, iso3n) %>% 
+  select(iso3, iso3n, ecoregion, province, realm) %>% 
   distinct() %>% 
   left_join(cb, by = "iso3n") %>% 
-  select(lon, lat, iso3, benefit = ranking_raster, cost = fishing_days_as_costs) %>% 
-  mutate(mb = benefit / cost)
+  select(lon, lat, iso3, ecoregion, province, realm, benefit = ranking_raster, cost = delta_v_raster_a2) %>% 
+  mutate(mb = benefit / cost,
+         neg = mb >= 0)
 
 global_data <- master_data %>% 
-  arrange(desc(benefit)) %>%
+  arrange(neg, desc(mb)) %>%
   mutate(tb = cumsum(benefit),
          tc = cumsum(cost),
          pct = (1:nrow(.)) / nrow(.))
   
 country_data <- master_data %>% 
   group_by(iso3) %>% 
-  arrange(desc(mb)) %>%
+  arrange(neg, desc(mb)) %>%
   mutate(tb = cumsum(benefit),
-         tc = cumsum(cost)) %>% 
+         tc = cumsum(cost),
+         pct = (1:length(tc)) / length(tc)) %>% 
   ungroup()
-# FIGURES
 
-# Desired level of conservation
-ggplot(global_data, aes(x = pct, y = tb)) +
-  geom_line()
+country_realm <- master_data %>% 
+  group_by(iso3, realm) %>% 
+  arrange(neg, desc(mb)) %>%
+  mutate(tb = cumsum(benefit),
+         tc = cumsum(cost),
+         pct = (1:length(tc)) / length(tc)) %>% 
+  ungroup()
 
-# Supply curves
-ggplot(mapping = aes(x = tb, y = cost)) +
-  geom_line(data = global_data) +
-  # geom_line(data = country_data, aes(color = iso3)) +
-  guides(color = F)
+country_province <- master_data %>% 
+  group_by(iso3, province) %>% 
+  arrange(neg, desc(mb)) %>%
+  mutate(tb = cumsum(benefit),
+         tc = cumsum(cost),
+         pct = (1:length(tc)) / length(tc)) %>% 
+  ungroup()
 
-
-
-
-lggplot(data, aes(benefit, cost)) +
-  geom_point()
-
-
+country_ecoregion <- master_data %>% 
+  group_by(iso3, ecoregion) %>% 
+  arrange(neg, desc(mb)) %>%
+  mutate(tb = cumsum(benefit),
+         tc = cumsum(cost),
+         pct = (1:length(tc)) / length(tc)) %>% 
+  ungroup()
 
 
 
