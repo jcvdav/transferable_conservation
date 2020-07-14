@@ -28,8 +28,8 @@ library(tidyverse)
 
 ## Process ###############################################################################################################################################################
 # Read in the shapefiles -------------------------------------------------------------------------------------------------------------------------------------------------
-eez <- st_read(dsn = file.path(project_path,
-                               "raw_data",
+eez <- st_read(dsn = file.path(data_path,
+                               "marine-regions-eez-v11",
                           "World_EEZ_v11_20191118"),
                layer = "eez_v11",
                stringsAsFactors = F) %>%              # Make sure strings are not read in as factors
