@@ -1,2 +1,2 @@
 source("renv/activate.R")
-source("scripts/setup.R")
+source("scripts/00_setup.R")
