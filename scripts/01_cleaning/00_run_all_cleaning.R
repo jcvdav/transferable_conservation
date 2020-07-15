@@ -2,7 +2,7 @@
 
 library(here)
 
-source(file = here("scripts", "setup.R"), local = F)
+source(file = here("scripts", "00_setup.R"), local = F)
 
 # CLEANING SCRIPT
 source(file = here("scripts", "01_cleaning", "01_clean_EEZs.R"), local = F)
