@@ -1,3 +1,43 @@
+# List of functions to convert area targets to
+# total benefit, and target benefit to area targets
+
+# Calculate area as a function of benefit
+area <- function(data, ben) {
+  max(data$pct[data$tb <= ben], na.rm = T)
+}
+
+benefit <- function(data, area) {
+  sum(data$ben[data$pct <= area], na.rm = T)
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+########## OLD FUNCTIONS BELOW ################
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+###############################################
+
+
+
+
+
+
 
 # Define function that finds the top n in each vector
 which_max_n <- function(vector, prop, dec) {
