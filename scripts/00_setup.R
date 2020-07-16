@@ -24,18 +24,18 @@ zis_con <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
 # Default geometry colors, fills, and shapes
 library(ggplot2)
 update_geom_defaults(geom = "col", list(color = "black",
-                                                 fill = "steelblue"))
+                                        fill = "steelblue"))
 
 update_geom_defaults(geom = "point", list(color = "black",
-                                                   fill = "steelblue",
-                                                   shape = 21,
-                                                   size = 3))
+                                          fill = "steelblue",
+                                          shape = 21,
+                                          size = 3))
 
 update_geom_defaults(geom = "line", list(color = "steelblue"))
 
 update_geom_defaults(geom = "sf", list(color = "black",
-                                                fill = "transparent",
-                                                size = 0.3))
+                                       fill = "transparent",
+                                       size = 0.3))
 
 
 # Source project functions

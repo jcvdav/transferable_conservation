@@ -6,11 +6,15 @@ area <- function(data, ben) {
   max(data$pct[data$tb <= ben], na.rm = T)
 }
 
+# Calculate benefit as a function of area
 benefit <- function(data, area) {
-  sum(data$ben[data$pct <= area], na.rm = T)
+  sum(data$benefit[data$pct <= area], na.rm = T)
 }
 
-
+# Get the trading price
+trading_price <- function(data, target) {
+  max(data$mc[data$tb <= target], na.rm = T)
+}
 
 
 

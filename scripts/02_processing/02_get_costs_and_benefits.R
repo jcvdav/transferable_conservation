@@ -40,7 +40,9 @@ benefits_raster <-
 
 # Costs raster
 costs_raster <-
-  -1 * raster(file.path(ng_data_path, "03_output/07_food/delta_v_raster_a2.tif"))
+  readRDS(file = file.path(project_path, "raw_data", "Fig1_PixelLeveDH_raw.rds")) %>% 
+  rasterFromXYZ(crs = proj_moll) %>% 
+  projectRaster(benefits_raster)
 
 # Load spatial metadata rasters
 iso3n <-
@@ -79,7 +81,7 @@ cb <-
     pro_code = pro_raster,
     eco_code = eco_raster,
     benefit = ranking_raster,
-    cost = delta_v_raster_a2
+    cost = deltaH
   ) %>%
   drop_na(iso3n)                  # Drop areas beyond national jurisdiction
 
@@ -90,8 +92,9 @@ master_data <- eez_meow %>%
   left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%            # Join to the data.frame from rasters
   select(lon, lat, iso3, ecoregion, province, realm, benefit, cost) %>%             # Select columns
   mutate(mb = benefit / cost,                                                       # Calculate marginal benefit
+         mc = cost / benefit,
          neg = mb >= 0) %>%                                                         # Create dummy variable for negative costs
-  drop_na(lat, lon)                                                 # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
+  drop_na(lat, lon, benefit, cost)                                                 # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
 
 # Calculate globla supply curve
 global_data <- master_data %>%
@@ -116,6 +119,16 @@ eez_data <- master_data %>%
 # Calculate realm and country level supply curve
 rlm_eez <- master_data %>%
   group_by(iso3, realm) %>%
+  arrange(neg, desc(mb)) %>%
+  mutate(
+    tb = cumsum(benefit),
+    tc = cumsum(cost),
+    pct = (1:length(tc)) / length(tc)
+  ) %>%
+  ungroup()
+
+rlm <- master_data %>% 
+  group_by(realm) %>% 
   arrange(neg, desc(mb)) %>%
   mutate(
     tb = cumsum(benefit),

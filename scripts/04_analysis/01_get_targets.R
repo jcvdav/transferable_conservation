@@ -10,7 +10,8 @@ global_cb <- readRDS(file = file.path(project_path, "processed_data", "global_co
   mutate(type = "market")
 
 # Load coastline vector
-world <- rnaturalearth::ne_coastline(returnclass = "sf")
+world <- rnaturalearth::ne_countries(returnclass = "sf") %>% 
+  select(1)
 
 max_con <- global_cb %>% 
   arrange(desc(benefit)) %>% 
@@ -54,25 +55,33 @@ ggplot(mapping = aes(x = pct, y = tb, color = type)) +
   geom_line(data = all_curves,
             size = 1) +
   geom_vline(xintercept = 0.3, linetype = "dashed") +
-  geom_point(data = cor_con) +
+  geom_point(data = cor_con, aes(fill = type), color = "black") +
   geom_segment(data = cor_con, aes(x = 0, xend = 0.3, yend = tb),
                linetype = "dashed") +
   ggtheme_plot() +
   scale_color_viridis_d() +
+  scale_fill_viridis_d() +
   theme(legend.justification = c(0, 1),
         legend.position = c(0, 1)) +
   labs(x = "Percent protected in EEZs",
        y = "Conservation",
        color = "Approach") +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0))
+  scale_y_continuous(expand = c(0, 0)) +
+  guides(fill = F)
 
 all_curves %>% 
   filter(pct <= 0.3) %>% 
   ggplot() +
-  geom_sf(data = world, size = 0.3) +
+  geom_sf(data = world, size = 0.3, fill = "black") +
   geom_raster(aes(x = lon, y = lat, fill = benefit)) +
   facet_wrap(~type, ncol = 2) +
   scale_fill_viridis_c() +
   ggtheme_map() +
   coord_sf(crs = 54009)
+
+desired_cons <- benefit(global_cb, 0.3)
+
+
+
+
