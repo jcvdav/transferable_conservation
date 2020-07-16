@@ -20,21 +20,20 @@ proj_longlat <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "             
 
 # A color palete
 zis_con <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
-mat_pal <- colorRamps::matlab.like(100)
-
 
 # Default geometry colors, fills, and shapes
-ggplot2::update_geom_defaults(geom = "col", list(color = "black",
+library(ggplot2)
+update_geom_defaults(geom = "col", list(color = "black",
                                                  fill = "steelblue"))
 
-ggplot2::update_geom_defaults(geom = "point", list(color = "black",
+update_geom_defaults(geom = "point", list(color = "black",
                                                    fill = "steelblue",
                                                    shape = 21,
                                                    size = 3))
 
-ggplot2::update_geom_defaults(geom = "line", list(color = "steelblue"))
+update_geom_defaults(geom = "line", list(color = "steelblue"))
 
-ggplot2::update_geom_defaults(geom = "sf", list(color = "black",
+update_geom_defaults(geom = "sf", list(color = "black",
                                                 fill = "transparent",
                                                 size = 0.3))
 
