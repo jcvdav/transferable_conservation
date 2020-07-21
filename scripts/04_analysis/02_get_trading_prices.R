@@ -1,17 +1,21 @@
-
-
-
+#######################################################
+# This scripts takes the five global conservation targets
+# identified before, and calculates the marginal cost.
+# 
+# This value becomes the trading price. If a country hits this spot,
+# it is cheaper for it to pay to conserve elsewhere, where marginal costs are lower.
+# 
+#######################################################
 
 # SET UP ################################################################################################
 # Load packages
 library(startR)
-library(cowplot)
 library(tidyverse)
 
 # Load data
 ## Global data
-global_cb <- readRDS(
-  file = file.path(project_path,"processed_data","global_costs_and_benefits.rds")
+eez_h_sum_cb <- readRDS(
+  file = file.path(project_path,"processed_data","eez_h_sum_costs_and_benefits.rds")
 )
 
 ## National data
@@ -19,98 +23,50 @@ eez_cb <- readRDS(
   file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")
 )
 
-## Realm eez
-rlm_eez_cb <- readRDS(
-  file = file.path( project_path, "processed_data", "rlm_eez_costs_and_benefits.rds")
-) 
+# Load the calculated conservation targets
+conservation_targets <- readRDS(
+  file.path(project_path, "output_data", "conservation_targets.rds")
+)
 
 
 # PROCESSING ############################################################################################
 
+# Calculate the trading price
+trading_prices <- conservation_targets %>% 
+  mutate(mc = map_dbl(tb, get_trading_price, eez_h_sum_cb))
 
-target_cons <- benefit(global_cb, 0.3)
-trading_price <- global_cb %>% 
-  filter(tb <= target_cons) %>% 
-  tail(1) %>% 
-  pull(mc)
 
-eez_cb %>% 
-  mutate(protected = cost <= trading_price) %>% 
-  ggplot(aes(lon, lat, fill = protected)) +
-  geom_raster() +
-  scale_fill_brewer(palette = "Set1")
-
-protected_global <- global_cb %>% 
-  filter(mc <= trading_price)
-
-protected_eez <- eez_cb %>% 
-  filter(mc <= trading_price)
-
-protected_rlm_eez <- rlm_eez_cb %>% 
-  filter(mc <= trading_price)
-
-ggplot() +
-  geom_line(data = protected_rlm_eez,
-            mapping = aes(x = tb, y = mc, color = iso3)) +
-  # geom_line(data = protected_global, aes(x = tb, y = mc)) +
-  guides(color = F) +
-  scale_color_viridis_d() +
+# Figure of trading prices
+trading_prices_plot <- 
+  ggplot(mapping = aes(x = tb, y = mc)) +
+  geom_line(data = eez_h_sum_cb,
+            size = 1) +
+  geom_segment(data = trading_prices, aes(x = tb, xend = tb, y = -5000, yend = mc),
+               linetype = "dashed") +
+  geom_segment(data = trading_prices, aes(x = 0, xend = tb, y = mc, yend = mc),
+               linetype = "dashed") +
+  geom_point(data = trading_prices, aes(fill = type), color = "black") +
+  geom_text(data = trading_prices, aes(label = round(mc, 2)), nudge_y = c(3, 5, 1, 4, 2) * 1000) +
   ggtheme_plot() +
+  scale_color_viridis_d() +
+  scale_fill_viridis_d() +
+  theme(legend.justification = c(0, 1),
+        legend.position = c(0, 1)) +
   labs(x = "Conservation",
-       y = "Marginal Costs") +
-  facet_wrap(~realm)
+       y = "MC",
+       fill = "Approach") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
 
+# Export stuff
 
-protected_eez %>% 
-  group_by(iso3) %>% 
-  summarize(tb = sum(benefit),
-            tc = sum(cost)) %>% 
-  arrange(tc)
+saveRDS(trading_prices,
+        file = file.path(project_path, "output_data", "global_trading_prices.rds"))
 
-
-
-##### testing maps
-
-a <- group_by(rlm, realm) %>% 
-  nest() %>% 
-  mutate(target_benefit = map(data, benefit, area = 0.3)) %>% 
-  select(-data) %>% 
-  unnest(target_benefit)
-
-tps <- rlm %>% 
-  group_by(realm) %>% 
-  nest() %>% 
-  left_join(a, by = "realm") %>% 
-  mutate(trading_price = map2(data, target_benefit, trading_price)) %>% 
-  select(-data) %>% 
-  unnest(trading_price)
-
-ggplot(rlm, aes(x = tb, y = mc, color = realm)) +
-  geom_line() +
-  geom_point(data = tps, aes(x = target_benefit, y = trading_price, fill = realm)) +
-  scale_y_continuous(limits = c(-1000, 1000))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+lazy_ggsave(trading_prices_plot,
+            "global_conservation_targets_and_trading_prices",
+            width = 14,
+            height = 7)
 
 
 

@@ -40,9 +40,13 @@ benefits_raster <-
 
 # Costs raster
 costs_raster <-
-  readRDS(file = file.path(project_path, "raw_data", "Fig1_PixelLeveDH_raw.rds")) %>% 
-  rasterFromXYZ(crs = proj_moll) %>% 
-  projectRaster(benefits_raster)
+  raster(
+    file.path(
+      project_path,
+      "processed_data",
+      "costs_raster.tif"
+    )
+  )
 
 # Load spatial metadata rasters
 iso3n <-
@@ -81,30 +85,26 @@ cb <-
     pro_code = pro_raster,
     eco_code = eco_raster,
     benefit = ranking_raster,
-    cost = deltaH
+    cost = costs_raster
   ) %>%
-  drop_na(iso3n)                  # Drop areas beyond national jurisdiction
+  drop_na(iso3n) %>%              # Drop areas beyond national jurisdiction
+  mutate(hemisphere = case_when(lon > 0 & lat > 0 ~ "NE",
+                                lon < 0 & lat > 0 ~ "NW",
+                                lon > 0 & lat <= 0 ~ "SE",
+                                lon > 0 & lat >= 0 ~ "SW"))
 
-# Create a master dataset with all the metadata for eahc pixel
+# Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
   st_drop_geometry() %>%
   select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>%
   left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%            # Join to the data.frame from rasters
-  select(lon, lat, iso3, ecoregion, province, realm, benefit, cost) %>%             # Select columns
+  select(lon, lat, iso3, ecoregion, province, realm, hemisphere, benefit, cost) %>% # Select columns
   mutate(mb = benefit / cost,                                                       # Calculate marginal benefit
          mc = cost / benefit,
          neg = mb >= 0) %>%                                                         # Create dummy variable for negative costs
-  drop_na(lat, lon, benefit, cost)                                                 # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
+  drop_na(lat, lon, benefit, cost)                                                  # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
 
-# Calculate globla supply curve
-global_data <- master_data %>%
-  arrange(neg, desc(mb)) %>%
-  mutate(
-    tb = cumsum(benefit),
-    tc = cumsum(cost),
-    pct = (1:nrow(.)) / nrow(.)
-  )
-
+## AT THE EEZ LEVEL ####
 # Calculate country-level supply curve
 eez_data <- master_data %>%
   group_by(iso3) %>%
@@ -116,6 +116,16 @@ eez_data <- master_data %>%
   ) %>%
   ungroup()
 
+# Calculate global supply curve by summing horizontally
+eez_h_sum <- master_data %>%
+  arrange(neg, desc(mb)) %>%
+  mutate(
+    tb = cumsum(benefit),
+    tc = cumsum(cost),
+    pct = (1:nrow(.)) / nrow(.)
+  )
+
+## AT THE REALM LEVEL ####
 # Calculate realm and country level supply curve
 rlm_eez <- master_data %>%
   group_by(iso3, realm) %>%
@@ -127,7 +137,8 @@ rlm_eez <- master_data %>%
   ) %>%
   ungroup()
 
-rlm <- master_data %>% 
+# Sum horizontally for each realm
+rlm_h_sum <- master_data %>% 
   group_by(realm) %>% 
   arrange(neg, desc(mb)) %>%
   mutate(
@@ -137,6 +148,7 @@ rlm <- master_data %>%
   ) %>%
   ungroup()
 
+## AT THE PROVINCE LEVEL ####
 # Calculate countyr level and province supply curve
 pro_eez <- master_data %>%
   group_by(iso3, province) %>%
@@ -148,8 +160,31 @@ pro_eez <- master_data %>%
   ) %>%
   ungroup()
 
+# Sum horizontally for each province
+pro_h_sum <- master_data %>%
+  group_by(province) %>%
+  arrange(neg, desc(mb)) %>%
+  mutate(
+    tb = cumsum(benefit),
+    tc = cumsum(cost),
+    pct = (1:length(tc)) / length(tc)
+  ) %>%
+  ungroup()
+
+## AT THE ECOREIGON LEVEL ####
 # Calculate country level and ecoregion supplu curve
 eco_eez <- master_data %>%
+  group_by(iso3, ecoregion) %>%
+  arrange(neg, desc(mb)) %>%
+  mutate(
+    tb = cumsum(benefit),
+    tc = cumsum(cost),
+    pct = (1:length(tc)) / length(tc)
+  ) %>%
+  ungroup()
+
+# Sum horizzontally for each realm
+eco_h_sum <- master_data %>%
   group_by(iso3, ecoregion) %>%
   arrange(neg, desc(mb)) %>%
   mutate(
@@ -166,15 +201,15 @@ saveRDS(
   file = file.path(project_path, "processed_data", "master_costs_and_benefits.rds")
 )
 
-# Export global table
-saveRDS(
-  global_data,
-  file = file.path( project_path, "processed_data", "global_costs_and_benefits.rds")
-)
-
 # Export country-level data
 saveRDS(eez_data,
         file = file.path( project_path, "processed_data", "eez_costs_and_benefits.rds")
+)
+
+# Export horizontally summed
+saveRDS(
+  eez_h_sum,
+  file = file.path(project_path, "processed_data", "eez_h_sum_costs_and_benefits.rds")
 )
 
 # Export realm level data
@@ -182,14 +217,29 @@ saveRDS(rlm_eez,
         file = file.path( project_path, "processed_data", "rlm_eez_costs_and_benefits.rds")
 )
 
+# Export horizontally summed realms
+saveRDS(rlm_h_sum,
+        file = file.path( project_path, "processed_data", "rlm_h_sum_costs_and_benefits.rds")
+)
+
+
 # Export province level data
 saveRDS(pro_eez,
         file = file.path( project_path, "processed_data", "pro_eez_costs_and_benefits.rds")
 )
 
+# Export horizontally summed province level data
+saveRDS(pro_h_sum,
+        file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds")
+)
+
 # Export ecoregion level data
 saveRDS(eco_eez,
         file = file.path( project_path, "processed_data", "eco_eez_costs_and_benefits.rds")
+)
+
+saveRDS(eco_h_sum,
+        file = file.path( project_path, "processed_data", "eco_h_sum_costs_and_benefits.rds")
 )
 
 ## END OF SCRIPT ##

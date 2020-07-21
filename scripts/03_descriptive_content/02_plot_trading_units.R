@@ -8,7 +8,7 @@ library(tidyverse)
 
 # Load data
 
-global_cb <- readRDS(file = file.path(project_path, "processed_data", "global_costs_and_benefits.rds"))
+eez_h_sum_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_h_sum_costs_and_benefits.rds"))
 eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds"))
 rlm_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "rlm_eez_costs_and_benefits.rds"))
 pro_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "pro_eez_costs_and_benefits.rds"))
@@ -79,12 +79,13 @@ eezs_per_province <- eez_meow %>%
 
 eezs_per_ecoregion <- eez_meow %>% 
   st_drop_geometry() %>% 
-  group_by(realm, ecoregion) %>% 
+  group_by(realm, province, ecoregion) %>% 
   summarize(n_eez = n_distinct(iso3)) %>% 
   ungroup() %>% 
   arrange(desc(n_eez)) %>% 
   mutate(split = 1:nrow(.) >= 110) %>% 
   mutate(ecoregion = fct_reorder(ecoregion, n_eez)) 
+
 
 # Barplots
 

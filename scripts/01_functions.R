@@ -11,12 +11,54 @@ benefit <- function(data, area) {
   sum(data$benefit[data$pct <= area], na.rm = T)
 }
 
-# Get the trading price
-trading_price <- function(data, target) {
-  max(data$mc[data$tb <= target], na.rm = T)
+# Assign order of protection for each country
+get_country_pathways <- function(data) {
+  data %>% 
+    mutate(tb = cumsum(benefit),
+           pct = (1:nrow(.)) / nrow(.)) %>% 
+    select(-type)
 }
 
+# Get what the trading price is, for a given desired amount of conservation
+get_trading_price <- function(conservation_target, supply_curve) {
+  max(supply_curve$mc[supply_curve$tb <= conservation_target], na.rm = T)
+}
 
+# Plot conservation supply curve
+gg_sc <- function(data, color, h, v) {
+  
+  
+  if(is.null(color)) {
+    # Create the plot
+    p <- ggplot(data = data,
+                mapping = aes(x = tb, y = mc)) +
+      geom_line(size = 1) +
+      ggtheme_plot() +
+      labs(x = "Conservation",
+           y = "Marginal costs")
+  } else {
+    p <- ggplot(data = data,
+                mapping = aes(x = tb, y = mc, color = iso3)) +
+      geom_line(size = 1) +
+      ggtheme_plot() +
+      labs(x = "Conservation",
+           y = "Marginal costs")
+  }
+  
+  # Add horizontal line for marginal trading price
+  if(!is.null(h = )) {
+    p <- p +
+      geom_hline(yintercept = h, linetype = "dashed")
+  }
+  
+  # Add vertical line for target amount of conservation
+  if(!is.null(v)) {
+    p <- p +
+      geom_vline(xintercept = v, linetype = "dashed")
+  }
+  
+  return(p)
+}
 
 
 

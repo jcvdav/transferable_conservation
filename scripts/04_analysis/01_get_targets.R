@@ -1,86 +1,138 @@
+#######################################################
+# There are many ways the 30% can be interpreted. Each
+# country may decide to protect their 30% in a
+# different way. For example, by protecting the 30% with
+# the highest biodiversity, or the 30% with the least cost.
+# 
+# To avoid ambiguities, I calculate the country-level
+# biodiversity benefit of conserving 30% with the
+# the folloeing rules:
+# 
+# - Most efficient (benefit / cost)
+# - Most conservtion (benefit)
+# - Least cosnervation (-benefit)
+# - Most costly (cost)
+# - Cheapest (-cost)
+# 
+# I then calculate the global biodiversity benefit by
+# summing across all nations. These 5 numbers represent
+# plausible global biodiversity targets.
+#######################################################
+
+
+
+# SET UP ################################################################################################
 # Load packages
 library(startR)
-library(rnaturalearth)
-library(sf)
 library(tidyverse)
 
-
 # Load data
-global_cb <- readRDS(file = file.path(project_path, "processed_data", "global_costs_and_benefits.rds")) %>% 
-  mutate(type = "market")
+eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")) %>% 
+  mutate(type = "efficient") %>% 
+  select(iso3, everything())
 
-# Load coastline vector
-world <- rnaturalearth::ne_countries(returnclass = "sf") %>% 
-  select(1)
+eez_h_sum_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_h_sum_costs_and_benefits.rds")) %>% 
+  mutate(type = "efficient") %>% 
+  select(iso3, everything())
 
-max_con <- global_cb %>% 
+# PROCESSING #############################################################################################
+# The procesing part sorts the dataset (ascending and descending) by the relevant variable (cost or benefit)
+# It then calculates the total benefit (using the "get_country_patwhays" function),
+# as well as the percentage contribution
+
+# Maximize conservation
+max_con <- eez_cb %>% 
+  group_by(iso3) %>% 
   arrange(desc(benefit)) %>% 
-  mutate(tb = cumsum(benefit),
-         pct = (1:nrow(.)) / nrow(.)) %>% 
-  mutate(type = "maximize conservation")
+  nest() %>% 
+  mutate(data = map(data, get_country_pathways)) %>% 
+  ungroup() %>% 
+  mutate(type = "maximize conservation") %>% 
+  unnest(data)
 
-min_con <- global_cb %>% 
-  arrange(benefit) %>% 
-  mutate(tb = cumsum(benefit),
-         pct = (1:nrow(.)) / nrow(.)) %>% 
-  mutate(type = "minimize conservation")
+# Minimize conservation
+min_con <- eez_cb %>% 
+  group_by(iso3) %>% 
+  arrange(benefit)  %>% 
+  nest() %>% 
+  mutate(data = map(data, get_country_pathways)) %>% 
+  ungroup() %>% 
+  mutate(type = "minimize conservation") %>% 
+  unnest(data)
 
-max_cos <- global_cb %>% 
-  arrange(desc(cost)) %>% 
-  mutate(tb = cumsum(benefit),
-         pct = (1:nrow(.)) / nrow(.)) %>% 
-  mutate(type = "maximize costs")
+# Maximize costs
+max_cos <- eez_cb %>% 
+  group_by(iso3) %>% 
+  arrange(desc(cost))  %>% 
+  nest() %>% 
+  mutate(data = map(data, get_country_pathways)) %>% 
+  ungroup() %>% 
+  mutate(type = "maximize costs") %>% 
+  unnest(data)
 
-min_cos <- global_cb %>% 
+# Minimize costs
+min_cos <- eez_cb %>% 
+  group_by(iso3) %>% 
   arrange(cost) %>% 
-  mutate(tb = cumsum(benefit),
-         pct = (1:nrow(.)) / nrow(.)) %>% 
-  mutate(type = "minimize costs")
+  nest() %>% 
+  mutate(data = map(data, get_country_pathways)) %>% 
+  ungroup() %>% 
+  mutate(type = "minimize costs") %>% 
+  unnest(data)
 
-all_curves <- rbind(global_cb,
-      max_con,
-      min_con,
-      max_cos,
-      min_cos)
 
-cor_con <- all_curves %>% 
-  filter(pct <= 0.3) %>% 
+# We now combine all curves together
+all_curves <- rbind(
+  eez_cb,
+  max_con,
+  min_con,
+  max_cos,
+  min_cos) %>% 
+  group_by(type)
+
+# Plot all the country-level protection curves. The curvature is different,
+# based on the approach taken. But the end value is always the same.
+all_supply_curves <- 
+  ggplot(all_curves, aes(x = pct, y = tb, group = iso3)) +
+  geom_line(size = 0.1) +
+  facet_wrap(~type) +
+  geom_vline(xintercept = 0.3, linetype = "dashed") +
+  ggtheme_plot() +
+  labs(x = "Percent protected",
+       y = "Conservation")
+
+# Now tht we know teh country-level conservation,
+# we can derive the global by summing across all of those.
+conservation_targets <- all_curves %>%
   group_by(type) %>%
   nest() %>%
-  mutate(data = map(data, tail, 1)) %>%
-  unnest(cols = data) %>% 
-  select(pct, tb, type)
+  mutate(tb = map_dbl(data, benefit, 0.3)) %>% 
+  select(-data)
 
-ggplot(mapping = aes(x = pct, y = tb, color = type)) +
-  geom_line(data = all_curves,
-            size = 1) +
-  geom_vline(xintercept = 0.3, linetype = "dashed") +
-  geom_point(data = cor_con, aes(fill = type), color = "black") +
-  geom_segment(data = cor_con, aes(x = 0, xend = 0.3, yend = tb),
-               linetype = "dashed") +
-  ggtheme_plot() +
-  scale_color_viridis_d() +
-  scale_fill_viridis_d() +
-  theme(legend.justification = c(0, 1),
-        legend.position = c(0, 1)) +
-  labs(x = "Percent protected in EEZs",
-       y = "Conservation",
-       color = "Approach") +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) +
-  guides(fill = F)
+# Export stuff
 
-all_curves %>% 
-  filter(pct <= 0.3) %>% 
-  ggplot() +
-  geom_sf(data = world, size = 0.3, fill = "black") +
-  geom_raster(aes(x = lon, y = lat, fill = benefit)) +
-  facet_wrap(~type, ncol = 2) +
-  scale_fill_viridis_c() +
-  ggtheme_map() +
-  coord_sf(crs = 54009)
+lazy_ggsave(all_supply_curves,
+            "eez_supply_curves_approaches",
+            width = 14,
+            height = 9)
 
-desired_cons <- benefit(global_cb, 0.3)
+saveRDS(object = conservation_targets,
+        file = file.path(project_path, "output_data", "conservation_targets.rds"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
