@@ -99,16 +99,16 @@ master_data <- eez_meow %>%
   select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>%
   left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%            # Join to the data.frame from rasters
   select(lon, lat, iso3, ecoregion, province, realm, hemisphere, benefit, cost) %>% # Select columns
-  mutate(mb = benefit / cost,                                                       # Calculate marginal benefit
+  mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
          mc = cost / benefit,
-         neg = mb >= 0) %>%                                                         # Create dummy variable for negative costs
+         neg = bcr >= 0) %>%                                                         # Create dummy variable for negative costs
   drop_na(lat, lon, benefit, cost)                                                  # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
 
 ## AT THE EEZ LEVEL ####
 # Calculate country-level supply curve
 eez_data <- master_data %>%
   group_by(iso3) %>%
-  arrange(neg, desc(mb)) %>%
+  arrange(neg, desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
@@ -118,7 +118,7 @@ eez_data <- master_data %>%
 
 # Calculate global supply curve by summing horizontally
 eez_h_sum <- master_data %>%
-  arrange(neg, desc(mb)) %>%
+  arrange(neg, desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
@@ -129,7 +129,7 @@ eez_h_sum <- master_data %>%
 # Calculate realm and country level supply curve
 rlm_eez <- master_data %>%
   group_by(iso3, realm) %>%
-  arrange(neg, desc(mb)) %>%
+  arrange(neg, desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
@@ -140,7 +140,7 @@ rlm_eez <- master_data %>%
 # Sum horizontally for each realm
 rlm_h_sum <- master_data %>% 
   group_by(realm) %>% 
-  arrange(neg, desc(mb)) %>%
+  arrange(neg, desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
@@ -152,7 +152,7 @@ rlm_h_sum <- master_data %>%
 # Calculate countyr level and province supply curve
 pro_eez <- master_data %>%
   group_by(iso3, province) %>%
-  arrange(neg, desc(mb)) %>%
+  arrange(neg, desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
@@ -163,7 +163,7 @@ pro_eez <- master_data %>%
 # Sum horizontally for each province
 pro_h_sum <- master_data %>%
   group_by(province) %>%
-  arrange(neg, desc(mb)) %>%
+  arrange(neg, desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
@@ -175,7 +175,7 @@ pro_h_sum <- master_data %>%
 # Calculate country level and ecoregion supplu curve
 eco_eez <- master_data %>%
   group_by(iso3, ecoregion) %>%
-  arrange(neg, desc(mb)) %>%
+  arrange(neg, desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
@@ -186,7 +186,7 @@ eco_eez <- master_data %>%
 # Sum horizzontally for each realm
 eco_h_sum <- master_data %>%
   group_by(iso3, ecoregion) %>%
-  arrange(neg, desc(mb)) %>%
+  arrange(neg, desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),

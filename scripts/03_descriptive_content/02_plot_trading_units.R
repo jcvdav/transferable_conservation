@@ -24,7 +24,7 @@ meows_per_eez <- eez_meow %>%
             n_eco = n_distinct(ecoregion)) %>% 
   ungroup() %>% 
   arrange(desc(n_eco)) %>% 
-  ms_simplify(keep_shapes = TRUE, sys = T)
+  ms_simplify(keep_shapes = TRUE)
 
 rlm_per_eez <- ggplot(meows_per_eez, aes(fill = n_rlm)) +
   geom_sf() +

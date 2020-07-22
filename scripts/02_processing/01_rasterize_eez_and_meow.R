@@ -1,5 +1,6 @@
 library(raster)
 library(fasterize)
+library(sf)
 library(tidyverse)
 
 # Load reference raster

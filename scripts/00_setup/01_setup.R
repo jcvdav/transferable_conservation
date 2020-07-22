@@ -18,6 +18,10 @@ project_path <- "~/Google Drive File Stream/Shared drives/emlab/projects/current
 proj_moll <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs " # Mollweide - EPSG code ESRI:54009
 proj_longlat <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "              # Unprojected coordinates - EPSG code 4326
 
+# EPSG codes
+epsg_moll <- "ESRI:54009"
+epsg_longlat <- 4326
+
 # A color palete
 zis_con <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
 
@@ -31,12 +35,13 @@ update_geom_defaults(geom = "point", list(color = "black",
                                           shape = 21,
                                           size = 3))
 
-update_geom_defaults(geom = "line", list(color = "steelblue"))
+update_geom_defaults(geom = "line", list(color = "steelblue",
+                                         size = 0.2))
 
-update_geom_defaults(geom = "sf", list(color = "black",
-                                       fill = "transparent",
+update_geom_defaults(geom = "sf", list(color = "transparent",
+                                       fill = "gray",
                                        size = 0.3))
 
 
 # Source project functions
-source(here::here("scripts", "01_functions.R"))
+source(here::here("scripts", "00_setup","02_functions.R"))

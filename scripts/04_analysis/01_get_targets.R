@@ -4,7 +4,7 @@
 # different way. For example, by protecting the 30% with
 # the highest biodiversity, or the 30% with the least cost.
 # 
-# To avoid ambiguities, I calculate the country-level
+# To avoid abcriguities, I calculate the country-level
 # biodiversity benefit of conserving 30% with the
 # the folloeing rules:
 # 
@@ -15,7 +15,7 @@
 # - Cheapest (-cost)
 # 
 # I then calculate the global biodiversity benefit by
-# summing across all nations. These 5 numbers represent
+# summing across all nations. These 5 nubcrers represent
 # plausible global biodiversity targets.
 #######################################################
 
@@ -81,7 +81,7 @@ min_cos <- eez_cb %>%
   unnest(data)
 
 
-# We now combine all curves together
+# We now cobcrine all curves together
 all_curves <- rbind(
   eez_cb,
   max_con,
