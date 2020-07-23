@@ -64,10 +64,9 @@ global <- ggplot(data = eez_h_sum,
 
 # Country-level supply curves
 eez <- ggplot(data = eez_cb,
-              mapping = aes(x = tb, y = mc, color = iso3)) +
+              mapping = aes(x = tb, y = mc, group = iso3)) +
   geom_line() +
   guides(color = F) +
-  scale_color_viridis_d() +
   ggtheme_plot() +
   labs(x = "Conservation",
        y = "Marginal costs")
@@ -100,7 +99,7 @@ eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
 # Country province, for each Realm
 eez_pro <-
   ggplot(data = pro_eez_cb,
-         mapping = aes(x = tb, y = mc, color = iso3, group = paste(province, iso3))) +
+         mapping = aes(x = tb, y = mc, group = paste(province, iso3))) +
   geom_line() +
   guides(color = F) +
   scale_color_viridis_d() +
