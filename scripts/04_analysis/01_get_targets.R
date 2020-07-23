@@ -81,7 +81,7 @@ min_cos <- eez_cb %>%
   unnest(data)
 
 
-# We now cobcrine all curves together
+# We now combine all curves together
 all_curves <- rbind(
   eez_cb,
   max_con,
@@ -90,24 +90,25 @@ all_curves <- rbind(
   min_cos) %>% 
   group_by(type)
 
-# Plot all the country-level protection curves. The curvature is different,
-# based on the approach taken. But the end value is always the same.
-all_supply_curves <- 
-  ggplot(all_curves, aes(x = pct, y = tb, group = iso3)) +
-  geom_line(size = 0.1) +
-  facet_wrap(~type) +
-  geom_vline(xintercept = 0.3, linetype = "dashed") +
-  ggtheme_plot() +
-  labs(x = "Percent protected",
-       y = "Conservation")
-
-# Now tht we know teh country-level conservation,
+# Now that we know the country-level conservation,
 # we can derive the global by summing across all of those.
 conservation_targets <- all_curves %>%
   group_by(type) %>%
   nest() %>%
   mutate(tb = map_dbl(data, benefit, 0.3)) %>% 
   select(-data)
+
+# Plot all the country-level protection curves. The curvature is different,
+# based on the approach taken. But the end value is always the same.
+all_supply_curves <- 
+  ggplot() +
+  geom_line(data = all_curves, mapping = aes(x = pct, y = tb, group = iso3), size = 0.1) +
+  geom_text(data = conservation_targets, aes(label = round(tb)), x = 0.1, y = 2000, size = 3) +
+  facet_wrap(~type) +
+  geom_vline(xintercept = 0.3, linetype = "dashed") +
+  ggtheme_plot() +
+  labs(x = "Percent protected",
+       y = "Conservation")
 
 # Export stuff
 
