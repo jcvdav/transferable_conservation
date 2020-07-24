@@ -107,8 +107,9 @@ all_supply_curves <-
   facet_wrap(~type) +
   geom_vline(xintercept = 0.3, linetype = "dashed") +
   ggtheme_plot() +
-  labs(x = "Percent protected",
-       y = "Conservation")
+  scale_x_continuous(labels = scales::percent) +
+  labs(x = "%EEZ protected",
+       y = "Biodiversity")
 
 # Export stuff
 

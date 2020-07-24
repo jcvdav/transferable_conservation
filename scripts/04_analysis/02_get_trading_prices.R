@@ -52,8 +52,8 @@ trading_prices_plot <-
   scale_fill_viridis_d() +
   theme(legend.justification = c(0, 1),
         legend.position = c(0, 1)) +
-  labs(x = "Conservation",
-       y = "MC",
+  labs(x = "Biodiversity",
+       y = "Costs",
        fill = "Approach") +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0))

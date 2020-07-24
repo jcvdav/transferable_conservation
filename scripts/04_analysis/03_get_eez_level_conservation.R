@@ -95,7 +95,8 @@ benefit_supply_curves <- rbind(bau, mkt) %>%
   facet_wrap(~approach) +
   lims(y = c(0, trading_price * 5)) +
   ggtheme_plot() +
-  labs(x = "Conservation", y = "Marginal Costs")
+  labs(x = "Biodiversity",
+       y = "Costs")
 
 area_supply_curves <- rbind(bau, mkt) %>%
   ggplot(aes(x = pct, y = mc, group = iso3)) +
@@ -104,13 +105,15 @@ area_supply_curves <- rbind(bau, mkt) %>%
   facet_wrap(~approach) +
   lims(y = c(0, trading_price * 10)) +
   ggtheme_plot() +
-  labs(x = "Percent protected in each EEZ", y = "Marginal Costs",
+  scale_x_continuous(labels = scales::percent) +
+  labs(x = "%EEZ Protected",
+       y = "Costs",
        caption = "Note: Y-axis has been cropped for visualization purposes")
 
 supply_curves <- plot_grid(benefit_supply_curves, area_supply_curves, ncol = 1)
 
 # Plot the two states of the world
-two_states_maxp <- 
+two_states_map <- 
   rbind(bau, mkt) %>% 
   ggplot() +
   geom_sf(data = coast) +
@@ -118,7 +121,8 @@ two_states_maxp <-
   facet_wrap(~approach, ncol = 1) +
   ggtheme_map() +
   scale_fill_viridis_c() +
-  guides(fill = guide_colorbar(frame.colour = "black",
+  guides(fill = guide_colorbar(title = "Biodiversity",
+                               frame.colour = "black",
                                ticks.colour = "black")) +
   labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach results in 1t4% of the costs")
 
