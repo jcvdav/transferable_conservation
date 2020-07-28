@@ -68,7 +68,16 @@ lazy_ggsave(trading_prices_plot,
             width = 14,
             height = 7)
 
+# Table
 
+trading_prices %>% 
+  mutate(type = str_to_sentence(type)) %>% 
+  knitr::kable(format = "latex",
+               digits = 2,
+               col.names = c("Type", "Biodiversity", "Trading price"),
+               label = "trading-prices",
+               caption = "Trading prices for each of the five biodiversity targets, depending on the approach taken.") %>% 
+  cat(file = here::here("results", "tab", "trading-prices.tex"))
 
 
 

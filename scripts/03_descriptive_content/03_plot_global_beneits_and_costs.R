@@ -42,7 +42,7 @@ benefit_map <- ggplot() +
   geom_sf(data = coastline, color = "transparent") +
   geom_raster(data = benefits, aes(x = x, y = y, fill = ranking_raster)) +
   ggtheme_map() +
-  labs(fill = "Biodiversity ranking") +
+  labs(fill = "Biodiversity\nranking") +
   scale_fill_viridis_c() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black"))
@@ -53,7 +53,7 @@ cost_map <- ggplot() +
   geom_sf(data = coastline, color = "transparent") +
   geom_raster(data = costs, aes(x = x, y = y, fill = costs_raster)) +
   ggtheme_map() +
-  labs(fill = "Losses in\landings") +
+  labs(fill = "Losses in\nlandings") +
   scale_fill_viridis_c() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black"))

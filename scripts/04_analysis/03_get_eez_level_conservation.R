@@ -71,32 +71,52 @@ realized_mkt_cb <- mkt %>%
             mkt_area = n()) %>% 
   ungroup()
 
-test <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3") %>% 
+# Find stopping prices
+stops <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3") %>% 
   select(-contains("app")) %>% 
   filter(bau_tb <= mkt_tb) %>% 
-  select(iso3, tb = bau_tb, mc = mc_stop)
+  select(iso3, mc_stop) %>% 
+  mutate(approach = "mkt")
 
-full_join(realized_mkt_cb, realized_bau_cb, by = "iso3")  %>% 
+gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3")  %>% 
   select_if(is.numeric) %>% 
+  select(-contains("stop")) %>% 
   summarize_all(sum, na.rm = T) %>% 
   gather(variable, value) %>% 
   separate(variable, into = c("approach", "variable")) %>% 
   spread(approach, value) %>% 
-  mutate(difference = mkt - bau,
+  mutate(difference = bau - mkt,
+         ratio = mkt / bau)
+
+eez_gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3")  %>% 
+  select_if(is.numeric) %>% 
+  select(-contains("stop")) %>% 
+  group_by(iso3) %>% 
+  summarize_all(sum, na.rm = T) %>% 
+  gather(variable, value) %>% 
+  separate(variable, into = c("approach", "variable")) %>% 
+  spread(approach, value) %>% 
+  mutate(difference = bau - mkt,
          ratio = mkt / bau)
 
 ## FIGURES #########################################################################
 ## Plot the supply curves where they stop
 benefit_supply_curves <- rbind(bau, mkt) %>%
-  ggplot(aes(x = tb, y = mc, group = iso3)) +
+  left_join(stops, by = c("iso3", "approach"), fill = list(mc_stop = 0)) %>% 
+  mutate(mkt_gain = mc >= mc_stop,
+         approach = ifelse(approach == "bau", "BAU", "Market")) %>% 
+  replace_na(replace = list(mkt_gain = F)) %>% 
+  ggplot(aes(x = tb, y = mc, group = iso3, color = mkt_gain)) +
   geom_line(size = 0.2) +
-  geom_point(data = test, size = 0.2) +
   geom_hline(yintercept = trading_price, linetype = "dashed") +
   facet_wrap(~approach) +
+  scale_color_brewer(palette = "Set1", direction = -1) +
   lims(y = c(0, trading_price * 5)) +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs")
+       y = "Costs",
+       caption = "NOTE: Axis have been cropped for visualization purposes") +
+  guides(color = FALSE)
 
 area_supply_curves <- rbind(bau, mkt) %>%
   ggplot(aes(x = pct, y = mc, group = iso3)) +
@@ -129,17 +149,24 @@ two_states_map <-
 
 ## EXPORT FIGURES #########################################################################
 
-lazy_ggsave(plot = supply_curves,
+lazy_ggsave(plot = benefit_supply_curves,
             filename = "equilibrum_supply_curves",
-            width = 14,
-            height = 10)
+            width = 12,
+            height = 6)
 
 lazy_ggsave(plot = two_states_map,
             filename = "two_states_map",
             width = 10,
             height = 10)
 
-
+gains_from_trade %>% 
+  mutate(variable = c("Area", "Biodiversity benefits", "Total costs")) %>% 
+  knitr::kable(format = "latex",
+               digits = 2, 
+               col.names = c("Variable", "BAU", "Market", "Difference", "Ratio"),
+               label = "gains-from-trade",
+               caption = "Gains from trade from protecting 9,687 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
+  cat(file = here::here("results", "tab", "gains_from_trade.tex"))
 
 
 
