@@ -2,6 +2,7 @@
 library(startR)
 library(cowplot)
 library(rmapshaper)
+library(rnaturalearth)
 library(sf)
 library(tidyverse)
 
@@ -14,7 +15,12 @@ rlm_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "rlm_eez_
 pro_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "pro_eez_costs_and_benefits.rds"))
 eco_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eco_eez_costs_and_benefits.rds"))
 
-eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg"))
+eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg")) %>% 
+  ms_simplify()
+
+# Load a coastline
+coast <- ne_countries(returnclass = "sf") %>% 
+  st_transform(crs = epsg_moll) 
 
 # How many MEOWS per country?
 meows_per_eez <- eez_meow %>% 
@@ -26,8 +32,9 @@ meows_per_eez <- eez_meow %>%
   arrange(desc(n_eco)) %>% 
   ms_simplify(keep_shapes = TRUE)
 
-rlm_per_eez <- ggplot(meows_per_eez, aes(fill = n_rlm)) +
-  geom_sf() +
+rlm_per_eez <- ggplot() +
+  geom_sf(data = coast) +
+  geom_sf(data = meows_per_eez, aes(fill = n_rlm)) +
   scale_fill_viridis_c() +
   ggtheme_map() +
   labs(fill = "# of\nRealms") +
@@ -61,6 +68,26 @@ lazy_ggsave(plot = meows_per_eez_plot,
             width = 10,
             height = 15)
 
+lazy_ggsave(plot = rlm_per_eez,
+            filename = "realms_per_eez",
+            width = 10,
+            height = 5)
+
+
+# Map marine ecoregions
+
+realm_map <- ggplot() +
+  geom_sf(data = coast) +
+  geom_sf(data = eez_meow, aes(fill = realm)) +
+  ggtheme_map() +
+  scale_fill_viridis_d() +
+  labs(fill = "Realm") +
+  theme(legend.position = "bottom")
+
+lazy_ggsave(plot = realm_map,
+            filename = "realm_map",
+            width = 20, 
+            height = 10)
 
 # How many countries per MEOW?
 eezs_per_realm <- eez_meow %>% 

@@ -59,7 +59,7 @@ global <- ggplot(data = eez_h_sum,
                  mapping = aes(x = tb, y = mc)) +
   geom_line(size = 1) +
   ggtheme_plot() +
-  labs(x = "Bioiversity",
+  labs(x = "Biodiversity",
        y = "Costs")
 
 # Country-level supply curves
@@ -68,7 +68,7 @@ eez <- ggplot(data = eez_cb,
   geom_line() +
   guides(color = F) +
   ggtheme_plot() +
-  labs(x = "Bioiversity",
+  labs(x = "Biodiversity",
        y = "Costs")
 
 eez_supply_curve <- plot_grid(eez, global, ncol = 2, labels = "AUTO")
@@ -76,13 +76,13 @@ eez_supply_curve <- plot_grid(eez, global, ncol = 2, labels = "AUTO")
 # Country realm
 eez_rlm <-
   ggplot(data = rlm_eez_cb,
-         mapping = aes(x = tb, y = mc, color = iso3)) +
+         mapping = aes(x = tb, y = mc, group = iso3)) +
   geom_line() +
   guides(color = F) +
   scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
-  labs(x = "Bioiversity",
+  labs(x = "Biodiversity",
        y = "Costs")
 
 # realm summed
@@ -91,7 +91,7 @@ rlm <- ggplot(data = rlm_h_sum,
   geom_line() +
   scale_color_viridis_d() +
   ggtheme_plot() +
-  labs(x = "Bioiversity",
+  labs(x = "Biodiversity",
        y = "Costs")
 
 eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
@@ -105,7 +105,7 @@ eez_pro <-
   scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
-  labs(x = "Bioiversity",
+  labs(x = "Biodiversity",
        y = "Costs")
 
 eez_pro <-
@@ -116,7 +116,7 @@ eez_pro <-
   scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
-  labs(x = "Bioiversity",
+  labs(x = "Biodiversity",
        y = "Costs")
 
 
@@ -128,7 +128,7 @@ eez_eco <-
   scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
-  labs(x = "Bioiversity",
+  labs(x = "Biodiversity",
        y = "Costs")
 
 # EXPORT PLOTS ##############################################################################################
