@@ -134,7 +134,7 @@ eez_eco <-
 # EXPORT PLOTS ##############################################################################################
 lazy_ggsave(plot = eez_supply_curve,
             filename = "eez_supply_curve",
-            width = 12, height = 6)
+            width = 12, height = 5)
 
 lazy_ggsave(plot = eez_rlm_supply_curve ,
             filename = "eez_rlm_supply_curve",

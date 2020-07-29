@@ -99,7 +99,7 @@ benefit_supply_curves <- rbind(bau, mkt) %>%
   geom_hline(yintercept = trading_price, linetype = "dashed") +
   facet_wrap(~approach) +
   scale_color_brewer(palette = "Set1", direction = -1) +
-  lims(y = c(0, trading_price * 5)) +
+  lims(y = c(0, trading_price * 2)) +
   ggtheme_plot() +
   labs(x = "Biodiversity",
        y = "Costs",

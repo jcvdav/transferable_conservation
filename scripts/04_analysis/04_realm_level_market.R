@@ -11,21 +11,12 @@
 # Load packages
 library(startR)
 library(cowplot)
+library(kableExtra)
 library(rnaturalearth)
 library(sf)
 library(tidyverse)
 
 # Load data
-## Global data
-eez_h_sum_cb <- readRDS(
-  file = file.path(project_path,"processed_data","eez_h_sum_costs_and_benefits.rds")
-)
-
-## National data
-eez_cb <- readRDS(
-  file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")
-)
-
 ### For each realm and country
 rlm_eez_cb <- readRDS(
   file = file.path( project_path, "processed_data", "rlm_eez_costs_and_benefits.rds")
@@ -34,11 +25,6 @@ rlm_eez_cb <- readRDS(
 rlm_h_sum <- readRDS(
   file = file.path( project_path, "processed_data", "rlm_h_sum_costs_and_benefits.rds")
 ) 
-
-## Read trading prices
-trading_prices <- readRDS(
-  file = file.path(project_path, "output_data", "global_trading_prices.rds")
-)
 
 # Load a coastline
 coast <- ne_countries(returnclass = "sf") %>% 
@@ -99,11 +85,12 @@ stops <- full_join(realized_mkt_cb, realized_bau_cb, by = c("iso3", "realm")) %>
   select(iso3, mc_stop, realm) %>% 
   mutate(approach = "mkt")
 
-gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3")  %>% 
-  select_if(is.numeric) %>% 
+gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = c("iso3", "realm"))  %>% 
+  select(realm, contains("mkt"), contains("bau")) %>% 
   select(-contains("stop")) %>% 
+  group_by(realm) %>% 
   summarize_all(sum, na.rm = T) %>% 
-  gather(variable, value) %>% 
+  gather(variable, value, -realm) %>% 
   separate(variable, into = c("approach", "variable")) %>% 
   spread(approach, value) %>% 
   mutate(difference = bau - mkt,
@@ -128,64 +115,81 @@ benefit_supply_curves <- rbind(bau, mkt) %>%
        caption = "NOTE: Axis have been cropped for visualization purposes") +
   guides(color = FALSE)
 
-got_paid <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3") %>% 
+got_paid <- full_join(realized_mkt_cb, realized_bau_cb, by = c("realm", "iso3")) %>% 
   select(-contains("app")) %>% 
   mutate(gets_paid = bau_tc <= mkt_tc)
 
 map_of_trade <- coast %>% 
   left_join(got_paid, by = c("iso_a3" = "iso3")) %>% 
+  drop_na(realm) %>% 
   replace_na(replace = list(gets_paid = FALSE)) %>% 
   ggplot() +
   geom_sf(aes(fill = gets_paid), color = "black") +
+  facet_wrap(~realm, ncol = 3) +
   scale_fill_brewer(palette = "Set1", direction = -1) +
   ggtheme_map() +
   guides(fill = FALSE)
 
 # Plot the two states of the world
-two_states_map <- 
-  rbind(bau, mkt) %>% 
-  ggplot() +
-  geom_sf(data = coast) +
-  geom_raster(aes(x = lon, y = lat, fill = benefit)) +
-  facet_wrap(~approach, ncol = 1) +
-  ggtheme_map() +
-  scale_fill_viridis_c() +
-  guides(fill = guide_colorbar(title = "Biodiversity",
-                               frame.colour = "black",
-                               ticks.colour = "black")) +
-  labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach results in 1t4% of the costs")
+# two_states_map <- 
+#   rbind(bau, mkt) %>% 
+#   ggplot() +
+#   geom_sf(data = coast) +
+#   geom_raster(aes(x = lon, y = lat, fill = benefit)) +
+#   facet_wrap(~approach, ncol = 1) +
+#   ggtheme_map() +
+#   scale_fill_viridis_c() +
+#   guides(fill = guide_colorbar(title = "Biodiversity",
+#                                frame.colour = "black",
+#                                ticks.colour = "black")) +
+#   labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach results in 1t4% of the costs")
 
 
 ## EXPORT FIGURES #########################################################################
 
-lazy_ggsave(plot = benefit_supply_curves,
-            filename = "equilibrum_supply_curves",
-            width = 12,
-            height = 6)
+# lazy_ggsave(plot = benefit_supply_curves,
+#             filename = "equilibrum_supply_curves",
+#             width = 12,
+#             height = 6)
 
-lazy_ggsave(plot = two_states_map,
-            filename = "two_states_map",
+# lazy_ggsave(plot = two_states_map,
+#             filename = "two_states_map",
+#             width = 10,
+#             height = 10)
+
+lazy_ggsave(plot = map_of_trade,
+            filename = "rlm_map_of_trade",
             width = 10,
             height = 10)
 
-lazy_ggsave(plot = map_of_trade,
-            filename = "map_of_trade",
-            width = 10,
-            height = 5)
-
 gains_from_trade %>% 
-  mutate(variable = c("Area", "Biodiversity benefits", "Total costs")) %>% 
+  mutate(variable = case_when(variable == "area" ~ "Area",
+                              variable == "tb" ~ "Biodiversity",
+                              variable == "tc" ~ "Costs")) %>% 
   knitr::kable(format = "latex",
                digits = 2, 
-               col.names = c("Variable", "BAU", "Market", "Difference", "Ratio"),
-               label = "gains-from-trade",
-               caption = "Gains from trade from protecting 9,687 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
-  cat(file = here::here("results", "tab", "gains_from_trade.tex"))
+               col.names = c("Realm", "Variable", "BAU", "Market", "Difference", "Ratio"),
+               label = "rlm-gains-from-trade",
+               caption = "Gains from trade from protecting 9876 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
+  # kableExtra::collapse_rows() %>% 
+  cat(file = here::here("results", "tab", "rlm_gains_from_trade.tex"))
 
+# Table of trading prices for each realm
+totals <- rlm_trading_prices %>% 
+  mutate(realm = "Summary") %>% 
+  group_by(realm) %>% 
+  summarize(trading_price = weighted.mean(trading_price, target),
+            target = sum(target)) %>% 
+  select(realm, target, trading_price)
 
-
-
-
+rlm_trading_prices %>% 
+  rbind(totals) %>% 
+  knitr::kable(format = "latex",
+               digits = 2,
+               col.names = c("Realm", "Biodiversity", "Trading Price"),
+               label = "rlm-trading-prices",
+               caption = "Biodiversity targets and trading prices for 12 realms. The Last row shows total biodiversity and weighted mean of trading price") %>% 
+  cat(file = here::here("results", "tab", "rlm_trading_prices.tex"))
 
 
 

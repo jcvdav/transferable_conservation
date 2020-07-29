@@ -75,14 +75,14 @@ bcr_map <- master_cb %>%
 lazy_ggsave(benefit_map,
             "benefit_map",
             width = 15,
-            height = 11.5)
+            height = 7)
 
 lazy_ggsave(cost_map,
             "cost_map",
             width = 15,
-            height = 11.5)
+            height = 7)
 
 lazy_ggsave(bcr_map,
             "bcr_map",
             width = 15,
-            height = 11.5)
+            height = 7)
