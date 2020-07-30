@@ -103,7 +103,7 @@ conservation_targets <- all_curves %>%
 all_supply_curves <- 
   ggplot() +
   geom_line(data = all_curves, mapping = aes(x = pct, y = tb, group = iso3), size = 0.1) +
-  geom_text(data = conservation_targets, aes(label = round(tb)), x = 0.1, y = 2000, size = 3) +
+  geom_text(data = conservation_targets, aes(label = round(tb)), x = 0.1, y = 9, size = 3) +
   facet_wrap(~type) +
   geom_vline(xintercept = 0.3, linetype = "dashed") +
   ggtheme_plot() +

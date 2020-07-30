@@ -131,7 +131,7 @@ two_states_map <-
   guides(fill = guide_colorbar(title = "Biodiversity",
                                frame.colour = "black",
                                ticks.colour = "black")) +
-  labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach results in 14% of the costs")
+  labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach costs 46% less.")
 
 
 ## EXPORT FIGURES #########################################################################
@@ -157,7 +157,7 @@ gains_from_trade %>%
                digits = 2, 
                col.names = c("Variable", "BAU", "Market", "Difference", "Ratio"),
                label = "gains-from-trade",
-               caption = "Gains from trade from protecting 9,687 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
+               caption = "Gains from trade from protecting 71.56 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
   cat(file = here::here("results", "tab", "gains_from_trade.tex"))
 
 

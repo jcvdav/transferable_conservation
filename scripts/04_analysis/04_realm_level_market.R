@@ -121,10 +121,11 @@ got_paid <- full_join(realized_mkt_cb, realized_bau_cb, by = c("realm", "iso3"))
 
 map_of_trade <- coast %>% 
   left_join(got_paid, by = c("iso_a3" = "iso3")) %>% 
-  drop_na(realm) %>% 
+  drop_na(realm) %>%
   replace_na(replace = list(gets_paid = FALSE)) %>% 
   ggplot() +
-  geom_sf(aes(fill = gets_paid), color = "black") +
+  geom_sf(data = coast) +
+  geom_sf(aes(fill = gets_paid), color = "black", size = 0.1) +
   facet_wrap(~realm, ncol = 3) +
   scale_fill_brewer(palette = "Set1", direction = -1) +
   ggtheme_map() +
@@ -170,7 +171,7 @@ gains_from_trade %>%
                digits = 2, 
                col.names = c("Realm", "Variable", "BAU", "Market", "Difference", "Ratio"),
                label = "rlm-gains-from-trade",
-               caption = "Gains from trade from protecting 9876 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
+               caption = "Gains from trade from protecting 73.65 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
   # kableExtra::collapse_rows() %>% 
   cat(file = here::here("results", "tab", "rlm_gains_from_trade.tex"))
 
