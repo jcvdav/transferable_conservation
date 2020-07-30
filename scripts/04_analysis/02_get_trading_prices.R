@@ -46,7 +46,7 @@ trading_prices_plot <-
   geom_segment(data = trading_prices, aes(x = 0, xend = tb, y = mc, yend = mc),
                linetype = "dashed") +
   geom_point(data = trading_prices, aes(fill = type), color = "black") +
-  geom_text(data = trading_prices, aes(label = round(mc, 2)), nudge_y = c(3, 5, 1, 4, 2) * 1000) +
+  geom_text(data = trading_prices, aes(label = round(mc, 2)), nudge_y = c(3, 5, 1, 4, 2) * 1e6) +
   ggtheme_plot() +
   scale_color_viridis_d() +
   scale_fill_viridis_d() +
@@ -59,7 +59,6 @@ trading_prices_plot <-
   scale_y_continuous(expand = c(0, 0))
 
 # Export stuff
-
 saveRDS(trading_prices,
         file = file.path(project_path, "output_data", "global_trading_prices.rds"))
 

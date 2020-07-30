@@ -98,7 +98,7 @@ gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = c("iso3", "
 
 ## FIGURES #########################################################################
 ## Plot the supply curves where they stop
-benefit_supply_curves <- rbind(bau, mkt) %>%
+benefit_supply_curves <- rbind(bau, mkt %>% select(-target)) %>%
   left_join(stops, by = c("iso3", "realm", "approach"), fill = list(mc_stop = 0)) %>% 
   mutate(mkt_gain = mc >= mc_stop,
          approach = ifelse(approach == "bau", "BAU", "Market")) %>% 

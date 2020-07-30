@@ -18,9 +18,9 @@ library(tidyverse)
 # Load data
 
 # Raw data
-benefits <- raster("~/Google Drive File Stream/Shared drives/emlab/projects/current-projects/ocean-conservation-priorities/data/03_output/05_spp_wts_smts_provs_MPAs/ranking_raster.tif") %>% 
+benefits <- raster("~/Google Drive File Stream/Shared drives/emlab/projects/current-projects/ocean-conservation-priorities/data/03_output/05_spp_wts_smts_provs_MPAs/delta_v_raster.tif") %>% 
   as.data.frame(xy = T) %>% 
-  drop_na(ranking_raster)
+  drop_na(delta_v_raster)
 
 costs <- raster("~/Google Drive File Stream/Shared drives/emlab/projects/current-projects/transferable-conservation/processed_data/costs_raster.tif") %>% 
   as.data.frame(xy = T) %>% 
@@ -40,7 +40,7 @@ coastline <- ne_countries(returnclass = "sf") %>%
 
 benefit_map <- ggplot() +
   geom_sf(data = coastline, color = "transparent") +
-  geom_raster(data = benefits, aes(x = x, y = y, fill = ranking_raster)) +
+  geom_raster(data = benefits, aes(x = x, y = y, fill = delta_v_raster)) +
   ggtheme_map() +
   labs(fill = "Biodiversity\nranking") +
   scale_fill_viridis_c() +

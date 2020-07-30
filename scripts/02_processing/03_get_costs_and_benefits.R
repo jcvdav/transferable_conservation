@@ -34,7 +34,7 @@ benefits_raster <-
   raster(
     file.path(
       ng_data_path,
-      "03_output/05_spp_wts_smts_provs_MPAs/ranking_raster.tif"
+      "03_output/05_spp_wts_smts_provs_MPAs/delta_v_raster.tif"
     )
   )
 
@@ -84,10 +84,10 @@ cb <-
     rlm_code = rlm_raster,
     pro_code = pro_raster,
     eco_code = eco_raster,
-    benefit = ranking_raster,
+    benefit = delta_v_raster,
     cost = costs_raster
   ) %>%
-  drop_na(iso3n) %>%              # Drop areas beyond national jurisdiction
+  drop_na(iso3n, cost, benefit) %>%              # Drop areas beyond national jurisdiction
   mutate(hemisphere = case_when(lon > 0 & lat > 0 ~ "NE",
                                 lon < 0 & lat > 0 ~ "NW",
                                 lon > 0 & lat <= 0 ~ "SE",
@@ -99,6 +99,7 @@ master_data <- eez_meow %>%
   select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>%
   left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%            # Join to the data.frame from rasters
   select(lon, lat, iso3, ecoregion, province, realm, hemisphere, benefit, cost) %>% # Select columns
+  filter(benefit >= 1e-6) %>% 
   mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
          mc = cost / benefit,
          neg = bcr >= 0) %>%                                                         # Create dummy variable for negative costs
@@ -243,3 +244,4 @@ saveRDS(eco_h_sum,
 )
 
 ## END OF SCRIPT ##
+

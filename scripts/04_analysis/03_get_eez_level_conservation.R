@@ -131,7 +131,7 @@ two_states_map <-
   guides(fill = guide_colorbar(title = "Biodiversity",
                                frame.colour = "black",
                                ticks.colour = "black")) +
-  labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach results in 1t4% of the costs")
+  labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach results in 14% of the costs")
 
 
 ## EXPORT FIGURES #########################################################################
