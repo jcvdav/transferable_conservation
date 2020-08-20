@@ -152,7 +152,7 @@ eezs_per_ecoregion_plot <-
 # Export plots
 lazy_ggsave(plot = eezs_per_realm_plot,
             filename = "eezs_per_realm",
-            width = 15, height = 11)
+            width = 15, height = 8)
 
 # Export plots
 lazy_ggsave(plot = eezs_per_province_plot,
