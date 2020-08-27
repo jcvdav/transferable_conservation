@@ -147,7 +147,7 @@ all_supply_curves_eez <-
   geom_vline(xintercept = 0.3, linetype = "dashed") +
   ggtheme_plot() +
   scale_x_continuous(labels = scales::percent) +
-  labs(x = "%EEZ protected",
+  labs(x = "% EEZ Protected",
        y = "Biodiversity")
 
 all_supply_curves_agg <- 
@@ -158,10 +158,9 @@ all_supply_curves_agg <-
   ggtheme_plot() +
   scale_color_brewer(palette = "Set1") +
   scale_x_continuous(labels = scales::percent) +
-  labs(x = "%EEZ protected",
+  labs(x = "%Oceans protected (within EEZ only)",
        y = "Biodiversity") + 
-  guides(color = guide_legend(title = "Approach")) +
-  theme(legend.position = "bottom")
+  guides(color = guide_legend(title = "Approach"))
 
 # Export stuff
 
