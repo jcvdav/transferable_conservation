@@ -91,7 +91,7 @@ cb <-
   mutate(hemisphere = case_when(lon > 0 & lat > 0 ~ "NE",
                                 lon < 0 & lat > 0 ~ "NW",
                                 lon > 0 & lat <= 0 ~ "SE",
-                                lon > 0 & lat >= 0 ~ "SW"))
+                                lon < 0 & lat <= 0 ~ "SW"))
 
 # Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
@@ -125,6 +125,30 @@ eez_h_sum <- master_data %>%
     tc = cumsum(cost),
     pct = (1:nrow(.)) / nrow(.)
   )
+
+## AT THE HEMISPHERE LEVEL
+# Calculate hemisphere-eez level supply curve
+hem_data <- master_data %>%
+  group_by(iso3, hemisphere) %>%
+  arrange(neg, desc(bcr)) %>%
+  mutate(
+    tb = cumsum(benefit),
+    tc = cumsum(cost),
+    pct = (1:length(tc)) / length(tc)
+  ) %>%
+  ungroup()
+
+# Calculate hemisphere aggregate curve by summing horizontally
+# Calculate global supply curve by summing horizontally
+hem_h_sum <- master_data %>% 
+  group_by(hemisphere) %>% 
+  arrange(neg, desc(bcr)) %>%
+  mutate(
+    tb = cumsum(benefit),
+    tc = cumsum(cost),
+    pct = (1:length(tc)) / length(tc)
+  ) %>%
+  ungroup()
 
 ## AT THE REALM LEVEL ####
 # Calculate realm and country level supply curve
@@ -211,6 +235,17 @@ saveRDS(eez_data,
 saveRDS(
   eez_h_sum,
   file = file.path(project_path, "processed_data", "eez_h_sum_costs_and_benefits.rds")
+)
+
+# Export hemisphere-level data
+saveRDS(hem_data,
+        file = file.path( project_path, "processed_data", "hem_eez_costs_and_benefits.rds")
+)
+
+# Export horizontally summed hemisphere data
+saveRDS(
+  hem_h_sum,
+  file = file.path(project_path, "processed_data", "hem_h_sum_costs_and_benefits.rds")
 )
 
 # Export realm level data
