@@ -151,6 +151,18 @@ lazy_ggsave(plot = map_of_trade,
             width = 10,
             height = 5)
 
+percent_of_bau_costs <- gains_from_trade %>% 
+  filter(variable == "tc") %>% 
+  pull(ratio)
+
+gains_from_trade %>% 
+  select(variable, difference) %>% 
+  spread(variable, difference) %>% 
+  mutate(percent_of_bau = percent_of_bau_costs,
+         market = "global",
+         segments = 1L) %>% 
+  saveRDS(file = file.path(project_path, "output_data", "gains_from_trade_glb.rds"))
+
 gains_from_trade %>% 
   mutate(variable = c("Area", "Biodiversity benefits", "Total costs")) %>% 
   knitr::kable(format = "latex",

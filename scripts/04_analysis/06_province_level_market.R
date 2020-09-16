@@ -100,71 +100,48 @@ gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = c("iso3", "
          ratio = mkt / bau)
 
 ## FIGURES #########################################################################
-## Plot the supply curves where they stop
-benefit_supply_curves <- rbind(bau, mkt %>% select(-target)) %>%
-  left_join(stops, by = c("iso3", "province", "approach"), fill = list(mc_stop = 0)) %>% 
-  mutate(mkt_gain = mc >= mc_stop,
-         approach = ifelse(approach == "bau", "BAU", "Market")) %>% 
-  replace_na(replace = list(mkt_gain = F)) %>% 
-  ggplot(aes(x = tb, y = mc, group = iso3, color = mkt_gain)) +
-  geom_line(size = 0.2) +
-  geom_hline(data = pro_trading_prices, aes(yintercept = trading_price), linetype = "dashed") +
-  facet_grid(province ~ approach, scales = "free_y") +
-  scale_color_brewer(palette = "Set1", direction = -1) +
-  # lims(y = c(-1000, 1000 * 5), x = c(0, 200)) +
-  ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Costs",
-       caption = "NOTE: Axis have been cropped for visualization purposes") +
-  guides(color = FALSE)
-
 got_paid <- full_join(realized_mkt_cb, realized_bau_cb, by = c("province", "iso3")) %>% 
   select(-contains("app")) %>% 
   mutate(gets_paid = bau_tc <= mkt_tc)
 
-map_of_trade <- coast %>% 
-  left_join(got_paid, by = c("iso_a3" = "iso3")) %>% 
-  drop_na(province) %>%
-  replace_na(replace = list(gets_paid = FALSE)) %>% 
+# Plot the two states of the world
+two_states_map <-
+  rbind(bau, mkt %>% select(-target)) %>%
   ggplot() +
   geom_sf(data = coast) +
-  geom_sf(aes(fill = gets_paid), color = "black", size = 0.1) +
-  facet_wrap(~province, ncol = 3) +
-  scale_fill_brewer(palette = "Set1", direction = -1) +
+  geom_raster(aes(x = lon, y = lat, fill = benefit)) +
+  facet_wrap(~approach, ncol = 1) +
   ggtheme_map() +
-  guides(fill = FALSE)
-
-# Plot the two states of the world
-# two_states_map <- 
-#   rbind(bau, mkt) %>% 
-#   ggplot() +
-#   geom_sf(data = coast) +
-#   geom_raster(aes(x = lon, y = lat, fill = benefit)) +
-#   facet_wrap(~approach, ncol = 1) +
-#   ggtheme_map() +
-#   scale_fill_viridis_c() +
-#   guides(fill = guide_colorbar(title = "Biodiversity",
-#                                frame.colour = "black",
-#                                ticks.colour = "black")) +
-#   labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach results in 1t4% of the costs")
+  scale_fill_viridis_c() +
+  guides(fill = guide_colorbar(title = "Biodiversity",
+                               frame.colour = "black",
+                               ticks.colour = "black")) +
+  labs(caption = "Both conservation strategies yield the same benefits,\nbut a market costs 18.3% less")
 
 
 ## EXPORT FIGURES #########################################################################
 
-# lazy_ggsave(plot = benefit_supply_curves,
-#             filename = "equilibrum_supply_curves",
-#             width = 12,
-#             height = 6)
-
-# lazy_ggsave(plot = two_states_map,
-#             filename = "two_states_map",
-#             width = 10,
-#             height = 10)
-
-lazy_ggsave(plot = map_of_trade,
-            filename = "pro_map_of_trade",
+lazy_ggsave(plot = two_states_map,
+            filename = "two_states_map_pro",
             width = 10,
             height = 10)
+
+percent_of_bau_costs <- 
+  gains_from_trade %>% 
+  filter(variable == "tc") %>%
+  select(bau, mkt) %>% 
+  summarize_all(sum, na.rm = T) %>% 
+  mutate(ratio = mkt / bau) %>% 
+  pull(ratio)
+
+gains_from_trade %>%
+  group_by(variable) %>%
+  summarize(difference = sum(difference, na.rm = T)) %>% 
+  spread(variable, difference) %>% 
+  mutate(percent_of_bau = percent_of_bau_costs,
+         market = "province",
+         segments = 60L) %>% 
+  saveRDS(file = file.path(project_path, "output_data", "gains_from_trade_pro.rds"))
 
 gains_from_trade %>% 
   mutate(variable = case_when(variable == "area" ~ "Area",
@@ -193,7 +170,7 @@ pro_trading_prices %>%
                col.names = c("province", "Biodiversity", "Trading Price"),
                label = "pro-trading-prices",
                caption = "Biodiversity targets and trading prices for 12 provinces. The Last row shows total biodiversity and weighted mean of trading price") %>% 
-  cat(file = here::here("results", "tab", "pro_trading_prices.tex"))
+  cat(file = here::here("results", "tab", "trading_prices_pro.tex"))
 
 
 

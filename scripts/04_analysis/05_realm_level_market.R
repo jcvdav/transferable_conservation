@@ -108,7 +108,7 @@ benefit_supply_curves <- rbind(bau, mkt %>% select(-target)) %>%
   geom_hline(data = rlm_trading_prices, aes(yintercept = trading_price), linetype = "dashed") +
   facet_grid(realm ~ approach, scales = "free_y") +
   scale_color_brewer(palette = "Set1", direction = -1) +
-  # lims(y = c(-1000, 1000 * 5), x = c(0, 200)) +
+  lims(y = c(-1000, 100000 * 5), x = c(0, 4)) +
   ggtheme_plot() +
   labs(x = "Biodiversity",
        y = "Costs",
@@ -132,36 +132,53 @@ map_of_trade <- coast %>%
   guides(fill = FALSE)
 
 # Plot the two states of the world
-# two_states_map <- 
-#   rbind(bau, mkt) %>% 
-#   ggplot() +
-#   geom_sf(data = coast) +
-#   geom_raster(aes(x = lon, y = lat, fill = benefit)) +
-#   facet_wrap(~approach, ncol = 1) +
-#   ggtheme_map() +
-#   scale_fill_viridis_c() +
-#   guides(fill = guide_colorbar(title = "Biodiversity",
-#                                frame.colour = "black",
-#                                ticks.colour = "black")) +
-#   labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach results in 1t4% of the costs")
+two_states_map <-
+  rbind(bau, mkt %>% select(-target)) %>%
+  ggplot() +
+  geom_sf(data = coast) +
+  geom_raster(aes(x = lon, y = lat, fill = benefit)) +
+  facet_wrap(~approach, ncol = 1) +
+  ggtheme_map() +
+  scale_fill_viridis_c() +
+  guides(fill = guide_colorbar(title = "Biodiversity",
+                               frame.colour = "black",
+                               ticks.colour = "black")) +
+  labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach costs 34.8% less")
 
 
 ## EXPORT FIGURES #########################################################################
 
-# lazy_ggsave(plot = benefit_supply_curves,
-#             filename = "equilibrum_supply_curves",
-#             width = 12,
-#             height = 6)
+lazy_ggsave(plot = benefit_supply_curves,
+            filename = "equilibrum_supply_curves_rlm",
+            width = 12,
+            height = 6)
 
-# lazy_ggsave(plot = two_states_map,
-#             filename = "two_states_map",
-#             width = 10,
-#             height = 10)
-
-lazy_ggsave(plot = map_of_trade,
-            filename = "rlm_map_of_trade",
+lazy_ggsave(plot = two_states_map,
+            filename = "two_states_map_rlm",
             width = 10,
             height = 10)
+
+lazy_ggsave(plot = map_of_trade,
+            filename = "map_of_trade_rlm",
+            width = 10,
+            height = 10)
+
+percent_of_bau_costs <- 
+  gains_from_trade %>% 
+  filter(variable == "tc") %>%
+  select(bau, mkt) %>% 
+  summarize_all(sum, na.rm = T) %>% 
+  mutate(ratio = mkt / bau) %>% 
+  pull(ratio)
+
+gains_from_trade %>%
+  group_by(variable) %>%
+  summarize(difference = sum(difference, na.rm = T)) %>% 
+  spread(variable, difference) %>% 
+  mutate(percent_of_bau = percent_of_bau_costs,
+         market = "realm",
+         segments = 12L) %>% 
+  saveRDS(file = file.path(project_path, "output_data", "gains_from_trade_rlm.rds"))
 
 gains_from_trade %>% 
   mutate(variable = case_when(variable == "area" ~ "Area",
@@ -172,8 +189,7 @@ gains_from_trade %>%
                col.names = c("Realm", "Variable", "BAU", "Market", "Difference", "Ratio"),
                label = "rlm-gains-from-trade",
                caption = "Gains from trade from protecting 73.65 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
-  # kableExtra::collapse_rows() %>% 
-  cat(file = here::here("results", "tab", "rlm_gains_from_trade.tex"))
+  cat(file = here::here("results", "tab", "gains_from_trade_rlm.tex"))
 
 # Table of trading prices for each realm
 totals <- rlm_trading_prices %>% 
@@ -190,7 +206,7 @@ rlm_trading_prices %>%
                col.names = c("Realm", "Biodiversity", "Trading Price"),
                label = "rlm-trading-prices",
                caption = "Biodiversity targets and trading prices for 12 realms. The Last row shows total biodiversity and weighted mean of trading price") %>% 
-  cat(file = here::here("results", "tab", "rlm_trading_prices.tex"))
+  cat(file = here::here("results", "tab", "trading_prices_rlm.tex"))
 
 
 
