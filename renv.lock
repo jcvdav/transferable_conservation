@@ -79,6 +79,18 @@
       "Repository": "RSPM",
       "Hash": "f7fee4557377d47093bd2b65f2642e52"
     },
+    "UnidecodeR": {
+      "Package": "UnidecodeR",
+      "Version": "0.02",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "UnidecodeR",
+      "RemoteUsername": "rich-iannone",
+      "RemoteRef": "master",
+      "RemoteSha": "2d210365bbfce8284cd070fb03b5d879d514e1db",
+      "Hash": "84727b94f2380be38b593a4d62e8547d"
+    },
     "V8": {
       "Package": "V8",
       "Version": "3.2.0",
@@ -92,13 +104,6 @@
       "Source": "Repository",
       "Repository": "RSPM",
       "Hash": "3bda721e8beddb888917a419d8204dad"
-    },
-    "abind": {
-      "Package": "abind",
-      "Version": "1.4-5",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "4f57884290cc75ab22f4af9e9d4ca862"
     },
     "askpass": {
       "Package": "askpass",
@@ -128,19 +133,26 @@
       "Repository": "CRAN",
       "Hash": "543776ae6848fde2f48ff3816d0628bc"
     },
-    "bigmemory": {
-      "Package": "bigmemory",
-      "Version": "4.5.36",
+    "bigrquery": {
+      "Package": "bigrquery",
+      "Version": "1.3.1",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "4e2046666d75e14d8ddbf4988a1638a7"
+      "Repository": "RSPM",
+      "Hash": "35f6f88137863925c8c9e9347bbd3c2c"
     },
-    "bigmemory.sri": {
-      "Package": "bigmemory.sri",
-      "Version": "0.1.3",
+    "bit": {
+      "Package": "bit",
+      "Version": "1.1-15.2",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "489695009d38d14d926f224dd6267f8e"
+      "Repository": "RSPM",
+      "Hash": "eb6c52d8cc44463085a4cde1c63df163"
+    },
+    "bit64": {
+      "Package": "bit64",
+      "Version": "0.9-7.1",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "41dbb29d3c0d62c53b03fef11cdb0f09"
     },
     "blob": {
       "Package": "blob",
@@ -148,6 +160,13 @@
       "Source": "Repository",
       "Repository": "RSPM",
       "Hash": "9addc7e2c5954eca5719928131fed98c"
+    },
+    "bookdown": {
+      "Package": "bookdown",
+      "Version": "0.20",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "31ed5641f4a91cf113de490e0bb006b8"
     },
     "brew": {
       "Package": "brew",
@@ -204,13 +223,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "08cf4045c149a0f0eaf405324c7495bd"
-    },
-    "codetools": {
-      "Package": "codetools",
-      "Version": "0.2-16",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "89cf4b8207269ccf82fbeb6473fd662b"
     },
     "colorspace": {
       "Package": "colorspace",
@@ -298,10 +310,10 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "0.8.5",
+      "Version": "1.0.0",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "57a42ddf80f429764ff7987128c3fd0a"
+      "Repository": "RSPM",
+      "Hash": "4011f62581a34080e44105d4aa05a97f"
     },
     "e1071": {
       "Package": "e1071",
@@ -373,12 +385,12 @@
       "Repository": "RSPM",
       "Hash": "8c04112383ca1988e96f429255f95675"
     },
-    "future": {
-      "Package": "future",
-      "Version": "1.18.0",
+    "gargle": {
+      "Package": "gargle",
+      "Version": "0.5.0",
       "Source": "Repository",
       "Repository": "RSPM",
-      "Hash": "7f6e18b431939ccf2b4667d406a1f33e"
+      "Hash": "aaacaf8b0ec3dfe45df9eb6bc040db44"
     },
     "gdtools": {
       "Package": "gdtools",
@@ -429,12 +441,12 @@
       "Repository": "RSPM",
       "Hash": "4ded8b439797f7b1693bd3d238d0106b"
     },
-    "globals": {
-      "Package": "globals",
-      "Version": "0.12.5",
+    "git2r": {
+      "Package": "git2r",
+      "Version": "0.27.1",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "e9e529fb7a579ad4b4ff65e052e76ed8"
+      "Hash": "531a82d1beed1f545beb25f4f5945bf7"
     },
     "glue": {
       "Package": "glue",
@@ -569,12 +581,19 @@
       "Repository": "CRAN",
       "Hash": "81054bf17db72db68871baefcfd209cf"
     },
-    "knitr": {
-      "Package": "knitr",
-      "Version": "1.28",
+    "kableExtra": {
+      "Package": "kableExtra",
+      "Version": "1.1.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "915a6f0134cdbdf016d7778bc80b2eda"
+      "Hash": "37e11c605b3c0b7207763beda52c8535"
+    },
+    "knitr": {
+      "Package": "knitr",
+      "Version": "1.29",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "e5f4c41c17df8cdf7b0df12117c0d99a"
     },
     "labeling": {
       "Package": "labeling",
@@ -638,13 +657,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "361811f31f71f8a617a9a68bf63f1f42"
-    },
-    "listenv": {
-      "Package": "listenv",
-      "Version": "0.8.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "0bde42ee282efb18c7c4e63822f5b4f7"
     },
     "lubridate": {
       "Package": "lubridate",
@@ -732,10 +744,10 @@
     },
     "openssl": {
       "Package": "openssl",
-      "Version": "1.4.1",
+      "Version": "1.4.2",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "49f7258fd86ebeaea1df24d9ded00478"
+      "Repository": "RSPM",
+      "Hash": "b3209c62052922b6c629544d94c8fa8a"
     },
     "pillar": {
       "Package": "pillar",
@@ -764,13 +776,6 @@
       "Source": "Repository",
       "Repository": "RSPM",
       "Hash": "b6b150cd4709e0c0c9b5d51ac4376282"
-    },
-    "plogr": {
-      "Package": "plogr",
-      "Version": "0.2.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "09eb987710984fc2905c7129c7d85e65"
     },
     "plyr": {
       "Package": "plyr",
@@ -914,10 +919,10 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.1",
+      "Version": "2.3",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "9d1c61d476c448350c482d6664e1b28b"
+      "Repository": "RSPM",
+      "Hash": "202260e1b2c410edc086d5b8f1ed946e"
     },
     "rnaturalearth": {
       "Package": "rnaturalearth",
@@ -1019,10 +1024,16 @@
     },
     "startR": {
       "Package": "startR",
-      "Version": "0.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "02bd721f34df0feac01953afae72aa2a"
+      "Version": "0.1.0",
+      "Source": "GitHub",
+      "Remotes": "rich-iannone/UnidecodeR",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteRepo": "startR",
+      "RemoteUsername": "jcvdav",
+      "RemoteRef": "master",
+      "RemoteSha": "1c2ffee3e504afeb59f5f58bb51c9cde5852ccfd",
+      "Hash": "0b02f5c25f9e37ebe4620451bfa0f0d3"
     },
     "stringi": {
       "Package": "stringi",
@@ -1096,10 +1107,10 @@
     },
     "tinytex": {
       "Package": "tinytex",
-      "Version": "0.22",
+      "Version": "0.24",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "8b0712f45a05c8e79ce7ba06b249583c"
+      "Repository": "RSPM",
+      "Hash": "8f24b65b86f4d6d7b1e2d8a4ce2c02fb"
     },
     "triebeard": {
       "Package": "triebeard",
