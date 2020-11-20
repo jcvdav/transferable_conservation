@@ -203,27 +203,26 @@ gains_from_trade_multiple_scenarios <- rbind(
   )
 
 # Visualize 
-abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = targets / max(targets), y = difference, color = market)) +
+abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = targets, y = difference, color = market)) +
   geom_line(size = 1) +
   ggtheme_plot() +
   labs(x = "Biodiversity", 
        y = "Costs avoided (BAU - MKT)",
        color = "Segment") +
-  scale_x_continuous(labels = scales::percent) +
+  # scale_x_continuous(labels = scales::percent) +
   scale_color_brewer(palette = "Set1") +
   theme(legend.justification = c(0, 1),
         legend.position = c(0, 1))
 
-rel <- ggplot(gains_from_trade_multiple_scenarios, aes(x = targets / max(targets), y = 1 - ratio, color = market)) +
+rel <- ggplot(gains_from_trade_multiple_scenarios, aes(x = targets, y = 1 - ratio, color = market)) +
   geom_line(size = 1) +
   ggtheme_plot() +
   labs(x = "Biodiversity", 
        y = "Costs avoided (difference / BAU)") +
-  scale_x_continuous(labels = scales::percent) +
+  # scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   scale_color_brewer(palette = "Set1") +
-  theme(legend.position  = "None") +
-  geom_vline(xintercept = 72/126)
+  theme(legend.position  = "None")
 
 gain_from_trade_segmented_market_plot <- plot_grid(abs, rel, ncol = 2)
 

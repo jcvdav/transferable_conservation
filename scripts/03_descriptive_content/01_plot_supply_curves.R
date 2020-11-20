@@ -60,7 +60,7 @@ global <- ggplot(data = eez_h_sum,
   geom_line(size = 1) +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs")
+       y = "Marginal Costs")
 
 # Country-level supply curves
 eez <- ggplot(data = eez_cb,
@@ -69,7 +69,7 @@ eez <- ggplot(data = eez_cb,
   guides(color = F) +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs")
+       y = "Marginal Costs")
 
 eez_supply_curve <- plot_grid(eez, global, ncol = 2, labels = "AUTO")
 
@@ -83,7 +83,7 @@ eez_rlm <-
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs")
+       y = "Marginal Costs")
 
 # realm summed
 rlm <- ggplot(data = rlm_h_sum,
@@ -92,7 +92,7 @@ rlm <- ggplot(data = rlm_h_sum,
   scale_color_viridis_d() +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs")
+       y = "Marginal Costs")
 
 eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
 
@@ -106,7 +106,7 @@ eez_pro <-
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs")
+       y = "Marginal Costs")
 
 eez_pro <-
   ggplot(data = pro_h_sum,
@@ -117,7 +117,7 @@ eez_pro <-
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs")
+       y = "Marginal Costs")
 
 
 eez_eco <-
@@ -129,7 +129,7 @@ eez_eco <-
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs")
+       y = "Marginal Costs")
 
 # EXPORT PLOTS ##############################################################################################
 lazy_ggsave(plot = eez_supply_curve,

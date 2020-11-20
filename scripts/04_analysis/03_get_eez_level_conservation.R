@@ -102,7 +102,7 @@ benefit_supply_curves <- rbind(bau, mkt) %>%
   lims(y = c(0, trading_price * 2)) +
   ggtheme_plot() +
   labs(x = "Biodiversity",
-       y = "Costs",
+       y = "Marginal Costs",
        caption = "NOTE: Axis have been cropped for visualization purposes") +
   guides(color = FALSE)
 

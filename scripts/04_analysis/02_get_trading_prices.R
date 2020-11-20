@@ -35,7 +35,6 @@ conservation_targets <- readRDS(
 trading_prices <- conservation_targets %>% 
   mutate(mc = map_dbl(tb, get_trading_price, eez_h_sum_cb))
 
-
 # Figure of trading prices
 trading_prices_plot <- 
   ggplot(mapping = aes(x = tb, y = mc)) +
@@ -53,7 +52,7 @@ trading_prices_plot <-
   theme(legend.justification = c(0, 1),
         legend.position = c(0, 1)) +
   labs(x = "Biodiversity",
-       y = "Costs",
+       y = "Marginal Costs",
        fill = "Approach") +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0))
