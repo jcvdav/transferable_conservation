@@ -707,6 +707,13 @@
       "Repository": "CRAN",
       "Hash": "61e4a10781dd00d7d81dd06ca9b94e95"
     },
+    "matrixStats": {
+      "Package": "matrixStats",
+      "Version": "0.57.0",
+      "Source": "Repository",
+      "Repository": "RSPM",
+      "Hash": "7249fc52d19eab5af7a02925ab534d9c"
+    },
     "mgcv": {
       "Package": "mgcv",
       "Version": "1.8-31",
@@ -975,10 +982,10 @@
     },
     "sf": {
       "Package": "sf",
-      "Version": "0.9-5",
+      "Version": "0.9-6",
       "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "5b23b3b72c0d9962a59c57b110076f9a"
+      "Repository": "RSPM",
+      "Hash": "bf0ef23231efe31576e08d69772892ef"
     },
     "sfheaders": {
       "Package": "sfheaders",
