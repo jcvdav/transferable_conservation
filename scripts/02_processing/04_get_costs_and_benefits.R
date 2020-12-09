@@ -33,8 +33,12 @@ library(tidyverse)
 benefits_raster <-
   raster(
     file.path(
-      ng_data_path,
-      "03_output/05_spp_wts_smts_provs_MPAs/delta_v_raster.tif"
+      project_path,
+      # "03_output/05_spp_wts_smts_provs_MPAs/delta_v_raster.tif"
+      # "02_processed/species_richness/spp_richness.tif"
+      # "03_output/01_spp/ranking_raster.tif"
+      "processed_data",
+      "suitability.tif"
     )
   )
 
@@ -69,8 +73,7 @@ eez_meow <-
 ## PROCESSING ########################################################################
 # Extract codes for each pixel
 cb <-
-  stack(iso3n,
-        # Start by creating a raster stack of all features
+  stack(iso3n,                   # Start by creating a raster stack of all features
         rlm_code,
         pro_code,
         eco_code,
@@ -84,7 +87,7 @@ cb <-
     rlm_code = rlm_raster,
     pro_code = pro_raster,
     eco_code = eco_raster,
-    benefit = delta_v_raster,
+    benefit = suitability,
     cost = costs_raster
   ) %>%
   drop_na(iso3n, cost, benefit) %>%              # Drop areas beyond national jurisdiction
