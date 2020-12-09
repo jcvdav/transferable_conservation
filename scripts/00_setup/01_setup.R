@@ -6,7 +6,7 @@ sys_path <- ifelse(Sys.info()["sysname"]=="Windows", "~/G:/","~/Google Drive Fil
 # Nat geo ocean conservation priorities path
 ng_data_path <- file.path(sys_path,"Shared drives/emlab/projects/current-projects/ocean-conservation-priorities/data")
 # Path to our emLab's data folder
-data_path <- file.path(sys_path,"Shared drives/emlab/data/")
+data_path <- file.path(sys_path,"Shared drives/emlab/data")
 # Path to this projects directory
 project_path <- "~/Google Drive File Stream/Shared drives/emlab/projects/current-projects/transferable-conservation"
 
