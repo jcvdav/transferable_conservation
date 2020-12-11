@@ -34,23 +34,24 @@ benefits_raster <-
   raster(
     file.path(
       project_path,
-      # "03_output/05_spp_wts_smts_provs_MPAs/delta_v_raster.tif"
-      # "02_processed/species_richness/spp_richness.tif"
-      # "03_output/01_spp/ranking_raster.tif"
       "processed_data",
       "suitability.tif"
     )
   )
 
 # Costs raster
-costs_raster <-
+catch_raster <-
   raster(
     file.path(
       project_path,
       "processed_data",
-      "costs_raster.tif"
+      "catch_raster.tif"
     )
   )
+
+# effort_raster
+# revenue_raster
+
 
 # Load spatial metadata rasters
 iso3n <-
@@ -78,7 +79,7 @@ cb <-
         pro_code,
         eco_code,
         benefits_raster,
-        costs_raster) %>%
+        catch_raster) %>%
   as.data.frame(xy = T) %>%       # Convert to data.frame, but keep coordinates
   rename(                         # Select and rename columns
     lon = x,
@@ -88,9 +89,9 @@ cb <-
     pro_code = pro_raster,
     eco_code = eco_raster,
     benefit = suitability,
-    cost = costs_raster
+    cost1 = catch_raster
   ) %>%
-  drop_na(iso3n, cost, benefit) %>%              # Drop areas beyond national jurisdiction
+  drop_na(iso3n, cost1, benefit) %>%                             # Drop areas beyond national jurisdiction
   mutate(hemisphere = case_when(lon > 0 & lat > 0 ~ "NE",
                                 lon < 0 & lat > 0 ~ "NW",
                                 lon > 0 & lat <= 0 ~ "SE",
@@ -101,12 +102,12 @@ master_data <- eez_meow %>%
   st_drop_geometry() %>%
   select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>%
   left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%            # Join to the data.frame from rasters
-  select(lon, lat, iso3, ecoregion, province, realm, hemisphere, benefit, cost) %>% # Select columns
+  select(lon, lat, iso3, ecoregion, province, realm, hemisphere, benefit, cost1) %>% # Select columns
   filter(benefit >= 1e-6) %>% 
-  mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
-         mc = cost / benefit,
-         neg = bcr >= 0) %>%                                                         # Create dummy variable for negative costs
-  drop_na(lat, lon, benefit, cost)                                                  # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
+  mutate(bcr1 = benefit / cost1,                                                       # Calculate marginal benefit
+         mc1 = cost1 / benefit,
+         neg = bcr1 >= 0) %>%                                                         # Create dummy variable for negative costs
+  drop_na(lat, lon, benefit, cost1)                                                  # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
 
 ## AT THE EEZ LEVEL ####
 # Calculate country-level supply curve
