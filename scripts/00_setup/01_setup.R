@@ -10,6 +10,12 @@ data_path <- file.path(sys_path,"Shared drives/emlab/data")
 # Path to this projects directory
 project_path <- "~/Google Drive File Stream/Shared drives/emlab/projects/current-projects/transferable-conservation"
 
+# Source project functions
+source(here::here("scripts", "00_setup","02_functions.R"))
+
+# Turn off dplyr's anoying messages
+options(dplyr.summarise.inform = FALSE)
+
 
 ###########################
 ## Useful general values ##
@@ -25,6 +31,9 @@ epsg_longlat <- 4326
 # A color palete
 zis_con <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
 
+##########################
+## Plot-related things ##
+##########################
 # Default geometry colors, fills, and shapes
 library(ggplot2)
 update_geom_defaults(geom = "col", list(color = "black",
@@ -43,5 +52,3 @@ update_geom_defaults(geom = "sf", list(color = "transparent",
                                        size = 0.3))
 
 
-# Source project functions
-source(here::here("scripts", "00_setup","02_functions.R"))
