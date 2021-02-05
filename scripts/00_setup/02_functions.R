@@ -156,6 +156,39 @@ global_benefits <- function(benefits, costs, proportion, tactic = "bau", dec = T
   return(values)
 }
 
+######################
+my_validate <- function(species_list){
+  # browser()
+  tmp <- data.frame(input = species_list, stringsAsFactors = FALSE)
+  
+  results_fishbase <- synonyms(species_list, server = "fishbase") %>%
+    select(input = synonym, Status, Species) %>%
+    distinct()
+  
+  results_sealifebase <- synonyms(species_list, server = "sealifebase") %>%
+    select(input = synonym, Status, Species) %>%
+    distinct()
+  
+  results <- rbind(results_fishbase, results_sealifebase) %>% 
+    drop_na(Species)
+  
+  accepted <- results %>% 
+    filter(Status == "accepted name") %>% 
+    select(input, accepted_name = Species)
+  
+  synonyms <- results %>% 
+    filter(Status == "synonym") %>% 
+    select(input, synonym = Species)
+  
+  final <- tmp %>% 
+    left_join(accepted, by = "input") %>% 
+    left_join(synonyms, by = "input") %>% 
+    mutate(Species = ifelse(is.na(accepted_name), synonym, accepted_name),
+           Species = ifelse(is.na(Species), input, Species))
+  
+  return(final$Species)
+  
+}
 
 
 
