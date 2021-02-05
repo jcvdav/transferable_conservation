@@ -1,107 +1,20 @@
 
-
 # Load packages
-library(raster)
-library(data.table)
 library(tidyverse)
 library(rfishbase)
 
-# Create common pointer to RegWatson data
-rw_path <- file.path(data_path, "reg-watson-global-marine-capture", "global_fisheries_landing_v4")
-
-# Read in catch data
-## List the files
-ind <- list.files(path = file.path(rw_path, "industrial"),
-                          pattern = "*.csv",
-                          full.names = T) %>% 
-  tail(2)
-
-Nind <- list.files(path = file.path(rw_path, "nonindustrial"),
-                    pattern = "*.csv",
-                    full.names = T) %>% 
-  tail(2)
-
-
-catch_files <- c(ind, Nind)
-
-# Read all
-dt <- map_dfr(catch_files, fread, sep = ",")
-setkey(dt , Cell, ID)
-
-# Read in the codes
-cell_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 1L) %>% 
-  as.data.table(key = "Cell")
-
-taxa_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 3L)
-
-# Read indices
-index <- list.files(rw_path, "*.csv", full.names = T) %>% 
-  map_dfr(fread, key = "ID") %>% 
-  .[, ":=" (Year = IYear, TaxonKey = Taxonkey)] %>%
-  .[Year >= 2010, .(ID, Year, TaxonKey)]
-  
-
-merged <- dt %>% 
-  merge(index, all.x = TRUE, by = "ID") %>% 
-  merge(taxa_codes, all.x = TRUE, by = "TaxonKey") %>% 
-  merge(cell_codes, all.x = TRUE, by = "Cell")
-
-setkey(merged, Year, Cell)
-
-summary <- merged %>% 
-  .[!is.na(price)] %>% 
-  .[, .(Reported = sum(Reported, na.rm = T),
-        Revenue = sum(Reported * price, na.rm = T)),
-    by = .(Year, Cell, LatCentre, LonCentre)] %>%
-  .[,.(Reported = mean(Reported, na.rm = T),
-       Revenue = mean(Revenue, na.rm = T)),
-    by = .(Cell, LatCentre, LonCentre)]
-
-benefits_raster <-
-  raster(
-    file.path(
-      project_path,
-      "processed_data",
-      "suitability.tif"
-    )
-  )
-
-crs(benefits_raster) <- proj_moll
-  
-watson_raster <- select(summary, LonCentre, LatCentre, Reported) %>%
-  raster::rasterFromXYZ(crs = proj_longlat) %>% 
-  raster::projectRaster(benefits_raster)
-
-sum(raster::values(watson_raster), na.rm = T)
-
-raster::plot(watson_raster)
-
-writeRaster(watson_raster,
-            filename = file.path(project_path, "processed_data", "catch_raster.tif"),
-            overwrite = TRUE)
-
-summary %>% 
-  sample_n(5e4) %>% 
-  ggplot(aes(x = LonCentre, y = LatCentre, fill = Reported)) +
-  geom_tile() +
-  scale_fill_viridis_c(trans = "log10") +
-  theme(text = element_text(family = "Times", face = "bold", color = "red", size = 24), axis.text.x = element_text(color = "blue"))
-
-
-
-
-
-######## Tyler's price dataset
-clean_seafod_path <- file.path(sys_path, "Shared drives/emlab/projects/current-projects/clean-seafood/project-materials/track-3-olivier/raw-data/reconstructed-global-prices/price-db-results/exvessel_price_database_1976_2017.csv")
-
+# Set up taxonomy baseline
+## Get taxonomy from SeaLifeBase
 sealifebase_names <- load_taxa(server = "sealifebase") %>%
   as_tibble() %>%
   select(Species, Genus, Family, Order, Class)
 
+## Get taxonomy from FishBase
 fishbase_names <- load_taxa(server = "fishbase") %>%
   as_tibble() %>%
   select(Species, Genus, Family, Order, Class)
 
+# Combine taxonomy
 taxonomy <- rbind(sealifebase_names, fishbase_names) %>% 
   select(Genus, Family, Order, Class) %>% 
   distinct() %>% 
@@ -111,62 +24,53 @@ taxonomy <- rbind(sealifebase_names, fishbase_names) %>%
          order = ifelse(order == "Not assigned", NA, order),
          class = ifelse(class == "Not assigned", NA, class)) %>% 
   filter(!(genus == "Mytilus" & class == "Bivalva"),
-         !(genus == "Pharus" & is.na(order))) 
+         !(genus == "Pharus" & is.na(order))) %>% 
+  mutate_all(~str_remove_all(., "<a0>")) %>% 
+  distinct()
 
+# Get unique lists of each taxon
 families <- unique(taxonomy$family)
 orders <- unique(taxonomy$order)
 classes <- unique(taxonomy$class)
 
+# We'll need to use stepped matching, because the "species" columns
+# in price and catch data contain different taxons. We'll have three
+# tables, and we'll join them hierarchichally after moving the "species"
+# to its correct taxon.
+## Match genus and family
 taxonomy_genus_family <- taxonomy %>% 
   select(genus, family) %>% 
   distinct() %>% 
-  drop_na(genus)
+  drop_na(genus) %>% 
+  group_by(genus) %>% 
+  slice(n = 1) %>% 
+  ungroup()
 
+## Match family and order
 taxonomy_family_order <- taxonomy %>% 
   select(family, order) %>% 
   distinct() %>% 
-  drop_na(family)
+  drop_na(family)%>% 
+  group_by(family) %>% 
+  slice(n = 1) %>% 
+  ungroup()
 
+## Match order and class
 taxonomy_order_class <- taxonomy %>% 
   select(order, class) %>% 
   distinct() %>% 
-  drop_na(order)
-
-my_validate <- function(species_list){
-  # browser()
-  tmp <- data.frame(input = species_list, stringsAsFactors = FALSE)
-
-  results_fishbase <- synonyms(species_list, server = "fishbase") %>%
-    select(input = synonym, Status, Species) %>%
-    distinct()
-  
-  results_sealifebase <- synonyms(species_list, server = "sealifebase") %>%
-    select(input = synonym, Status, Species) %>%
-    distinct()
-  
-  results <- rbind(results_fishbase, results_sealifebase) %>% 
-    drop_na(Species)
-  
-  accepted <- results %>% 
-    filter(Status == "accepted name") %>% 
-    select(input, accepted_name = Species)
-  
-  synonyms <- results %>% 
-    filter(Status == "synonym") %>% 
-    select(input, synonym = Species)
-  
-  final <- tmp %>% 
-    left_join(accepted, by = "input") %>% 
-    left_join(synonyms, by = "input") %>% 
-    mutate(Species = ifelse(is.na(accepted_name), synonym, accepted_name),
-           Species = ifelse(is.na(Species), input, Species))
-  
-  return(final$Species)
-
-}
+  drop_na(order)%>% 
+  group_by(order) %>% 
+  slice(n = 1) %>% 
+  ungroup()
 
 
-price <- read.csv(clean_seafod_path, stringsAsFactors = F) %>% 
+price <- read.csv(
+  file.path(
+    clean_seafod_path,
+    "exvessel_price_database_1976_2017.csv"
+  ),
+  stringsAsFactors = F) %>% 
   as_tibble() %>% 
   janitor::clean_names() %>% 
   filter(year == 2017) %>% 
@@ -280,24 +184,20 @@ all_prices <- price %>%
   left_join(price_order, by = "order") %>% 
   left_join(price_class, by = "class") %>% 
   left_join(price_isscaap_group, by = "isscaap_group") %>%
-  # left_join(price_asfis, by = "ASFIS_species") %>% 
-  # left_join(price_pool_com, by = "pooled_commodity") %>% 
-  # left_join(price_isscaap_division, by = "ISSCAAP_division") %>% 
   select(exvessel, contains("median")) %>% 
   magrittr::set_colnames(value = str_replace_all(str_remove_all(colnames(.), "_median"), "_", " "))
 
 corrplot::corrplot(corr = cor(all_prices, use = "pairwise.complete.obs"),
                    method = "ellipse",
-                   type = "lower",
+                   type = "upper",
                    outline = T,
                    addCoef.col = "black",
                    diag = F,
                    number.cex = 0.75)
 
-# Why does spp acanthuridae in taxa codes has no family?
-
 taxa_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 3L) %>% 
   rename(species = TaxonName) %>% 
+  janitor::clean_names() %>% 
   mutate(tmp_spp = species,
          species = my_validate(species)) %>% 
   mutate(species = case_when(species == "Clupeoids" ~ "Clupeidae",
@@ -324,14 +224,13 @@ taxa_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 3L) %
   select(-tmp_spp)
 
 combined <- taxa_codes %>%
-  # filter(!species == "Inermiidae") %>% 
   left_join(price_species, by = "species") %>% 
   left_join(price_genus, by = "genus") %>% 
   left_join(price_family, by = "family") %>% 
   left_join(price_order, by = "order") %>% 
   left_join(price_class, by = "class") %>% 
   left_join(price_isscaap_group, by = c("species" = "isscaap_group")) %>%
-  left_join(price_isscaap_group, by = c("CommonName" = "isscaap_group")) %>%
+  left_join(price_isscaap_group, by = c("common_name" = "isscaap_group")) %>%
   mutate(price = species_median,
          price = ifelse(is.na(price), genus_median, price),
          price = ifelse(is.na(price), family_median, price),
@@ -339,52 +238,9 @@ combined <- taxa_codes %>%
          price = ifelse(is.na(price), class_median, price),
          price = ifelse(is.na(price), isscaap_group_median.x, price),
          price = ifelse(is.na(price), isscaap_group_median.y, price),
-         price = ifelse(species == "Marine animals" & is.na(price), marine_animals_median, price))
+         price = ifelse(species == "Marine animals" & is.na(price), marine_animals_median, price)) %>% 
+  select(taxon_key, class, order, family, genus, species, common_name, price)
 
 
-# Testing
-
-asfis <- unique(price$asfis_species)
-pooled <- unique(price$pooled_commodity)
-isscaap <- unique(price$isscaap_division)
-isscaap2 <- unique(price$isscaap_group)
-
-all <- c(asfis, pooled, isscaap, isscaap2) %>% unique()
-
-filter(combined, is.na(price)) %>% 
-  mutate(n_matches = 1 * (species %in% all)) %>% 
-  View("unmatched")
-
-  # left_join(price_asfis, by = c("TaxonName" = "ASFIS_species")) %>% 
-  # left_join(price_asfis, by = c("CommonName" = "ASFIS_species")) %>% 
-  # # left_join(price_pool_com) %>% 
-  # left_join(price_isscaap_group, by = c("TaxonName" = "ISSCAAP_group")) %>%
-  # left_join(price_isscaap_group, by = c("CommonName" = "ISSCAAP_group")) %>%
-  # left_join(price_isscaap_division, by = c("CommonName" = "ISSCAAP_division")) 
-
-# Extra stuff
-# 
-# 
-# my_validate <- function(species_list, server){
-#   browser()
-#   tmp <- data.frame(input = species_list, stringsAsFactors = FALSE)
-#   
-#   synonyms(species_list, server = server) %>% 
-#     select(input = synonym, Status, Species) %>% 
-#     distinct() %>% 
-#     filter(Status %in% c("accepted name", "synonym")) %>% 
-#     spread(Status, Species) %>% 
-#     rename(accepted_name = `accepted name`) %>% 
-#     mutate(Species = ifelse(is.na(accepted_name), synonym, accepted_name)) %>% 
-#     right_join(tmp, by = "input") %>% 
-#     pull(Species)
-#   
-# }
-# 
-# my_fun <- function(sci_name1, sci_name2, sci_name3){
-#   sci_name <- sci_name3
-#   sci_name[is.na(sci_name)] <- sci_name2[is.na(sci_name)]
-#   sci_name[is.na(sci_name)] <- sci_name1[is.na(sci_name)]
-#   return(sci_name)
-# }
-
+# Save results to disk
+saveRDS(combined, file.path(project_path, "processed_data", "taxa_codes_and_prices.rds"))
