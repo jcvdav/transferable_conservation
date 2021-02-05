@@ -2,13 +2,18 @@
 ## Paths to directories ##
 ##########################
 # Check for OS
-sys_path <- ifelse(Sys.info()["sysname"]=="Windows", "~/G:/","~/Google Drive File Stream")
+sys_path <- ifelse(Sys.info()["sysname"]=="Windows", "~/G:/","/Volumes/GoogleDrive")
 # Nat geo ocean conservation priorities path
 ng_data_path <- file.path(sys_path,"Shared drives/emlab/projects/current-projects/ocean-conservation-priorities/data")
 # Path to our emLab's data folder
 data_path <- file.path(sys_path,"Shared drives/emlab/data")
 # Path to this projects directory
-project_path <- "~/Google Drive File Stream/Shared drives/emlab/projects/current-projects/transferable-conservation"
+project_path <- file.path(sys_path,"Shared drives/emlab/projects/current-projects/transferable-conservation")
+# Create common pointer to RegWatson data
+rw_path <- file.path(data_path, "reg-watson-global-marine-capture", "global_fisheries_landing_v4")
+# Pointer to cleanseafood path
+clean_seafod_path <- file.path(sys_path, "Shared drives/emlab/projects/current-projects/clean-seafood/project-materials/track-3-olivier/raw-data/reconstructed-global-prices/price-db-results")
+
 
 # Source project functions
 source(here::here("scripts", "00_setup","02_functions.R"))
