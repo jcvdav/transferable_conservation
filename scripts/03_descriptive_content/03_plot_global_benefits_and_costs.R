@@ -12,22 +12,22 @@
 library(startR)
 library(raster)
 library(rnaturalearth)
+library(cowplot)
 library(sf)
 library(tidyverse)
 
 # Load data
 
 # Raw data
-benefits <- raster("~/Google Drive File Stream/Shared drives/emlab/projects/current-projects/ocean-conservation-priorities/data/03_output/05_spp_wts_smts_provs_MPAs/delta_v_raster.tif") %>% 
+benefits <- raster(file.path(project_path, "processed_data", "suitability.tif")) %>% 
   as.data.frame(xy = T) %>% 
-  mutate(delta_v_raster = ifelse(delta_v_raster <= 1e-6, 0, delta_v_raster)) %>%
-  drop_na(delta_v_raster)
+  drop_na(suitability)
 
 
 
-costs <- raster("~/Google Drive File Stream/Shared drives/emlab/projects/current-projects/transferable-conservation/processed_data/costs_raster.tif") %>% 
+costs <- raster(file.path(project_path, "processed_data", "revenue_raster.tif")) %>% 
   as.data.frame(xy = T) %>% 
-  drop_na(costs_raster)
+  drop_na(revenue_raster)
 
 ## master data
 master_cb <- readRDS(
@@ -43,9 +43,9 @@ coastline <- ne_countries(returnclass = "sf") %>%
 
 benefit_map <- ggplot() +
   geom_sf(data = coastline, color = "transparent") +
-  geom_raster(data = benefits, aes(x = x, y = y, fill = delta_v_raster)) +
+  geom_raster(data = master_cb, aes(x = lon, y = lat, fill = benefit)) +
   ggtheme_map() +
-  labs(fill = "Biodiversity\nranking") +
+  labs(fill = "Habitat\nsuitability") +
   scale_fill_viridis_c(trans = "log10") +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
@@ -53,12 +53,12 @@ benefit_map <- ggplot() +
 
 # Costs
 
-cost_map <- ggplot() +
+cost_map <- ggplot(trans = "log10") +
   geom_sf(data = coastline, color = "transparent") +
-  geom_raster(data = costs, aes(x = x, y = y, fill = costs_raster)) +
+  geom_raster(data = master_cb, aes(x = lon, y = lat, fill = cost)) +
   ggtheme_map() +
-  labs(fill = "Losses in\nlandings") +
-  scale_fill_viridis_c(trans = "log10") +
+  labs(fill = "Fisheries\nrevenue") +
+  scale_fill_viridis_c() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
   labs(caption = "Note: Fill values have been log10-transformded")
@@ -75,6 +75,7 @@ bcr_map <- master_cb %>%
                                ticks.colour = "black")) +
   labs(caption = "Note: Fill values have been log10-transformded")
 
+pannel <- plot_grid(benefit_map, cost_map, bcr_map, ncol = 1)
 
 # Export figures
 lazy_ggsave(benefit_map,
@@ -91,3 +92,8 @@ lazy_ggsave(bcr_map,
             "bcr_map",
             width = 15,
             height = 7)
+
+lazy_ggsave(pannel,
+            "input_data_maps_panel",
+            width = 10,
+            height = 15)

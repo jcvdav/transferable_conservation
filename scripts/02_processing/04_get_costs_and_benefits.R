@@ -40,14 +40,15 @@ benefits_raster <-
   )
 
 # Costs raster
-catch_raster <-
+costs_raster <-
   raster(
     file.path(
       project_path,
       "processed_data",
-      "catch_raster.tif"
+      "revenue_raster.tif"
     )
-  )
+  ) %>% 
+  crop(benefits_raster)
 
 # effort_raster
 # revenue_raster
@@ -79,7 +80,7 @@ cb <-
         pro_code,
         eco_code,
         benefits_raster,
-        catch_raster) %>%
+        costs_raster) %>%
   as.data.frame(xy = T) %>%       # Convert to data.frame, but keep coordinates
   rename(                         # Select and rename columns
     lon = x,
@@ -89,25 +90,27 @@ cb <-
     pro_code = pro_raster,
     eco_code = eco_raster,
     benefit = suitability,
-    cost1 = catch_raster
+    cost = revenue_raster
   ) %>%
-  drop_na(iso3n, cost1, benefit) %>%                             # Drop areas beyond national jurisdiction
+  drop_na(iso3n, cost, benefit) %>%                             # Drop areas beyond national jurisdiction
   mutate(hemisphere = case_when(lon > 0 & lat > 0 ~ "NE",
                                 lon < 0 & lat > 0 ~ "NW",
                                 lon > 0 & lat <= 0 ~ "SE",
-                                lon < 0 & lat <= 0 ~ "SW"))
+                                lon < 0 & lat <= 0 ~ "SW"),
+         cost = pmax(cost, 0))
 
 # Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
   st_drop_geometry() %>%
+  tibble() %>% 
   select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>%
   left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%            # Join to the data.frame from rasters
-  select(lon, lat, iso3, ecoregion, province, realm, hemisphere, benefit, cost1) %>% # Select columns
+  select(lon, lat, iso3, ecoregion, province, realm, hemisphere, benefit, cost) %>% # Select columns
   filter(benefit >= 1e-6) %>% 
-  mutate(bcr1 = benefit / cost1,                                                       # Calculate marginal benefit
-         mc1 = cost1 / benefit,
-         neg = bcr1 >= 0) %>%                                                         # Create dummy variable for negative costs
-  drop_na(lat, lon, benefit, cost1)                                                  # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
+  mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
+         mc = cost / benefit,
+         neg = bcr > 0) %>%                                                         # Create dummy variable for negative costs
+  drop_na(lat, lon, benefit, cost)                                                  # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
 
 ## AT THE EEZ LEVEL ####
 # Calculate country-level supply curve

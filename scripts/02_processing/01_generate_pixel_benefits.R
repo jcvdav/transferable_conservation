@@ -48,7 +48,7 @@ suitability_layer <- tibble(suitability = matrixStats::rowSums2(Norm_features_ma
   left_join(metadata, by = "cell_id") %>% 
   select(x, y, suitability) %>% 
   mutate(suitability = suitability / max(suitability, na.rm = T)) %>%
-  rasterFromXYZ()
+  rasterFromXYZ(crs = proj_moll)
 
 plot(suitability_layer)
 
