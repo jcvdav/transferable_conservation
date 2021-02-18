@@ -1,7 +1,9 @@
 
 # Load packages
-library(tidyverse)
 library(rfishbase)
+library(corrplot)
+library(tidyverse)
+
 
 # Set up taxonomy baseline
 ## Get taxonomy from SeaLifeBase
@@ -64,7 +66,7 @@ taxonomy_order_class <- taxonomy %>%
   slice(n = 1) %>% 
   ungroup()
 
-
+# Read-in price data and perform high-level data cleaning
 price <- read.csv(
   file.path(
     clean_seafod_path,
@@ -73,7 +75,7 @@ price <- read.csv(
   stringsAsFactors = F) %>% 
   as_tibble() %>% 
   janitor::clean_names() %>% 
-  filter(year == 2017) %>% 
+  filter(between(year, 2005, 2015)) %>% 
   filter_all(all_vars(!str_detect(., "[fF]reshwater|FRESHWATER"))) %>% 
   select(-x) %>% 
   drop_na(exvessel) %>% 
@@ -86,9 +88,13 @@ price <- read.csv(
          asfis_species = str_remove_all(asfis_species, "\\(.*\\)"),
          asfis_species = str_remove_all(asfis_species, "[:punct:]"),
          asfis_species = str_squish(asfis_species),
-         asfis_species = str_trim(asfis_species)) %>% 
-  rename(species = scientific_name) %>% 
-  mutate(species = my_validate(species)) %>% 
+         asfis_species = str_trim(asfis_species)) 
+
+# Take only the species data, and validate the scientific names and all taxonomy
+validated_taxonomy <- price %>% 
+  select(scientific_name) %>% 
+  distinct() %>% 
+  mutate(species = my_validate(scientific_name)) %>% 
   mutate(genus = str_extract(species, pattern = "^[:alpha:]+")) %>% 
   left_join(taxonomy_genus_family, by = "genus") %>% 
   mutate(family = ifelse(is.na(family) & genus %in% families, genus, family)) %>% 
@@ -99,48 +105,54 @@ price <- read.csv(
   mutate(genus = ifelse(genus == family, NA_character_, genus),
          genus = ifelse(genus == order, NA_character_, genus),
          genus = ifelse(genus == class, NA_character_, genus))
+  
+# Now we need to create a list of cases where "species" is not actually "species", but a higher taxon.
+# Leaving them in would be as double-counting.
 
-redundant_prices_species_genus <- price %>%
+# Find cases where species is actually a genus
+redundant_prices_species_genus <- validated_taxonomy %>%
   group_by(genus) %>%
   mutate(n = n()) %>%
   ungroup() %>%
   filter(species == genus, n > 1) %>% 
   pull(species)
 
-redundant_prices_species_family <- price %>%
+# Find cases where species is actually a family
+redundant_prices_species_family <- validated_taxonomy %>%
   group_by(family) %>%
   mutate(n = n()) %>%
   ungroup() %>%
   filter(species == family, n > 1) %>% 
   pull(species)
 
-redundant_prices_species_order <- price %>%
+# Find cases where species is actually an order
+redundant_prices_species_order <- validated_taxonomy%>%
   group_by(order) %>%
   mutate(n = n()) %>%
   ungroup() %>%
   filter(species == order, n > 1) %>% 
   pull(species)
 
-redundant_prices_species_class <- price %>%
+# Find cases where species is actually a class
+redundant_prices_species_class <- validated_taxonomy %>%
   group_by(class) %>%
   mutate(n = n()) %>%
   ungroup() %>%
   filter(species == class, n > 1) %>% 
   pull(species)
 
-price <- price %>% 
+# Now we remove all those from our list
+validated_taxonomy <- validated_taxonomy %>% 
   filter(!species %in% c(redundant_prices_species_genus,
                          redundant_prices_species_family,
                          redundant_prices_species_order,
                          redundant_prices_species_class))
 
 
+updated_price <- price %>% 
+  right_join(validated_taxonomy, by = "scientific_name")
 
-# Checks
-# filter(price, is.na(class)) %>% select(species, genus, family, order, class) %>% View("price_missing_class")
-
-# if family is NA AND genus IN family, genus is family
-
+# Now e create a fucntion that calculates median for any desired taxa
 
 summarize_group <- function(x, group) {
   varname <- paste0(group, c("_median"))
@@ -151,49 +163,68 @@ summarize_group <- function(x, group) {
     drop_na()
 }
 
-price_species <- price %>% 
+# Get species-level median
+price_species <- updated_price %>% 
   summarize_group("species")
 
-price_genus <- price %>% 
+# Get genus-level median
+price_genus <- updated_price %>% 
   summarize_group("genus")
 
-price_family <- price %>% 
+# Get family-level median
+price_family <- updated_price %>% 
   summarize_group("family")
 
-price_order <- price %>% 
+# Get order-level median
+price_order <- updated_price %>% 
   summarize_group("order")
 
-price_class <- price %>% 
+# Get class-level median
+price_class <- updated_price %>% 
   summarize_group("class")
 
-price_isscaap_group <- price %>% 
+# Get family-level median
+price_isscaap_group <- updated_price %>% 
   summarize_group("isscaap_group")
 
-marine_animals_median <- price %>% 
+# We also know that the Watson dataset contains a "marine animals" category, whic in this case we'll
+# impute using the overal median value, for lack of a better value
+marine_animals_median <- updated_price %>% 
   select(species, exvessel) %>% 
   distinct() %>% 
   pull(exvessel) %>% 
   median(na.rm = T)
 
-
 # Check correlation between these
-all_prices <- price %>% 
+all_prices <- updated_price %>% 
   left_join(price_species, by = "species") %>% 
   left_join(price_genus, by = "genus") %>% 
   left_join(price_family, by = "family") %>% 
   left_join(price_order, by = "order") %>% 
   left_join(price_class, by = "class") %>% 
   left_join(price_isscaap_group, by = "isscaap_group") %>%
-  select(exvessel, contains("median")) %>% 
+  select(contains("median")) %>% 
   magrittr::set_colnames(value = str_replace_all(str_remove_all(colnames(.), "_median"), "_", " "))
 
-corrplot::corrplot(corr = cor(all_prices, use = "pairwise.complete.obs"),
-                   method = "ellipse",
-                   type = "upper",
-                   outline = T,
-                   addCoef.col = "black",
-                   diag = F,
-                   number.cex = 0.75)
+correlogram <- all_prices %>%
+  magrittr::set_colnames(value = str_to_sentence(colnames(.))) %>%
+  # rename(Original = Exvessel) %>%
+  cor(use = "pairwise.complete.obs") %>%
+  ggcorrplot(type = "lower",
+             lab = TRUE,
+             colors = c("red", "white", "steelblue"),
+             outline.color = "black") +
+  startR::ggtheme_plot() +
+  labs(x = "Taxon or group", y = "Taxon or group") +
+  guides(fill = guide_colorbar(title = "Pearson's\nR",
+                               frame.colour = "black",
+                               ticks.colour = "black"))
+
+startR::lazy_ggsave(correlogram,
+                    filename = "correlogram_exvessel_price",
+                    width = 12, 
+                    height = 12)
+
 
 taxa_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 3L) %>% 
   rename(species = TaxonName) %>% 
