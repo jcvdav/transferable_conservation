@@ -1,12 +1,22 @@
 ---
 title: "A Global Market for Marine Conservation"
 subtitle: "Draft"
+# https://stackoverflow.com/questions/52918716/authors-and-affiliations-in-the-yaml-of-rmarkdown
 author:
-  - "Juan Carlos Villaseñor-Derbez"
-  - "Darcy Bradley"
-  - "Christopher Costello"
-  - "Juan Mayorga"
-  - "Andrew Plantinga"
+  - Juan Carlos Villaseñor-Derbez:
+      email: juancarlos@ucsb.edu
+      institute: bren
+      correspondence: true
+  - name: Darcy Bradley
+    institute: bren
+  - name: Christopher Costello
+    institute: bren
+  - name: Juan Mayorga
+    institute: bren
+  - name: Andrew Plantinga
+    institute: bren
+institute:
+  - bren: Bren School of Environmental Science and Management, University of California Santa Barbara
 date: "Prepared on `r format(Sys.time(), '%B %d, %Y')`"
 abstract: "Humanity depends on the ocean for livelihood, subsitance, and way of life. Yet, many of our activities continiously pose a threat to marine populations and ecosystems. The implementation of Marine Protected Areas (MPAs), where extractive activities are regulated or prohibited on the basis of spatial deliniations, are one of many ways to manage the oceans. Current intenrational agreements call to achieve a certain amount of within-country conservation. Here we explore the benefits from implementing a market for conservation in which nations trade conservation towards a global target. We find that such a market reduces the costs of conservation by 46%, relative to a BAU scenario without a market where each country protects a fixed portion of their waters. When creating 12 distinct markets based on biogeography regionalization, we find that costs are reduced by 34.8%."
 fontsize: 12pt
@@ -16,6 +26,9 @@ output:
     fig_caption: yes
     number_sections: yes
     toc: no
+    pandoc_args:
+      - '--lua-filter=scholarly-metadata.lua'
+      - '--lua-filter=author-info-blocks.lua'
 header-includes:
   - \usepackage{multirow}
   - \usepackage{float}
@@ -30,6 +43,12 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.pos = "!H",
                       out.extra = "")
 ```
+
+\clearpage
+
+# Important sentences
+
+Importantly, the quality of a patch can be defined independently of other pixels. This is true for habitat suitability, in which the abiotic characteristics that determine the suitability of a patch are independent of the protected status of any patch.
 
 # Introduction
 
@@ -157,9 +176,9 @@ So far, I have performed preliminary analyses for a global market and outlined h
 
 ![\label{fig:eez-rlm-supply-curve} Biodiversity supply curves for all nations within each realm (top panels), and realm-level biodiversity supply curves (bottom). For the small panels, each line represents a country. In the large bottom panel, each line represents the horizontally-summed supply curve for each realm (color coded).](results/img/eez_rlm_supply_curve.png)
 
-\input{results/tab/rlm_trading_prices.tex}
+\input{results/tab/trading_prices_rlm.tex}
 
-\input{results/tab/rlm_gains_from_trade.tex}
+\input{results/tab/gains_from_trade_rlm.tex}
 
 ![\label{fig:rlm-map-of-trade}Map of trade for each realm. Blue indicates nations that reach the trading price before meeting their target, and therefore chose to pay to conerve elsewhere. Red nations get paid to conserve in their waters, due to the low costs relative to blue nations.](results/img/rlm_map_of_trade.png)
 
