@@ -157,9 +157,9 @@ updated_price <- price %>%
 summarize_group <- function(x, group) {
   varname <- paste0(group, c("_median"))
   x %>% 
-    group_by_at(vars(one_of(group))) %>% 
+    group_by_at(vars(one_of(group, "year"))) %>% 
     summarize(median = median(exvessel, na.rm = T)) %>% 
-    magrittr::set_colnames(c(group, varname)) %>% 
+    magrittr::set_colnames(c(group, "year", varname)) %>% 
     drop_na()
 }
 
@@ -188,27 +188,28 @@ price_isscaap_group <- updated_price %>%
   summarize_group("isscaap_group")
 
 # We also know that the Watson dataset contains a "marine animals" category, whic in this case we'll
-# impute using the overal median value, for lack of a better value
+# impute using the overall median value, for lack of a better value
 marine_animals_median <- updated_price %>% 
-  select(species, exvessel) %>% 
+  select(species, year, exvessel) %>% 
   distinct() %>% 
-  pull(exvessel) %>% 
-  median(na.rm = T)
+  group_by(year) %>% 
+  summarize(marine_animals_median = median(exvessel, na.rm = T)) %>% 
+  ungroup() %>% 
+  mutate(species = "Marine animals")
 
 # Check correlation between these
 all_prices <- updated_price %>% 
-  left_join(price_species, by = "species") %>% 
-  left_join(price_genus, by = "genus") %>% 
-  left_join(price_family, by = "family") %>% 
-  left_join(price_order, by = "order") %>% 
-  left_join(price_class, by = "class") %>% 
-  left_join(price_isscaap_group, by = "isscaap_group") %>%
+  left_join(price_species, by = c("species", "year")) %>% 
+  left_join(price_genus, by = c("genus", "year")) %>% 
+  left_join(price_family, by = c("family", "year")) %>% 
+  left_join(price_order, by = c("order", "year")) %>% 
+  left_join(price_class, by = c("class", "year")) %>% 
+  left_join(price_isscaap_group, by = c("isscaap_group", "year")) %>%
   select(contains("median")) %>% 
   magrittr::set_colnames(value = str_replace_all(str_remove_all(colnames(.), "_median"), "_", " "))
 
 correlogram <- all_prices %>%
   magrittr::set_colnames(value = str_to_sentence(colnames(.))) %>%
-  # rename(Original = Exvessel) %>%
   cor(use = "pairwise.complete.obs") %>%
   ggcorrplot(type = "lower",
              lab = TRUE,
@@ -255,13 +256,15 @@ taxa_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 3L) %
   select(-tmp_spp)
 
 combined <- taxa_codes %>%
-  left_join(price_species, by = "species") %>% 
-  left_join(price_genus, by = "genus") %>% 
-  left_join(price_family, by = "family") %>% 
-  left_join(price_order, by = "order") %>% 
-  left_join(price_class, by = "class") %>% 
-  left_join(price_isscaap_group, by = c("species" = "isscaap_group")) %>%
-  left_join(price_isscaap_group, by = c("common_name" = "isscaap_group")) %>%
+  expand_grid(year = c(2005:2015)) %>% 
+  left_join(price_species, by = c("species", "year")) %>% 
+  left_join(price_genus, by = c("genus", "year")) %>%
+  left_join(price_family, by = c("family", "year")) %>%
+  left_join(price_order, by = c("order", "year")) %>%
+  left_join(price_class, by = c("class", "year")) %>%
+  left_join(price_isscaap_group, by = c("species" = "isscaap_group", "year")) %>%
+  left_join(price_isscaap_group, by = c("common_name" = "isscaap_group", "year")) %>%
+  left_join(marine_animals_median, by = c("species", "year")) %>%
   mutate(price = species_median,
          price = ifelse(is.na(price), genus_median, price),
          price = ifelse(is.na(price), family_median, price),
@@ -269,8 +272,8 @@ combined <- taxa_codes %>%
          price = ifelse(is.na(price), class_median, price),
          price = ifelse(is.na(price), isscaap_group_median.x, price),
          price = ifelse(is.na(price), isscaap_group_median.y, price),
-         price = ifelse(species == "Marine animals" & is.na(price), marine_animals_median, price)) %>% 
-  select(taxon_key, class, order, family, genus, species, common_name, price)
+         price = ifelse(is.na(price), marine_animals_median, price)) %>% 
+  select(year, taxon_key, class, order, family, genus, species, common_name, price)
 
 
 # Save results to disk
