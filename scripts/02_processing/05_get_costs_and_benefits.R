@@ -35,7 +35,7 @@ benefits_raster <-
     file.path(
       project_path,
       "processed_data",
-      "suitability.tif"
+      "normalized_suitability.tif"
     )
   )
 
@@ -50,19 +50,22 @@ costs_raster <-
   ) %>% 
   crop(benefits_raster)
 
-# effort_raster
-# revenue_raster
-
-
 # Load spatial metadata rasters
 iso3n <-
-  raster(file.path(project_path, "processed_data", "eez_raster.tif"))
+  raster(file.path(project_path, "processed_data", "eez_raster.tif")) %>% 
+  crop(benefits_raster)
+
 rlm_code <-
-  raster(file.path(project_path, "processed_data", "rlm_raster.tif"))
+  raster(file.path(project_path, "processed_data", "rlm_raster.tif")) %>% 
+  crop(benefits_raster)
+
 pro_code <-
-  raster(file.path(project_path, "processed_data", "pro_raster.tif"))
+  raster(file.path(project_path, "processed_data", "pro_raster.tif")) %>% 
+  crop(benefits_raster)
+
 eco_code <-
-  raster(file.path(project_path, "processed_data", "eco_raster.tif"))
+  raster(file.path(project_path, "processed_data", "eco_raster.tif")) %>% 
+  crop(benefits_raster)
 
 # Load the EEZ vector data
 eez_meow <-
@@ -89,7 +92,7 @@ cb <-
     rlm_code = rlm_raster,
     pro_code = pro_raster,
     eco_code = eco_raster,
-    benefit = suitability,
+    benefit = normalized_suitability,
     cost = revenue_raster
   ) %>%
   drop_na(iso3n, cost, benefit) %>%                             # Drop areas beyond national jurisdiction
@@ -97,21 +100,22 @@ cb <-
                                 lon < 0 & lat > 0 ~ "NW",
                                 lon > 0 & lat <= 0 ~ "SE",
                                 lon < 0 & lat <= 0 ~ "SW"),
-         cost = pmax(cost, 0))
+         cost = pmax(cost, 0),
+         benefit = 2500 * benefit)
 
 # Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
   st_drop_geometry() %>%
   tibble() %>% 
-  select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>%
+  select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>% 
   left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%            # Join to the data.frame from rasters
   select(lon, lat, iso3, ecoregion, province, realm, hemisphere, benefit, cost) %>% # Select columns
-  filter(benefit >= 1e-6) %>% 
+  filter(benefit > 0) %>% 
   mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
          mc = cost / benefit,
          neg = bcr > 0) %>%                                                         # Create dummy variable for negative costs
-  drop_na(lat, lon, benefit, cost)                                                  # !!!!!!!!  There are some slivers to be addressed   !!!!!!!!!
-
+  drop_na(lat, lon, benefit, cost)
+  
 ## AT THE EEZ LEVEL ####
 # Calculate country-level supply curve
 eez_data <- master_data %>%
