@@ -19,11 +19,9 @@ library(tidyverse)
 # Load data
 
 # Raw data
-benefits <- raster(file.path(project_path, "processed_data", "suitability.tif")) %>% 
+benefits <- raster(file.path(project_path, "processed_data", "normalized_suitability.tif")) %>% 
   as.data.frame(xy = T) %>% 
   drop_na(suitability)
-
-
 
 costs <- raster(file.path(project_path, "processed_data", "revenue_raster.tif")) %>% 
   as.data.frame(xy = T) %>% 
@@ -45,11 +43,10 @@ benefit_map <- ggplot() +
   geom_sf(data = coastline, color = "transparent") +
   geom_raster(data = master_cb, aes(x = lon, y = lat, fill = benefit)) +
   ggtheme_map() +
-  labs(fill = "Habitat\nsuitability") +
-  scale_fill_viridis_c(trans = "log10") +
+  labs(fill = expression(Q_i)) +
+  scale_fill_viridis_c() +
   guides(fill = guide_colorbar(frame.colour = "black",
-                               ticks.colour = "black")) +
-  labs(caption = "Note: Fill values have been log10-transformded")
+                               ticks.colour = "black"))
 
 # Costs
 
@@ -58,10 +55,9 @@ cost_map <- ggplot(trans = "log10") +
   geom_raster(data = master_cb, aes(x = lon, y = lat, fill = cost)) +
   ggtheme_map() +
   labs(fill = "Fisheries\nrevenue") +
-  scale_fill_viridis_c() +
+  scale_fill_viridis_c(trans = "log10") +
   guides(fill = guide_colorbar(frame.colour = "black",
-                               ticks.colour = "black")) +
-  labs(caption = "Note: Fill values have been log10-transformded")
+                               ticks.colour = "black"))
 
 # BCR
 bcr_map <- master_cb %>% 
@@ -70,12 +66,13 @@ bcr_map <- master_cb %>%
   geom_sf(data = coastline, fill = "gray") +
   ggtheme_map() +
   scale_fill_viridis_c(trans = "log10") +
-  guides(fill = guide_colorbar(title = "BCR",
+  guides(fill = guide_colorbar(title = "log10(BCR)",
                                frame.colour = "black",
-                               ticks.colour = "black")) +
-  labs(caption = "Note: Fill values have been log10-transformded")
+                               ticks.colour = "black"))
 
-pannel <- plot_grid(benefit_map, cost_map, bcr_map, ncol = 1)
+pannel <- plot_grid(benefit_map, cost_map, bcr_map,
+                    ncol = 1,
+                    labels = "AUTO")
 
 # Export figures
 lazy_ggsave(benefit_map,

@@ -98,17 +98,6 @@ eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
 
 # Country province, for each Realm
 eez_pro <-
-  ggplot(data = pro_eez_cb,
-         mapping = aes(x = tb, y = mc, group = paste(province, iso3))) +
-  geom_line() +
-  guides(color = F) +
-  scale_color_viridis_d() +
-  facet_wrap( ~ realm, scales = "free") +
-  ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Marginal Costs")
-
-eez_pro <-
   ggplot(data = pro_h_sum,
          mapping = aes(x = tb, y = mc, color = iso3, group = paste(province, iso3))) +
   geom_line() +
@@ -119,10 +108,10 @@ eez_pro <-
   labs(x = "Biodiversity",
        y = "Marginal Costs")
 
-
+# Country ecoregion, for each realm
 eez_eco <-
   ggplot(data = eco_eez_cb,
-         mapping = aes(x = tb,y = mc,color = iso3,group = paste(ecoregion, province, iso3))) +
+         mapping = aes(x = tb,y = mc, color = iso3, group = paste(ecoregion, province, iso3))) +
   geom_line() +
   guides(color = F) +
   scale_color_viridis_d() +
