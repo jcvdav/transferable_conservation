@@ -26,8 +26,8 @@ options(dplyr.summarise.inform = FALSE)
 ## Useful general values ##
 ###########################
 # proj4strings
-proj_moll <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +units=m +no_defs " # Mollweide - EPSG code ESRI:54009
-proj_longlat <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "              # Unprojected coordinates - EPSG code 4326
+proj_moll <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs "             # Mollweide - EPSG code ESRI:54009
+proj_longlat <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "                         # Unprojected coordinates - EPSG code 4326
 
 # EPSG codes
 epsg_moll <- "ESRI:54009"
