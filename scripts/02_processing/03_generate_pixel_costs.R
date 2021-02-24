@@ -1,81 +1,86 @@
 
 
+## Set up
+
 # Load packages
 library(raster)
 library(data.table)
 library(tidyverse)
 
+# Load ocean mask to remove rogue pixels
+ocean_mask <- raster(
+  file.path(project_path, "processed_data", "ocean_mask.tif")
+)
+
 # Read in catch data
-## List the files
+# List all catch files for industrial fisheries
 ind <- list.files(path = file.path(rw_path, "industrial"),
                           pattern = "*.csv",
-                          full.names = T) %>% 
-  tail(3)
+                          full.names = T)
 
+# List all non-industrial fisheries
 Nind <- list.files(path = file.path(rw_path, "nonindustrial"),
                     pattern = "*.csv",
-                    full.names = T) %>% 
-  tail(3)
+                    full.names = T)
 
 
-catch_files <- c(ind, Nind)
+catch_files <- c(ind, Nind)                                                                  # Combine all file paths
+catch_files <- catch_files[str_detect(catch_files, "2005|2010|2015")]                        # Keep only file names for 2005-2015
 
 # Read all
-dt <- map_dfr(catch_files, fread, sep = ",", key = c("Cell", "ID")) %>% 
+dt <- map_dfr(catch_files, fread, sep = ",", key = c("Cell", "ID")) %>%                      # Mad across files to read them in
   .[, .(ID, Cell, Reported)]
 
 # Read in the codes
-cell_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 1L) %>% 
-  select(-OceanAreasqkm) %>% 
-  as.data.table(key = "Cell")
+cell_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 1L) %>%           # Read in the codes
+  as.data.table(key = "Cell")                                                                # Convert to data.table; set key to Cell
 
-taxa_codes <- readRDS(file.path(project_path, "processed_data", "taxa_codes_and_prices.rds")) %>% 
-  select(year, taxon_key, price) %>% 
-  data.table::data.table(key = c("taxon_key", "year"))
+taxa_codes <- readRDS(
+  file.path(project_path, "processed_data", "taxa_codes_and_prices.rds")                     # Read in tax condes with prices
+  ) %>% 
+  select(year, taxon_key, price) %>%                                                         # Keep only relevnt variables
+  data.table::data.table(key = c("taxon_key", "year"))                                       # Convert to data.table; set key to taxon and year
 
 # Read indices
 index <- list.files(rw_path, "*.csv", full.names = T) %>% 
   map_dfr(fread, key = "ID") %>% 
   .[, .(ID, year = IYear, taxon_key = Taxonkey)]
 
+# Merge the three datasets
+merged <- dt %>%                                                     # This has catch data at the pixel- species- year-level, coded in ID
+  merge(index, all.x = TRUE, by = "ID") %>%                          # This adds taxonkey and year
+  merge(taxa_codes, all.x = TRUE, by = c("taxon_key", "year"))       # This adds 
 
-merged <- dt %>% 
-  merge(index, all.x = TRUE, by = "ID") %>%
-  merge(taxa_codes, all.x = TRUE, by = c("taxon_key", "year"))
+setkey(merged, year, Cell)                                           # Sets a key to make computation faster
 
-setkey(merged, year, Cell)
-
+# Summarize the data
 summary <- merged %>% 
-  .[, .(revenue = sum(Reported * price, na.rm = T)),
-    by = .(year, Cell)] %>%
-  .[,.(revenue = mean(revenue, na.rm = T)),
-    by = .(Cell)] %>% 
-  merge(cell_codes, all.x = TRUE, by = "Cell")
+  .[, .(revenue = sum(Reported * price, na.rm = T)),                # Calculate revenue as the sum product of catch and price
+    by = .(year, Cell)] %>%                                         # Grouping it at the cell-year level
+  .[,.(revenue = median(revenue, na.rm = T)),                       # Now calculate the median revenue
+    by = .(Cell)] %>%                                               # Grouping it at the cell-level
+  merge(cell_codes, all.x = TRUE, by = "Cell")                      # Finally, add coordinates to the data
 
-benefits_raster <-
-  raster(
-    file.path(
-      project_path,
-      "processed_data",
-      "suitability.tif"
-    )
-  )
+# Rasterization
+watson_raster_longlat <- summary %>% 
+  select(LonCentre, LatCentre, revenue) %>%                               # Select coordinates and variable
+  raster::rasterFromXYZ(crs = proj_longlat)                               # Rasterize the revenue data into longlat coords
 
-crs(benefits_raster) <- proj_moll
-  
-watson_raster_longlat <- select(summary, LonCentre, LatCentre, revenue) %>%
-  raster::rasterFromXYZ(crs = proj_longlat)
+watson_intensity_raster_longlat <- 
+  watson_raster_longlat / raster::area(watson_raster_longlat)             # Transform units into USD / km 2
 
-total_longlat <- sum(values(watson_raster_longlat), na.rm = T)
+# Reprojection to Moll
+watson_intensity_raster_moll <- 
+  projectRaster(watson_intensity_raster_longlat,
+                crs = proj_moll,                                          # Specify the CRS
+                res = 50000,                                              # Specify the resolution (50 km cells to match species data)
+                over = T,                                                 # Allow interpolation over the dateline
+                method = "bilinear")                                      # Use bilinear interpolation
 
-watson_raster_moll <- watson_raster_longlat %>% 
-  raster::projectRaster(crs = proj_moll, res = 50000, over = T)
+watson_raster_moll <- watson_intensity_raster_moll * 2500                 # Convert intensity back to USD
+watson_raster_moll <- watson_raster_moll * ocean_mask
 
-total_moll <- sum(values(watson_raster_moll), na.rm = T)
-
-watson_raster_moll <- (watson_raster_moll / total_moll) * total_longlat
-
-
+# Export data
 writeRaster(watson_raster_moll,
             filename = file.path(project_path, "processed_data", "revenue_raster.tif"),
             overwrite = TRUE)
