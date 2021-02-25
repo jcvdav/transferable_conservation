@@ -39,7 +39,8 @@ world_seas <- st_read(dsn = file.path(data_path,
           ymin = -90L, ymax = 90L) %>% 
   st_transform(proj_moll) %>%                  # Reproject to Moll
   st_make_valid() %>%                          # Make sure all elements are valid
-  select(name, mrgid)                          # Select relevant columns
+  select(name, mrgid) %>%                      # Select relevant columns
+  st_collection_extract()                      # Make sure we don't have geometry collections
 
 ## Export ###########################################################################
 world_seas_fn <- file.path(project_path, "processed_data", "clean_world_seas.gpkg")      # Define filename
