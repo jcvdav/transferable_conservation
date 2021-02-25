@@ -1,0 +1,49 @@
+################################################################
+######################## 02_clean_MEOWs ########################
+################################################################
+#
+# This is a cleaning script for the MEOW shapefile.
+# The purpose is to read the file in, and keep only relevant
+# columns, as well as only relevan polygons.
+# 
+# Data will be exported as a geopackage in the data folder.
+# 
+# This dataset represents the boundaries of the major oceans and
+# seas of the world. The source for the boundaries is the publication
+# 'Limits of Oceans & Seas, Special Publication No. 23' published
+# by the IHO in 1953. The dataset was composed by the Flanders
+# Marine Data and Information Centre.
+# 
+# 
+# Data available at:
+# https://www.marineregions.org/sources.php#iho
+# 
+# For more info:
+# Flanders Marine Institute (2018). IHO Sea Areas, version 3. 
+# Available online at https://www.marineregions.org/. https://doi.org/10.14284/323.
+################################################################
+
+## Set up ##########################################################################
+# Load packages
+library(janitor)
+library(sf)
+library(tidyverse)
+
+## Process #########################################################################
+# Load shapefile -------------------------------------------------------------------
+world_seas <- st_read(dsn = file.path(data_path,
+                                "world-seas-v3", "World_Seas_IHO_v3"),
+                layer = "World_Seas_IHO_v3") %>% 
+  clean_names() %>%                             # Clean column names
+  st_crop(xmin = -180L, xmax = 180L,
+          ymin = -90L, ymax = 90L) %>% 
+  st_transform(proj_moll) %>%                  # Reproject to Moll
+  st_make_valid() %>%                          # Make sure all elements are valid
+  select(name, mrgid)                          # Select relevant columns
+
+## Export ###########################################################################
+world_seas_fn <- file.path(project_path, "processed_data", "clean_world_seas.gpkg")      # Define filename
+file.remove(world_seas_fn)                            # Remove them if file exists
+st_write(obj = world_seas, dsn = world_seas_fn)             # Save file to disk
+
+# END OF SCRIPT ####################################################################
