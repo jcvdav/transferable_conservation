@@ -35,15 +35,22 @@ rlm_h_sum <- readRDS(
 pro_eez_cb <- readRDS(
   file = file.path( project_path, "processed_data", "pro_eez_costs_and_benefits.rds")
 ) 
-### Horizontally summed for each province
+
 pro_h_sum <- readRDS(
   file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds")
-) 
+)
+
+sea_eez_cb <- readRDS(
+  file = file.path( project_path, "processed_data", "sea_eez_costs_and_benefits.rds")
+  )
+sea_h_sum <- readRDS(
+  file = file.path( project_path, "processed_data", "sea_h_sum_costs_and_benefits.rds")
+  )
 
 
-get_market_gains <- function(eez_cb, r, trading_price) {
+get_global_market_gains <- function(eez_cb, r, trading_price) {
   bau <- eez_cb %>% 
-    filter(pct <= r) %>%                       # Keep the most efficient 30% of each country - hemisphere
+    filter(pct <= r) %>%                       # Keep the most efficient r% of each country - hemisphere
     mutate(approach = "bau") %>% 
     group_by(approach, iso3) %>% 
     summarize(bau_tb = sum(benefit, na.rm = T),
@@ -80,7 +87,7 @@ get_market_gains <- function(eez_cb, r, trading_price) {
 #################
 # Gains from trade hemisphere function
 
-get_market_gains_hem <- function(curves, r, trading_prices, group) {
+get_segmented_market_gains <- function(curves, r, trading_prices, group) {
   
   # Filter to keep only the protected places
   bau <- curves %>% 
@@ -149,7 +156,7 @@ market_segmenter <- function(rs, curves, agg_curves, group){
   tibble(rs = rs) %>% 
     mutate(targets = map(rs, benefit_wrapper, curves = curves, group = group)) %>% 
     mutate(trading_prices = map(targets, trading_price_wrapper, agg_curves = agg_curves, group = group)) %>% 
-    mutate(costs = map2(rs, trading_prices, get_market_gains_hem, curves = curves, group = group)) %>% 
+    mutate(costs = map2(rs, trading_prices, get_segmented_market_gains, curves = curves, group = group)) %>% 
     unnest(costs) %>% 
     mutate(difference = bau - mkt,
            ratio = mkt / bau,
@@ -164,7 +171,7 @@ rs <- seq(0.05, 1, by = c(0.01))
 gains_from_trade_multiple_scenarios_global <- tibble(rs = rs) %>% 
   mutate(targets = map_dbl(rs, benefit, data = eez_cb)) %>% 
   mutate(trading_prices = map_dbl(targets, get_trading_price, supply_curve = eez_h_sum_cb)) %>% 
-  mutate(costs = map2(rs, trading_prices, get_market_gains, eez_cb = eez_cb)) %>% 
+  mutate(costs = map2(rs, trading_prices, get_global_market_gains, eez_cb = eez_cb)) %>% 
   unnest(costs) %>% 
   mutate(difference = bau - mkt,
          ratio = mkt / bau,
@@ -194,21 +201,30 @@ gains_from_trade_multiple_scenarios_pro <-
     group = "province"
   )
 
+gains_from_trade_multiple_scenarios_sea <- 
+  market_segmenter(
+    rs = rs,
+    curves = sea_eez,
+    agg_curves = sea_h_sum,
+    group = "sea_name"
+  )
 
 gains_from_trade_multiple_scenarios <- rbind(
   gains_from_trade_multiple_scenarios_global,
   gains_from_trade_multiple_scenarios_hem,
   gains_from_trade_multiple_scenarios_rlm,
-  gains_from_trade_multiple_scenarios_pro
+  gains_from_trade_multiple_scenarios_pro,
+  gains_from_trade_multiple_scenarios_sea
   ) %>% 
   mutate(market = stringr::str_to_sentence(market),
-         market = fct_relevel(market, "Province", after = Inf))
+         market = fct_relevel(market, "Province", after = Inf)) %>% 
+  mutate(difference = difference)
 
 # Visualize 
 abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = targets / max(targets), y = difference, color = market)) +
   geom_line(size = 1) +
   ggtheme_plot() +
-  labs(x = "% Biodiversity protected", 
+  labs(x = " (Q_i * Area) protected", 
        y = "Costs avoided (BAU - MKT)",
        color = "Segment") +
   scale_x_continuous(labels = scales::percent) +
@@ -219,7 +235,7 @@ abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = targets / max(targets
 rel <- ggplot(gains_from_trade_multiple_scenarios, aes(x = targets / max(targets), y = 1 - ratio, color = market)) +
   geom_line(size = 1) +
   ggtheme_plot() +
-  labs(x = "% Biodiversity protected", 
+  labs(x = "% (Q_i * Area) protected", 
        y = "Costs avoided (difference / BAU)") +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +

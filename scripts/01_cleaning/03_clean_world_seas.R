@@ -35,8 +35,6 @@ world_seas <- st_read(dsn = file.path(data_path,
                                 "world-seas-v3", "World_Seas_IHO_v3"),
                 layer = "World_Seas_IHO_v3") %>% 
   clean_names() %>%                             # Clean column names
-  st_crop(xmin = -180L, xmax = 180L,
-          ymin = -90L, ymax = 90L) %>% 
   st_transform(proj_moll) %>%                  # Reproject to Moll
   st_make_valid() %>%                          # Make sure all elements are valid
   select(name, mrgid) %>%                      # Select relevant columns

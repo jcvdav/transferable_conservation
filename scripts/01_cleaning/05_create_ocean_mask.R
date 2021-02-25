@@ -1,12 +1,12 @@
 
+library(raster)
 library(fasterize)
 library(rnaturalearth)
 library(sf)
 library(tidyverse)
 
 
-world_seas <- st_read(dsn = file.path(data_path, "world-seas-v3", "World_Seas_IHO_v3"), "World_Seas_IHO_v3") %>% 
-  st_transform(proj_moll)
+world_seas <- st_read(file.path(project_path, "processed_data", "clean_world_seas.gpkg"))
 
 base_raster <- raster(file.path(project_path, "processed_data", "base_raster.tif"))
 
