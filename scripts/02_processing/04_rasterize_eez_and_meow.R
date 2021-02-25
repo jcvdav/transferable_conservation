@@ -5,7 +5,7 @@ library(sf)
 library(tidyverse)
 
 # Load reference raster
-benefits_raster <-
+base_raster <-
   raster(
     file.path(
       project_path,
@@ -19,10 +19,10 @@ eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_a
   select(iso3n, contains("code")) 
 
 # Rasterize
-eez_raster <- fasterize(eez_meow, benefits_raster, field = "iso3n")
-realm_raster <- fasterize(eez_meow, benefits_raster, field = "rlm_code")
-province_raster <- fasterize(eez_meow, benefits_raster, field = "pro_code")
-ecoregion_raster <- fasterize(eez_meow, benefits_raster, field = "eco_code")
+eez_raster <- fasterize(eez_meow, base_raster, field = "iso3n")
+realm_raster <- fasterize(eez_meow, base_raster, field = "rlm_code")
+province_raster <- fasterize(eez_meow, base_raster, field = "pro_code")
+ecoregion_raster <- fasterize(eez_meow, base_raster, field = "eco_code")
 
 
 # Export rasters
