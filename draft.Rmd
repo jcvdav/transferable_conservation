@@ -68,49 +68,6 @@ The same approach can then be repeated for any level of spatial aggregation. As 
 
 The following sections go into more detail to describe my methods. The first section describes the data, and important caveats are mentioned at this stage. The second section describes how nation-level and aggregate supply curves were built. The third section dives into translating area-based targets into biodiversity benefit targets and the corresponding trading prices. Finally, we discuss how the analysis can be replicated by creating markets at different spatial scales.
 
-## Data description
-
-We must first identify the costs and benefits of conservation. Conserving biodiversity may provide benefits to society. For example, areas with higher species richness and biomass are more attractive to tourism \citep{williams_2000}. Species richness also leads to increased stability of ecosystems \citep{tilman_1995}, and may reduce exposure to pathogens \citep{lamb_2017}. The quantification is not straightforward, but we can assume that biodiversity indices are positively correlated with their benefits they provide (although saturation may occur past a given point).
-
-I use spatially-explicit data on biodiversity benefit for each 50 X 50 km grid in the ocean. The score was derived to account for species richness and evolutionary distinctiveness, but also presence of topographic features (*e.g.* sea mounts). Figure \ref{fig:biodiversity-ranking} shows a global map of these values. The value of a given pixel (termed $\Delta v$) depends on previously protected pixels. As such, the value of a randomly chosen pixel is more or less meaningless. However, the configuration represented in Figure \ref{fig:biodiversity-ranking} was derived to maximize biodiversity. Therefore, protecting the best $n$ pixels and summing their values does represent the total amount of biodiversity protected. The same exercise has been done at the country-level (This is an important consideration for target calculations mentioned below. While I will use this global data for the purposes of motivating my approach, I do plan on using the appropriate data in my final work.)
-
-![\label{fig:biodiversity-ranking} Global map of biodiversity ranking priorities. Higher values indicate higher priority to conserve.](results/img/benefit_map.png)
-
-On the other hand, we need to quantify the costs associated to each pixel. An often-cited cost of implementing MPAs is that of losses in fisheries revenues \citep{smith_2010}. In this case, we define costs as losses in fisheries landings ^[I intend to use losses in fisheries revenues in the future. This will involve species-level changes in landings, as well as species-level price data. Essentially, the global losses in landings used here will be weighed by species price data.]. Since protection of some areas may lead to rebuilding fisheries, parts of the ocean might have negative costs. This means that there are gains to be made in conserving them. A map of global costs of conservation is shown in Figure \ref{fig:landing-losses}. As before, these data do not consider the transient dynamics, and represent the equilibrium state of protecting any given pixel.
-
-![\label{fig:landing-losses} Global map showing the costs (losses in landings) from closing portions of the ocean. Negative values imply that there are gains to be made.](results/img/cost_map.png)
-
-\FloatBarrier
-
-## Building supply curves
-
-Although there are important caveats, these data provide us with a way of calculating the costs and benefits of protecting any place under a nation's jurisdiction. While protecting the high seas may provide many benefits \citep{white_2014, sumaila_2015}, our market-based approach requires enforceable property rights, such as those offered by Exclusive Economic Zones. Moreover, biodiversity benefit is higher within Exclusive Economic Zones, where most of the species live \citep{mayorga_2020}. Therefore, we will ignore areas beyond national jurisdiction.
-
-The next step is to identify which areas to protect. For two grid cells that provide equal biodiversity benefit, which one should be prioritized? This prioritization exercise need not be too complicated. We can assume that even if a country is seriously committed to conservation, costs must still be minimized. The most efficient thing to do is to protect the one that minimizes costs while maximizing biodiversity benefits. Therefore, we must calculate the benefit-cost ratio of each gridcell:
-
-
-$$
-BCR_i = \frac{B_i}{C_i}
-$$
-
-Where $B_i$ corresponds to the biodiversity benefit associated with protecting cell $i$, and $C_i$ corresponds to the costs of protecting cell $i$. We can do this calculation globally, and produce a map of BCR (Figure \ref{fig:bcr-map}). Due to the possibility of negative costs, the BCR may be negative. We must therefore differentiate the BCR of cells with negative and positive costs, and rank them in this nested way.
-
-![\label{fig:bcr-map} Map of Benefit-Cost Ratio (BCR) within nation's Exclusive Economic Zones.](results/img/bcr_map.png)
-
-For each country, we can rank the grid cells by their BCR and calculate the total biodiversity benefit and total costs of achieving that benefit. But more importantly, we can calculate the marginal costs (defined as the cost of protecting an extra unit of biodiversity: tonnes of fish lost / benefit unit), and produce a supply curve of conservation for each country. Their shape suggests that the first few units of conservation can be achieved at relatively low costs, but that it becomes increasingly costly to obtain more and more biodiversity benefits. Figure \ref{fig:eez-supply-curve} shows the biodiversity supply curves of each country, and the horizontally-summed global supply curve.
-
-![\label{fig:eez-supply-curve}Supply curve for each country](results/img/eez_supply_curve.png)
-
-## Finding targets and trading price
-
-<!-- MAYBE:: A meta-analysis of simulation studies suggests that targets ranging from biodiversity protection to food provisioning can be indeed achieved by protecting ~30% of our coastal oceans \citep{oleary_2016,cabral_2019}. However, these area-based targets ultimately imply a desired level of biodiversity benefit. -->
-
-The supply curves above will tell us the per-unit-costs of achieving a given amount of biodiversity benefit. But what is this "desired" amount of biodiversity benefit? All conservation targets are area-based, and do not explicitly call for an amount of conservation such as "protect 20 species", or "protect 3 habitats". However, we know the costs and benefits of each grid cell. This allows us to anticipate how rational nations may translate their area-based requirements into conservation interventions.
-
-Figure \ref{fig:eez-supply-curve-approaches} shows five possible ways in which nations may reach an area-based target. Each panel shows the amount of biodiversity benefit produced by protecting a given percentage (x-axis) of a nation's EEZ. The only difference between panels is the strategy taken by nations, which leads to different curvatures. In the first panel, labeled as "efficient", nations conserve area in decreasing BCR values. The second panel maximizes conservation, and nations protect based on the biodiversity benefit rankings and completely ignore the costs. Similarly, the third panel seeks to maximize costs only, without accounting for how much conservation is achieved. The last two panels do the opposite, and try to minimize conservation or costs, without accounting for the other. The scenarios where costs are maximized or biodiversity benefits minimized are of course unlikely, however they provide bounds for where the true target lies. From now on, we will move forward with he efficient target of achieving 72 units of biodiversity benefit.
-
-The most efficient way to achieve this level of conservation is by prioritizing places with a higher BCR. We can take the horizontally-summed global supply curve of biodiversity and find the corresponding costs for each of the benefit targets identified above (Figure \ref{fig:global-conservation-targets-and-trading-prices}). This values are also known as the trading price. A nation will continue to conserve in-situ up until the cost of an additional unit of conservation is equal to this value. Instead, it is more cost-effective to conserve elsewhere in the world where the costs are lower.
-
 ## Spatial considerations
 
 When combining different data sources, we also include pixel-level information about the Hemisphere, Realm, Province, and Ecoregion in which they reside. This allows us to repeat the exercise of finding supply curves for any level of spatial division in order to simulate markets within them. This is better described in the results section, where I present detailed methods and results in parallel.
@@ -192,5 +149,51 @@ So far, I have performed preliminary analyses for a global market and outlined h
 ![](results/img/eezs_per_ecoregion.png)
 
 \clearpage
+
+# Supplementary Information
+
+## Data description
+
+We must first identify the costs and benefits of conservation. Conserving biodiversity may provide benefits to society. For example, areas with higher species richness and biomass are more attractive to tourism \citep{williams_2000}. Species richness also leads to increased stability of ecosystems \citep{tilman_1995}, and may reduce exposure to pathogens \citep{lamb_2017}. The quantification is not straightforward, but we can assume that biodiversity indices are positively correlated with their benefits they provide (although saturation may occur past a given point).
+
+I use spatially-explicit data on biodiversity benefit for each 50 X 50 km grid in the ocean. The score was derived to account for species richness and evolutionary distinctiveness, but also presence of topographic features (*e.g.* sea mounts). Figure \ref{fig:biodiversity-ranking} shows a global map of these values. The value of a given pixel (termed $\Delta v$) depends on previously protected pixels. As such, the value of a randomly chosen pixel is more or less meaningless. However, the configuration represented in Figure \ref{fig:biodiversity-ranking} was derived to maximize biodiversity. Therefore, protecting the best $n$ pixels and summing their values does represent the total amount of biodiversity protected. The same exercise has been done at the country-level (This is an important consideration for target calculations mentioned below. While I will use this global data for the purposes of motivating my approach, I do plan on using the appropriate data in my final work.)
+
+![\label{fig:biodiversity-ranking} Global map of biodiversity ranking priorities. Higher values indicate higher priority to conserve.](results/img/benefit_map.png)
+
+On the other hand, we need to quantify the costs associated to each pixel. An often-cited cost of implementing MPAs is that of losses in fisheries revenues \citep{smith_2010}. In this case, we define costs as losses in fisheries landings ^[I intend to use losses in fisheries revenues in the future. This will involve species-level changes in landings, as well as species-level price data. Essentially, the global losses in landings used here will be weighed by species price data.]. Since protection of some areas may lead to rebuilding fisheries, parts of the ocean might have negative costs. This means that there are gains to be made in conserving them. A map of global costs of conservation is shown in Figure \ref{fig:landing-losses}. As before, these data do not consider the transient dynamics, and represent the equilibrium state of protecting any given pixel.
+
+![\label{fig:landing-losses} Global map showing the costs (losses in landings) from closing portions of the ocean. Negative values imply that there are gains to be made.](results/img/cost_map.png)
+
+\FloatBarrier
+
+## Building supply curves
+
+Although there are important caveats, these data provide us with a way of calculating the costs and benefits of protecting any place under a nation's jurisdiction. While protecting the high seas may provide many benefits \citep{white_2014, sumaila_2015}, our market-based approach requires enforceable property rights, such as those offered by Exclusive Economic Zones. Moreover, biodiversity benefit is higher within Exclusive Economic Zones, where most of the species live \citep{mayorga_2020}. Therefore, we will ignore areas beyond national jurisdiction.
+
+The next step is to identify which areas to protect. For two grid cells that provide equal biodiversity benefit, which one should be prioritized? This prioritization exercise need not be too complicated. We can assume that even if a country is seriously committed to conservation, costs must still be minimized. The most efficient thing to do is to protect the one that minimizes costs while maximizing biodiversity benefits. Therefore, we must calculate the benefit-cost ratio of each gridcell:
+
+
+$$
+BCR_i = \frac{B_i}{C_i}
+$$
+
+Where $B_i$ corresponds to the biodiversity benefit associated with protecting cell $i$, and $C_i$ corresponds to the costs of protecting cell $i$. We can do this calculation globally, and produce a map of BCR (Figure \ref{fig:bcr-map}). Due to the possibility of negative costs, the BCR may be negative. We must therefore differentiate the BCR of cells with negative and positive costs, and rank them in this nested way.
+
+![\label{fig:bcr-map} Map of Benefit-Cost Ratio (BCR) within nation's Exclusive Economic Zones.](results/img/bcr_map.png)
+
+For each country, we can rank the grid cells by their BCR and calculate the total biodiversity benefit and total costs of achieving that benefit. But more importantly, we can calculate the marginal costs (defined as the cost of protecting an extra unit of biodiversity: tonnes of fish lost / benefit unit), and produce a supply curve of conservation for each country. Their shape suggests that the first few units of conservation can be achieved at relatively low costs, but that it becomes increasingly costly to obtain more and more biodiversity benefits. Figure \ref{fig:eez-supply-curve} shows the biodiversity supply curves of each country, and the horizontally-summed global supply curve.
+
+![\label{fig:eez-supply-curve}Supply curve for each country](results/img/eez_supply_curve.png)
+
+## Finding targets and trading price
+
+<!-- MAYBE:: A meta-analysis of simulation studies suggests that targets ranging from biodiversity protection to food provisioning can be indeed achieved by protecting ~30% of our coastal oceans \citep{oleary_2016,cabral_2019}. However, these area-based targets ultimately imply a desired level of biodiversity benefit. -->
+
+The supply curves above will tell us the per-unit-costs of achieving a given amount of biodiversity benefit. But what is this "desired" amount of biodiversity benefit? All conservation targets are area-based, and do not explicitly call for an amount of conservation such as "protect 20 species", or "protect 3 habitats". However, we know the costs and benefits of each grid cell. This allows us to anticipate how rational nations may translate their area-based requirements into conservation interventions.
+
+Figure \ref{fig:eez-supply-curve-approaches} shows five possible ways in which nations may reach an area-based target. Each panel shows the amount of biodiversity benefit produced by protecting a given percentage (x-axis) of a nation's EEZ. The only difference between panels is the strategy taken by nations, which leads to different curvatures. In the first panel, labeled as "efficient", nations conserve area in decreasing BCR values. The second panel maximizes conservation, and nations protect based on the biodiversity benefit rankings and completely ignore the costs. Similarly, the third panel seeks to maximize costs only, without accounting for how much conservation is achieved. The last two panels do the opposite, and try to minimize conservation or costs, without accounting for the other. The scenarios where costs are maximized or biodiversity benefits minimized are of course unlikely, however they provide bounds for where the true target lies. From now on, we will move forward with he efficient target of achieving 72 units of biodiversity benefit.
+
+The most efficient way to achieve this level of conservation is by prioritizing places with a higher BCR. We can take the horizontally-summed global supply curve of biodiversity and find the corresponding costs for each of the benefit targets identified above (Figure \ref{fig:global-conservation-targets-and-trading-prices}). This values are also known as the trading price. A nation will continue to conserve in-situ up until the cost of an additional unit of conservation is equal to this value. Instead, it is more cost-effective to conserve elsewhere in the world where the costs are lower.
+
 
 \bibliography{references}
