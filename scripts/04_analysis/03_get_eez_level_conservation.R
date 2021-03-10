@@ -33,9 +33,26 @@ trading_prices <- readRDS(
 
 # Load a coastline
 coast <- ne_countries(returnclass = "sf") %>% 
-  st_transform(crs = epsg_moll) 
+  st_transform(crs = epsg_moll) %>% 
+  mutate(in_mkt = iso_a3 %in% unique(eez_cb$iso3))
+
+# Load EEZ geopackage
+eez <- st_read(
+  file.path(project_path,
+            "processed_data",
+            "clean_world_eez_v11.gpkg")
+  ) %>% 
+  mutate(has_obligations = iso3 %in% unique(eez_cb$iso3)) %>% 
+  rmapshaper::ms_simplify(keep_shapes = T, sys = T) %>% 
+  st_make_valid() %>% 
+  filter(iso3 %in% unique(eez_cb$iso3))
 
 # PROCESSING ############################################################################################
+
+## Set up a data.frame of nation ISO3s that participate
+conserving_nations <- eez_cb %>% 
+  select(iso3) %>% 
+  distinct()
 
 ## Identify conserved patches
 # Get the most efficient trading price
@@ -45,7 +62,10 @@ trading_price <- trading_prices %>%
 
 # Filter to keep only the protected places
 bau <- eez_cb %>% 
-  filter(pct <= 0.3) %>%                       # Keep the most efficient 30$ of each country
+  group_by(iso3) %>% 
+  mutate(min_pct = min(pct, na.rm = T)) %>% 
+  ungroup() %>% 
+  filter(pct <= 0.3 | min_pct > 0.3) %>%      # Keep the most efficient 30% of each country OR the first patch
   mutate(approach = "bau")
   
 mkt <- eez_cb %>% 
@@ -59,7 +79,7 @@ realized_bau_cb <- bau %>%
   summarize(bau_tb = sum(benefit, na.rm = T),
             bau_tc = sum(cost, na.rm = T),
             mc_stop = max(mc, na.rm = T),
-            bau_area = n()) %>% 
+            bau_area = n() * 2500) %>% 
   ungroup()
 
 # For a market
@@ -67,17 +87,29 @@ realized_mkt_cb <- mkt %>%
   group_by(approach, iso3) %>% 
   summarize(mkt_tb = sum(benefit, na.rm = T),
             mkt_tc = sum(cost, na.rm = T),
-            mkt_area = n()) %>% 
+            mkt_area = n() * 2500) %>% 
   ungroup()
 
-# Find stopping prices
-stops <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3") %>% 
+# Create a data.frame with the combined summarized outcomes
+combined_outcomes <- conserving_nations %>% 
+  left_join(realized_mkt_cb, by = "iso3") %>%
+  left_join(realized_bau_cb, by = "iso3") %>% 
+  replace_na(replace = list(
+    mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
+    bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
   select(-contains("app")) %>% 
+  mutate(mkt_tc2 = mkt_tc + ((bau_tb - mkt_tb) * trading_price),
+         mkt_tc = ifelse(mkt_tc2 <=0, bau_tc, mkt_tc2)) %>% 
+  select(-mkt_tc2)
+
+# Find stopping prices
+stops <- combined_outcomes %>% 
   filter(bau_tb <= mkt_tb) %>% 
   select(iso3, mc_stop) %>% 
   mutate(approach = "mkt")
 
-gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3")  %>% 
+
+gains_from_trade <- combined_outcomes %>% 
   select_if(is.numeric) %>% 
   select(-contains("stop")) %>% 
   summarize_all(sum, na.rm = T) %>% 
@@ -90,49 +122,76 @@ gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3")  %>
 ## FIGURES #########################################################################
 ## Plot the supply curves where they stop
 benefit_supply_curves <- rbind(bau, mkt) %>%
-  left_join(stops, by = c("iso3", "approach"), fill = list(mc_stop = 0)) %>% 
+  left_join(stops, by = c("iso3", "approach"),
+            fill = list(mc_stop = 0, mkt_tb = 0, mkt_tc = 0, mkt_area = 0)) %>% 
   mutate(mkt_gain = mc >= mc_stop,
          approach = ifelse(approach == "bau", "BAU", "Market")) %>% 
-  replace_na(replace = list(mkt_gain = F)) %>% 
-  ggplot(aes(x = tb, y = mc, group = iso3, color = mkt_gain)) +
+  replace_na(replace = list(mkt_gain = F)) %>%
+  ggplot(aes(x = pct, y = mc, group = iso3, color = mkt_gain)) +
   geom_line(size = 0.2) +
   geom_hline(yintercept = trading_price, linetype = "dashed") +
-  facet_wrap(~approach) +
+  facet_wrap(~approach, scales = "free_y") +
   scale_color_brewer(palette = "Set1", direction = -1) +
-  lims(y = c(0, trading_price * 2)) +
+  # lims(y = c(0, trading_price * 2)) +
   ggtheme_plot() +
   labs(x = "Biodiversity",
        y = "Marginal Costs",
        caption = "NOTE: Axis have been cropped for visualization purposes") +
   guides(color = FALSE)
 
-got_paid <- full_join(realized_mkt_cb, realized_bau_cb, by = "iso3") %>% 
-  select(-contains("app")) %>% 
-  mutate(gets_paid = bau_tc <= mkt_tc)
+got_paid <- combined_outcomes %>% 
+  mutate(gets_paid = mc_stop <= trading_price,
+         mkt_gains = bau_tc - mkt_tc) %>% 
+  select(iso3, gets_paid, bau_tc, mkt_tc, mkt_gains) %>% 
+  pivot_longer(cols = c(gets_paid, bau_tc, mkt_tc, mkt_gains), names_to = "variable", values_to = "value") %>% 
+  mutate(label = case_when(variable == "bau_tc" ~ "A) Business-as-usual",
+                           variable == "mkt_tc" ~ "B) Market-based (global)",
+                           variable == "mkt_gains" ~ "C) Gains from trade",
+                           T ~ NA_character_))
 
-map_of_trade <- coast %>% 
-  left_join(got_paid, by = c("iso_a3" = "iso3")) %>% 
-  replace_na(replace = list(gets_paid = FALSE)) %>% 
+eez_with_results <- eez %>% 
+  left_join(got_paid, by = "iso3")
+
+map_contrasting_scenarios <- ggplot() +
+  geom_sf(data = filter(eez_with_results,!variable == "gets_paid"),
+          aes(fill = value), color = "black") +
+  geom_sf(data = coast, color = "black") +
+  facet_wrap(~label, ncol = 1) +
+  scale_fill_viridis_c(na.value = "gray") +
+  ggtheme_map() +
+  guides(fill = guide_colorbar(title = "Total costs\nmillion USD",
+                               frame.colour = "black",
+                               ticks.colour = "black"))
+  
+map_of_trade <- eez %>% 
+  left_join(got_paid, by = c("iso3")) %>% 
+  filter(variable == "gets_paid") %>% 
+  mutate(gets_paid = value == 1) %>% 
   ggplot() +
   geom_sf(aes(fill = gets_paid), color = "black") +
-  scale_fill_brewer(palette = "Set1", direction = -1) +
+  geom_sf(data = coast, color = "black") +
+  scale_fill_brewer(palette = "Set1", direction = -1, na.value = "gray") +
   ggtheme_map() +
   guides(fill = FALSE)
+
+
+
+plot_grid(map_contrasting_scenarios, map_of_trade, ncol = 1, rel_heights = c(3, 1))
 
 # Plot the two states of the world
 two_states_map <- 
   rbind(bau, mkt) %>% 
   ggplot() +
   geom_sf(data = coast) +
-  geom_raster(aes(x = lon, y = lat, fill = benefit)) +
+  geom_tile(aes(x = lon, y = lat, fill = benefit)) +
   facet_wrap(~approach, ncol = 1) +
   ggtheme_map() +
   scale_fill_viridis_c() +
   guides(fill = guide_colorbar(title = "Biodiversity",
                                frame.colour = "black",
-                               ticks.colour = "black")) +
-  labs(caption = "Both conservation strategies yield the same benefits,\nbut a market approach costs 46% less.")
+                               ticks.colour = "black"))
 
+plot_grid(map_of_trade, two_states_map, ncol = 1)
 
 ## EXPORT FIGURES #########################################################################
 
