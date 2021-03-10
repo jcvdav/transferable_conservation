@@ -40,4 +40,4 @@ data <- expand_grid(
 
 
 cowplot::plot_grid(p1, p2, ncol = 2, labels = c(1, 2)) %>% 
-  lazy_ggsave(filename = "dummy_supply_curves.pdf", width = 6, height = 2.5)
+  lazy_ggsave(filename = "dummy_supply_curves", width = 6, height = 2.5)
