@@ -33,9 +33,6 @@ proj_longlat <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "             
 epsg_moll <- "ESRI:54009"
 epsg_longlat <- 4326
 
-# A color palete
-zis_con <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
-
 ##########################
 ## Plot-related things ##
 ##########################
