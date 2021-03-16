@@ -176,6 +176,16 @@ market_gains_plot <- combined_outcomes %>%
   scale_x_discrete(labels = c("BAU", "Market")) +
   coord_flip()
 
+
+ggplot(gains_from_trade, aes(x = variable, y = value, fill = approach)) +
+  geom_col(position = "dodge", color = "black") +
+  facet_grid(realm~variable, scale = "free") +
+  scale_fill_brewer(palette = "Set1", guide = F) +
+  ggtheme_plot() +
+  labs(x = "Approach", y = "Value") +
+  scale_x_discrete(labels = c("BAU", "Market")) +
+  coord_flip()
+
 map_contrasting_scenarios <- ggplot() +
   geom_sf(data = filter(eez_with_results,!variable == "gets_paid", str_detect(realm, "Atlantic")),
           aes(fill = value), color = "black") +
@@ -217,6 +227,11 @@ two_states_map <-
 
 
 ## EXPORT FIGURES #########################################################################
+
+lazy_ggsave(plot = market_gains_plot,
+            filename = "market_gains_plot_rlm",
+            width = 15,
+            height = 20)
 
 lazy_ggsave(plot = benefit_supply_curves,
             filename = "equilibrum_supply_curves_rlm",
