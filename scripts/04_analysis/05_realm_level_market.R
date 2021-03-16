@@ -30,6 +30,21 @@ rlm_h_sum <- readRDS(
 coast <- ne_countries(returnclass = "sf") %>% 
   st_transform(crs = epsg_moll) 
 
+# Load EEZ geopackage
+eez <- st_read(
+  file.path(project_path,
+            "processed_data",
+            "intersected_eez_and_meow.gpkg")
+) %>% 
+  mutate(has_obligations = iso3 %in% unique(rlm_eez_cb$iso3)) %>%
+  rmapshaper::ms_simplify(keep_shapes = T, sys = T) %>%
+  st_make_valid() %>%
+  filter(iso3 %in% unique(rlm_eez_cb$iso3))
+
+conserving_nations <- rlm_eez_cb %>% 
+  select(iso3, realm) %>% 
+  distinct()
+
 # PROCESSING ############################################################################################
 
 # Get targets
@@ -45,20 +60,22 @@ rlm_trading_prices <- rlm_h_sum %>%
   left_join(rlm_conservation_target, by = "realm") %>% 
   mutate(trading_price = map2_dbl(.x = target, .y = data, get_trading_price)) %>% 
   select(-data)
-  
+
 ## Identify conserved patches
 # Get the most efficient trading price
 
 # Filter to keep only the protected places
 bau <- rlm_eez_cb %>% 
-  filter(pct <= 0.3) %>%                       # Keep the most efficient 30% of each country - realm
+  group_by(iso3, realm) %>% 
+  mutate(min_pct = min(pct, na.rm = T)) %>% 
+  ungroup() %>% 
+  filter(pct <= 0.3 | pct <= min_pct) %>%                       # Keep the most efficient 30% of each country - realm
   mutate(approach = "bau")
 
 mkt <- rlm_eez_cb %>% 
   left_join(rlm_trading_prices, by = c("realm")) %>%
   filter(mc <= trading_price) %>%              # Keep all patches in each country with a cost < trading price
-  mutate(approach = "mkt") %>% 
-  select(-c(trading_price,))
+  mutate(approach = "mkt")
 
 ## Calculate country-level summaries
 # For BAU
@@ -67,27 +84,38 @@ realized_bau_cb <- bau %>%
   summarize(bau_tb = sum(benefit, na.rm = T),
             bau_tc = sum(cost, na.rm = T),
             mc_stop = max(mc, na.rm = T),
-            bau_area = n()) %>% 
+            bau_area = n() * 2500) %>% 
   ungroup()
 
 # For a market
 realized_mkt_cb <- mkt %>% 
-  group_by(approach, iso3, realm) %>% 
+  group_by(approach, iso3, realm, trading_price) %>% 
   summarize(mkt_tb = sum(benefit, na.rm = T),
             mkt_tc = sum(cost, na.rm = T),
-            mkt_area = n()) %>% 
+            mkt_area = n() * 2500) %>% 
   ungroup()
 
-# Find stopping prices
-stops <- full_join(realized_mkt_cb, realized_bau_cb, by = c("iso3", "realm")) %>% 
+#Something
+combined_outcomes <- conserving_nations %>% 
+  left_join(realized_mkt_cb, by = c("iso3", "realm")) %>%
+  left_join(realized_bau_cb, by = c("iso3", "realm")) %>% 
+  replace_na(replace = list(
+    mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
+    bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
   select(-contains("app")) %>% 
+  mutate(mkt_tc2 = mkt_tc + ((bau_tb - mkt_tb) * trading_price),
+         mkt_tc = ifelse(mkt_tc2 <=0, bau_tc, mkt_tc2)) %>% 
+  select(-mkt_tc2)
+
+# Find stopping prices
+stops <- combined_outcomes %>% 
   filter(bau_tb <= mkt_tb) %>% 
-  select(iso3, mc_stop, realm) %>% 
+  select(iso3, mc_stop) %>% 
   mutate(approach = "mkt")
 
-gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = c("iso3", "realm"))  %>% 
-  select(realm, contains("mkt"), contains("bau")) %>% 
-  select(-contains("stop")) %>% 
+gains_from_trade <- combined_outcomes %>% 
+  # select_if(is.numeric) %>% 
+  select(-contains("stop"), -c(iso3, trading_price)) %>% 
   group_by(realm) %>% 
   summarize_all(sum, na.rm = T) %>% 
   gather(variable, value, -realm) %>% 
@@ -95,6 +123,20 @@ gains_from_trade <- full_join(realized_mkt_cb, realized_bau_cb, by = c("iso3", "
   spread(approach, value) %>% 
   mutate(difference = bau - mkt,
          ratio = mkt / bau)
+
+
+got_paid <- combined_outcomes %>% 
+  mutate(gets_paid = mc_stop <= trading_price,
+         mkt_gains = bau_tc - mkt_tc) %>% 
+  select(iso3, realm, gets_paid, bau_tc, mkt_tc, mkt_gains) %>% 
+  pivot_longer(cols = c(gets_paid, bau_tc, mkt_tc, mkt_gains), names_to = "variable", values_to = "value") %>% 
+  mutate(label = case_when(variable == "bau_tc" ~ "A) Business-as-usual",
+                           variable == "mkt_tc" ~ "B) Market-based (global)",
+                           variable == "mkt_gains" ~ "C) Gains from trade",
+                           T ~ NA_character_))
+
+eez_with_results <- eez %>% 
+  left_join(got_paid, by = c("iso3", "realm"))
 
 ## FIGURES #########################################################################
 ## Plot the supply curves where they stop
@@ -115,21 +157,49 @@ benefit_supply_curves <- rbind(bau, mkt %>% select(-target)) %>%
        caption = "NOTE: Axis have been cropped for visualization purposes") +
   guides(color = FALSE)
 
-got_paid <- full_join(realized_mkt_cb, realized_bau_cb, by = c("realm", "iso3")) %>% 
-  select(-contains("app")) %>% 
-  mutate(gets_paid = bau_tc <= mkt_tc)
+market_gains_plot <- combined_outcomes %>% 
+  # select_if(is.numeric) %>% 
+  select(-contains("stop"), -c(iso3, trading_price)) %>% 
+  group_by(realm) %>% 
+  summarize_all(sum, na.rm = T) %>% 
+  gather(variable, value, -realm) %>% 
+  separate(variable, into = c("approach", "variable")) %>% 
+  mutate(variable = case_when(variable == "tc" ~ "Total costs",
+                              variable == "tb" ~ "Quality-weighed area",
+                              variable == "area" ~ "Area")) %>% 
+  ggplot(aes(x = approach, y = value, fill = approach)) +
+  geom_col(position = "dodge", color = "black") +
+  facet_grid(realm~variable, scale = "free") +
+  scale_fill_brewer(palette = "Set1", guide = F) +
+  ggtheme_plot() +
+  labs(x = "Approach", y = "Value") +
+  scale_x_discrete(labels = c("BAU", "Market")) +
+  coord_flip()
 
-map_of_trade <- coast %>% 
-  left_join(got_paid, by = c("iso_a3" = "iso3")) %>% 
-  drop_na(realm) %>%
-  replace_na(replace = list(gets_paid = FALSE)) %>% 
-  ggplot() +
-  geom_sf(data = coast) +
-  geom_sf(aes(fill = gets_paid), color = "black", size = 0.1) +
-  facet_wrap(~realm, ncol = 3) +
-  scale_fill_brewer(palette = "Set1", direction = -1) +
+map_contrasting_scenarios <- ggplot() +
+  geom_sf(data = filter(eez_with_results,!variable == "gets_paid", str_detect(realm, "Atlantic")),
+          aes(fill = value), color = "black") +
+  geom_sf(data = coast, color = "black") +
+  facet_grid(label ~ realm) +
+  scale_fill_viridis_c(na.value = "gray") +
   ggtheme_map() +
-  guides(fill = FALSE)
+  guides(fill = guide_colorbar(title = "Total costs\nmillion USD",
+                               frame.colour = "black",
+                               ticks.colour = "black"))
+
+map_of_trade <- eez %>% 
+  left_join(got_paid, by = c("iso3", "realm")) %>% 
+  filter(variable == "gets_paid",
+         str_detect(realm, "Atlantic")) %>% 
+  mutate(gets_paid = ifelse(value == 1, "Got paid", "Pays")) %>% 
+  ggplot() +
+  geom_sf(aes(fill = gets_paid), color = "black") +
+  geom_sf(data = coast, color = "black") +
+  scale_fill_brewer(palette = "Set1", direction = -1, na.value = "gray") +
+  ggtheme_map() +
+  facet_wrap(~realm) +
+  guides(fill = guide_legend(title = "Transaction")) +
+  theme(legend.position = "bottom")
 
 # Plot the two states of the world
 two_states_map <-
@@ -158,9 +228,14 @@ lazy_ggsave(plot = two_states_map,
             width = 10,
             height = 10)
 
+lazy_ggsave(plot = map_contrasting_scenarios,
+            filename = "map_contrasting_scenarios_rlm",
+            width = 20,
+            height = 20)
+
 lazy_ggsave(plot = map_of_trade,
             filename = "map_of_trade_rlm",
-            width = 10,
+            width = 20,
             height = 10)
 
 percent_of_bau_costs <- 

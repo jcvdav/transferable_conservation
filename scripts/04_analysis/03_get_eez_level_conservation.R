@@ -65,7 +65,7 @@ bau <- eez_cb %>%
   group_by(iso3) %>% 
   mutate(min_pct = min(pct, na.rm = T)) %>% 
   ungroup() %>% 
-  filter(pct <= 0.3 | min_pct > 0.3) %>%      # Keep the most efficient 30% of each country OR the first patch
+  filter(pct <= 0.3 | pct <= min_pct) %>%      # Keep the most efficient 30% of each country OR the first patch
   mutate(approach = "bau")
   
 mkt <- eez_cb %>% 
@@ -119,26 +119,6 @@ gains_from_trade <- combined_outcomes %>%
   mutate(difference = bau - mkt,
          ratio = mkt / bau)
 
-## FIGURES #########################################################################
-## Plot the supply curves where they stop
-benefit_supply_curves <- rbind(bau, mkt) %>%
-  left_join(stops, by = c("iso3", "approach"),
-            fill = list(mc_stop = 0, mkt_tb = 0, mkt_tc = 0, mkt_area = 0)) %>% 
-  mutate(mkt_gain = mc >= mc_stop,
-         approach = ifelse(approach == "bau", "BAU", "Market")) %>% 
-  replace_na(replace = list(mkt_gain = F)) %>%
-  ggplot(aes(x = pct, y = mc, group = iso3, color = mkt_gain)) +
-  geom_line(size = 0.2) +
-  geom_hline(yintercept = trading_price, linetype = "dashed") +
-  facet_wrap(~approach, scales = "free_y") +
-  scale_color_brewer(palette = "Set1", direction = -1) +
-  # lims(y = c(0, trading_price * 2)) +
-  ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Marginal Costs",
-       caption = "NOTE: Axis have been cropped for visualization purposes") +
-  guides(color = FALSE)
-
 got_paid <- combined_outcomes %>% 
   mutate(gets_paid = mc_stop <= trading_price,
          mkt_gains = bau_tc - mkt_tc) %>% 
@@ -152,6 +132,45 @@ got_paid <- combined_outcomes %>%
 eez_with_results <- eez %>% 
   left_join(got_paid, by = "iso3")
 
+## FIGURES #########################################################################
+## Plot the supply curves where they stop
+benefit_supply_curves <- bau %>% 
+  select(-min_pct) %>% 
+  rbind(mkt) %>%
+  left_join(stops, by = c("iso3", "approach"),
+            fill = list(mc_stop = 0, mkt_tb = 0, mkt_tc = 0, mkt_area = 0)) %>% 
+  mutate(mkt_gain = mc >= mc_stop,
+         approach = ifelse(approach == "bau", "BAU", "Market")) %>% 
+  replace_na(replace = list(mkt_gain = F)) %>%
+  ggplot(aes(x = tb, y = mc, group = iso3, color = mkt_gain)) +
+  geom_line(size = 0.2) +
+  geom_hline(yintercept = trading_price, linetype = "dashed") +
+  facet_wrap(~approach, scales = "free_y") +
+  scale_color_brewer(palette = "Set1", direction = -1) +
+  # lims(y = c(0, trading_price * 2)) +
+  ggtheme_plot() +
+  labs(x = "Quality-weighted area protected",
+       y = "Marginal Costs ($ USD / km2)",
+       caption = "NOTE: Axis have been cropped for visualization purposes") +
+  guides(color = FALSE)
+
+market_gains_plot <- combined_outcomes %>% 
+  select_if(is.numeric) %>% 
+  select(-contains("stop")) %>% 
+  summarize_all(sum, na.rm = T) %>% 
+  gather(variable, value) %>% 
+  separate(variable, into = c("approach", "variable")) %>% 
+  mutate(variable = case_when(variable == "tc" ~ "Total costs",
+                              variable == "tb" ~ "Quality-weighed area",
+                              variable == "area" ~ "Area")) %>% 
+  ggplot(aes(x = approach, y = value, fill = approach)) +
+  geom_col(position = "dodge", color = "black") +
+  facet_wrap(~variable, scale = "free_y", ncol = 1) +
+  scale_fill_brewer(palette = "Set1", guide = F) +
+  ggtheme_plot() +
+  labs(x = "Approach", y = "Value") +
+  scale_x_discrete(labels = c("BAU", "Market"))
+
 map_contrasting_scenarios <- ggplot() +
   geom_sf(data = filter(eez_with_results,!variable == "gets_paid"),
           aes(fill = value), color = "black") +
@@ -163,37 +182,50 @@ map_contrasting_scenarios <- ggplot() +
                                frame.colour = "black",
                                ticks.colour = "black"))
   
+eez_with_results %>% 
+  filter(variable == "mkt_gains") %>% 
+  mutate(iso3 = fct_reorder(.f = iso3, .x = value)) %>% 
+  ggplot(aes(x = iso3,
+             y = value)) +
+  geom_col() +
+  coord_flip()
+
+
 map_of_trade <- eez %>% 
   left_join(got_paid, by = c("iso3")) %>% 
   filter(variable == "gets_paid") %>% 
-  mutate(gets_paid = value == 1) %>% 
+  mutate(gets_paid = ifelse(value == 1, "Got paid", "Pays")) %>% 
   ggplot() +
   geom_sf(aes(fill = gets_paid), color = "black") +
   geom_sf(data = coast, color = "black") +
   scale_fill_brewer(palette = "Set1", direction = -1, na.value = "gray") +
   ggtheme_map() +
-  guides(fill = FALSE)
-
-
-
-plot_grid(map_contrasting_scenarios, map_of_trade, ncol = 1, rel_heights = c(3, 1))
+  guides(fill = guide_legend(title = "Transaction")) +
+  theme(legend.position = "bottom")
 
 # Plot the two states of the world
-two_states_map <- 
-  rbind(bau, mkt) %>% 
+two_states_map <- eez_cb %>% 
+  select(lon, lat, benefit) %>% 
+  left_join(bau %>% select(lon, lat) %>% mutate(a = 1), by = c("lon", "lat")) %>% 
+  left_join(mkt %>% select(lon, lat) %>% mutate(b = 1), by = c("lon", "lat")) %>% 
+  mutate(status = case_when(a == 1 & b == 1 ~ "Protected anyway",
+                            a == 1 & is.na(b) ~ "Protected only under BAU",
+                            is.na(a) & b == 1 ~ "Protected only under market",
+                            is.na(a) & is.na(b) ~ NA_character_)) %>% 
   ggplot() +
-  geom_sf(data = coast) +
-  geom_tile(aes(x = lon, y = lat, fill = benefit)) +
-  facet_wrap(~approach, ncol = 1) +
+  geom_sf(data = coast, color = "black", fill = "transparent") +
+  geom_tile(aes(x = lon, y = lat, fill = status)) +
   ggtheme_map() +
-  scale_fill_viridis_c() +
-  guides(fill = guide_colorbar(title = "Biodiversity",
-                               frame.colour = "black",
-                               ticks.colour = "black"))
-
-plot_grid(map_of_trade, two_states_map, ncol = 1)
+  scale_fill_viridis_d(na.value = "gray") +
+  guides(fill = guide_legend(title = "Status")) +
+  theme(legend.position = "bottom")
 
 ## EXPORT FIGURES #########################################################################
+
+lazy_ggsave(plot = market_gains_plot,
+            filename = "market_gains_plot",
+            width = 7.5,
+            height = 10)
 
 lazy_ggsave(plot = benefit_supply_curves,
             filename = "equilibrum_supply_curves",
@@ -202,14 +234,20 @@ lazy_ggsave(plot = benefit_supply_curves,
 
 lazy_ggsave(plot = two_states_map,
             filename = "two_states_map",
-            width = 10,
+            width = 20,
             height = 10)
+
+lazy_ggsave(plot = map_contrasting_scenarios,
+            filename = "map_contrasting_scenarios_global",
+            width = 15,
+            height = 20)
 
 lazy_ggsave(plot = map_of_trade,
             filename = "map_of_trade",
-            width = 10,
-            height = 5)
+            width = 20,
+            height = 10)
 
+# Tables
 percent_of_bau_costs <- gains_from_trade %>% 
   filter(variable == "tc") %>% 
   pull(ratio)
