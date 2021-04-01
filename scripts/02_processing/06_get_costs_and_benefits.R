@@ -35,7 +35,7 @@ benefits_raster <-
     file.path(
       project_path,
       "processed_data",
-      "normalized_suitability.tif"
+      "suitability.tif"
     )
   )
 
@@ -109,7 +109,7 @@ cb <-
     pro_code = pro_raster,
     eco_code = eco_raster,
     sea_code = world_seas_raster,
-    benefit = normalized_suitability,
+    benefit = suitability,
     cost = revenue_raster
   ) %>%
   drop_na(iso3n, cost, benefit) %>%                             # Drop areas beyond national jurisdiction
