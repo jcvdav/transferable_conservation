@@ -47,8 +47,7 @@ costs_raster <-
       "processed_data",
       "revenue_raster.tif"
     )
-  ) %>% 
-  crop(benefits_raster)
+  )
 
 # Load spatial metadata rasters
 iso3n <-
