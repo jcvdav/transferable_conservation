@@ -64,7 +64,8 @@ summary <- merged %>%
 # Rasterization
 watson_raster_longlat <- summary %>% 
   select(LonCentre, LatCentre, revenue) %>%                               # Select coordinates and variable
-  raster::rasterFromXYZ(crs = proj_longlat)                               # Rasterize the revenue data into longlat coords
+  raster::rasterFromXYZ(res = 0.5,                                        # Resolution is 0.5 deg
+                        crs = proj_longlat)                               # Rasterize the revenue data into longlat coords
 
 watson_intensity_raster_longlat <- 
   watson_raster_longlat / raster::area(watson_raster_longlat)             # Transform units into USD / km 2
@@ -72,12 +73,11 @@ watson_intensity_raster_longlat <-
 # Reprojection to Moll
 watson_intensity_raster_moll <- 
   projectRaster(watson_intensity_raster_longlat,
-                crs = proj_moll,                                          # Specify the CRS
-                res = 50000,                                              # Specify the resolution (50 km cells to match species data)
+                ocean_mask,
                 over = T,                                                 # Allow interpolation over the dateline
                 method = "bilinear")                                      # Use bilinear interpolation
 
-watson_raster_moll <- watson_intensity_raster_moll * 2500                 # Convert intensity back to USD
+watson_raster_moll <- watson_intensity_raster_moll #* 2500          NOT       # Convert intensity back to USD
 watson_raster_moll <- watson_raster_moll * ocean_mask
 
 # Export data
