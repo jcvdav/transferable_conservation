@@ -50,6 +50,16 @@ knitr::opts_chunk$set(echo = FALSE,
 
 Importantly, the quality of a patch can be defined independently of other pixels. This is true for habitat suitability, in which the abiotic characteristics that determine the suitability of a patch are independent of the protected status of any patch.
 
+It is important that we acknowledge the equity concerns of any conservation intenrvention. Under the current approach to conservation, nations face two options: to conserve 30% in situ, or not engage in conservation at all. This market-based approach allows for a third option: it allows nations to decide how much to conserve in their waters.
+
+Ocean grabbing, the term that relates to the loss of soveraignty in the ocean (see Benett) may be perceived as a problem. However, nations are not forced to conserve in situ, and will only do so if they are approrpiately compensated for it.
+
+All ecosystems are euqlly important for the subsistance of nature and species that reside in them. But a coral reef is not comparable to a kelp forest.  A market design that doesn't acknowledge these differences may unintendendly bias conservation towards different ecosystems or geographic regions. When outcomes of a market are restricted to a geographic extent, such as air pollution markets, a buble policy is implemented. We borrow from this principle and use biogeographic regionalization principles to create ecologically-coherent market segments where nations trade similar habitat. For example, in the temperate eastern pacific, Mexico and the US will trade a same type of habitat, while in the Tropical Atlantic they wil.
+
+Having tackled these three limitations (spatially-independent measure, x, and market bubbles), we proceed to simulate the trade outcomes of such a market. We evaluate the outcomes across a range of target coverages (1 - 100), and find that a market always results in reduced costs. The absolute and relative magnitude of the costs-savings changes with protection target, peaking at between X and Y, depending on of the choice market segmentation. Intuitively, increasing teh number of market segments reduces the opportunity for bargaining and reduces the gains from trade, but ensures the persistance of different habitats.
+
+We pay especial attention to goals of interest, such as protecting 30% of the marine area (habitat suitability-weighted) within all national jurisdictions. We find that a market-based approach to conservation would reduce costs by X%, and that Y% less area would be needed.
+
 # Introduction
 
 Nations have committed to protect a fixed portion of their EEZs in order to reduce and control anthropogenic impacts in the marine environment. Aichi target 11^[Aichi target 11 states that by 2020 10% of coastal and marine areas should be conserved through protected areas.] and target 14.5 of the United Nations Sustainable Development Goals^[Similarly, target 14.5 of the United Nations Sustainable Development Goals is to conserve at least 10% of coastal and marine areas.] aim to protect 10% of coastal and marine areas. Some more ambitious goals call for 30%, such as that from the World Parks Congress^[the International Union for the Conservation of Nature (IUCN) has suggested that at least 30% of each marine habitat should be protected in areas with no extractive activities.].
