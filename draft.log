@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  14 APR 2021 07:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.4.7)  15 JUN 2021 15:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -581,64 +581,63 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <6> on input line 101.
 [1
 
-{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 125.
-[2
+{/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2
 
 ] [3]
-<results/img/eez_supply_curves_approaches.png, id=42, 1659.19875pt x 1065.9825p
+<results/img/eez_supply_curves_approaches.png, id=63, 1659.19875pt x 1065.9825p
 t>
 File: results/img/eez_supply_curves_approaches.png Graphic file (type png)
 <use results/img/eez_supply_curves_approaches.png>
 Package pdftex.def Info: results/img/eez_supply_curves_approaches.png  used on 
-input line 159.
+input line 157.
 (pdftex.def)             Requested size: 469.73721pt x 301.79124pt.
 [4] [5pdfTeX warning (ext4): destination with the same identifier (name{figure.
 1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.163 \newpage
+l.161 \newpage
                <./results/img/eez_supply_curves_approaches.png>]
-<results/img/global_conservation_targets_and_trading_prices.png, id=63, 1659.19
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 163.
+<results/img/global_conservation_targets_and_trading_prices.png, id=85, 1659.19
 875pt x 829.0975pt>
 File: results/img/global_conservation_targets_and_trading_prices.png Graphic fi
 le (type png)
 <use results/img/global_conservation_targets_and_trading_prices.png>
 Package pdftex.def Info: results/img/global_conservation_targets_and_trading_pr
-ices.png  used on input line 169.
+ices.png  used on input line 167.
 (pdftex.def)             Requested size: 469.73721pt x 234.72652pt.
 (./results/tab/trading-prices.tex) [6pdfTeX warning (ext4): destination with th
 e same identifier (name{table.1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.175 \newpage
+l.173 \newpage
               pdfTeX warning (ext4): destination with the same identifier (name
 {figure.2}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.175 \newpage
+l.173 \newpage
                <./results/img/global_conservation_targets_and_trading_prices.pn
 g>]
-<results/img/equilibrum_supply_curves.png, id=74, 1422.31375pt x 710.655pt>
+<results/img/equilibrum_supply_curves.png, id=97, 1422.31375pt x 710.655pt>
 File: results/img/equilibrum_supply_curves.png Graphic file (type png)
 <use results/img/equilibrum_supply_curves.png>
 Package pdftex.def Info: results/img/equilibrum_supply_curves.png  used on inpu
-t line 181.
+t line 179.
 (pdftex.def)             Requested size: 469.75565pt x 234.71205pt.
 (./results/tab/gains_from_trade.tex)
-<results/img/map_of_trade.png, id=78, 2370.8575pt x 1185.42876pt>
+<results/img/map_of_trade.png, id=101, 2370.8575pt x 1185.42876pt>
 File: results/img/map_of_trade.png Graphic file (type png)
 <use results/img/map_of_trade.png>
-Package pdftex.def Info: results/img/map_of_trade.png  used on input line 191.
+Package pdftex.def Info: results/img/map_of_trade.png  used on input line 189.
 (pdftex.def)             Requested size: 469.74959pt x 234.87479pt.
-<results/img/two_states_map.png, id=79, 2370.8575pt x 1185.42876pt>
+<results/img/two_states_map.png, id=102, 2370.8575pt x 1185.42876pt>
 File: results/img/two_states_map.png Graphic file (type png)
 <use results/img/two_states_map.png>
-Package pdftex.def Info: results/img/two_states_map.png  used on input line 197
+Package pdftex.def Info: results/img/two_states_map.png  used on input line 195
 .
 (pdftex.def)             Requested size: 469.74959pt x 234.87479pt.
 [7pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
@@ -646,50 +645,45 @@ has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.201 \newpage
+l.199 \newpage
                <./results/img/equilibrum_supply_curves.png>] [8pdfTeX warning (
 ext4): destination with the same identifier (name{table.2}) has been already us
 ed, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.201 \newpage
+l.199 \newpage
               pdfTeX warning (ext4): destination with the same identifier (name
 {figure.4}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.201 \newpage
+l.199 \newpage
                <./results/img/map_of_trade.png>] [9pdfTeX warning (ext4): desti
 nation with the same identifier (name{figure.5}) has been already used, duplica
 te ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.213 
+l.211 
        <./results/img/two_states_map.png>]
-<results/img/realm_map.png, id=117, 2370.8575pt x 1185.42876pt>
-File: results/img/realm_map.png Graphic file (type png)
-<use results/img/realm_map.png>
-Package pdftex.def Info: results/img/realm_map.png  used on input line 218.
-(pdftex.def)             Requested size: 469.74959pt x 234.87479pt.
-<results/img/eezs_per_realm.png, id=120, 1777.64125pt x 947.54pt>
+<results/img/eezs_per_realm.png, id=138, 1777.64125pt x 947.54pt>
 File: results/img/eezs_per_realm.png Graphic file (type png)
 <use results/img/eezs_per_realm.png>
-Package pdftex.def Info: results/img/eezs_per_realm.png  used on input line 224
+Package pdftex.def Info: results/img/eezs_per_realm.png  used on input line 216
 .
 (pdftex.def)             Requested size: 469.74359pt x 250.38844pt.
-<results/img/realms_per_eez.png, id=125, 1185.42876pt x 592.2125pt>
+<results/img/realms_per_eez.png, id=141, 1185.42876pt x 592.2125pt>
 File: results/img/realms_per_eez.png Graphic file (type png)
 <use results/img/realms_per_eez.png>
-Package pdftex.def Info: results/img/realms_per_eez.png  used on input line 230
+Package pdftex.def Info: results/img/realms_per_eez.png  used on input line 222
 .
 (pdftex.def)             Requested size: 469.74959pt x 234.6759pt.
-<results/img/eez_rlm_supply_curve.png, id=126, 2370.8575pt x 2370.8575pt>
+<results/img/eez_rlm_supply_curve.png, id=142, 2370.8575pt x 2370.8575pt>
 File: results/img/eez_rlm_supply_curve.png Graphic file (type png)
 <use results/img/eez_rlm_supply_curve.png>
 Package pdftex.def Info: results/img/eez_rlm_supply_curve.png  used on input li
-ne 236.
+ne 228.
 (pdftex.def)             Requested size: 469.74959pt x 469.74959pt.
 (./results/tab/trading_prices_rlm.tex) (./results/tab/gains_from_trade_rlm.tex
 Overfull \hbox (6.2pt too wide) in paragraph at lines 5--82
@@ -697,117 +691,119 @@ Overfull \hbox (6.2pt too wide) in paragraph at lines 5--82
  []
 
 )
-<results/img/rlm_map_of_trade.png, id=127, 1185.42876pt x 1185.42876pt>
+<results/img/rlm_map_of_trade.png, id=143, 1185.42876pt x 1185.42876pt>
 File: results/img/rlm_map_of_trade.png Graphic file (type png)
 <use results/img/rlm_map_of_trade.png>
 Package pdftex.def Info: results/img/rlm_map_of_trade.png  used on input line 2
-46.
+38.
 (pdftex.def)             Requested size: 469.74959pt x 469.74959pt.
 [10pdfTeX warning (ext4): destination with the same identifier (name{figure.6})
  has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.250 \newpage
-               <./results/img/realm_map.png>] [11pdfTeX warning (ext4): destina
-tion with the same identifier (name{figure.7}) has been already used, duplicate
- ignored
+l.242 \newpage
+               <./results/img/eezs_per_realm.png>] [11pdfTeX warning (ext4): de
+stination with the same identifier (name{figure.7}) has been already used, dupl
+icate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.250 \newpage
+l.242 \newpage
               pdfTeX warning (ext4): destination with the same identifier (name
-{figure.8}) has been already used, duplicate ignored
+{table.3}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.250 \newpage
-               <./results/img/eezs_per_realm.png> <./results/img/realms_per_eez
-.png>] [12pdfTeX warning (ext4): destination with the same identifier (name{fig
-ure.9}) has been already used, duplicate ignored
+l.242 \newpage
+               <./results/img/realms_per_eez.png>] [12pdfTeX warning (ext4): de
+stination with the same identifier (name{figure.8}) has been already used, dupl
+icate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.250 \newpage
+l.242 \newpage
                <./results/img/eez_rlm_supply_curve.png>] [13pdfTeX warning (ext
-4): destination with the same identifier (name{figure.10}) has been already use
-d, duplicate ignored
+4): destination with the same identifier (name{table.4}) has been already used,
+ duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.250 \newpage
+l.242 \newpage
+              ] [14pdfTeX warning (ext4): destination with the same identifier 
+(name{figure.9}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.242 \newpage
                <./results/img/rlm_map_of_trade.png>]
-<results/img/eezs_per_province.png, id=158, 1777.64125pt x 2370.8575pt>
+<results/img/eezs_per_province.png, id=176, 1777.64125pt x 2370.8575pt>
 File: results/img/eezs_per_province.png Graphic file (type png)
 <use results/img/eezs_per_province.png>
 Package pdftex.def Info: results/img/eezs_per_province.png  used on input line 
-257.
+249.
 (pdftex.def)             Requested size: 469.74359pt x 626.50162pt.
 
-LaTeX Warning: Float too large for page by 17.40492pt on input line 259.
+LaTeX Warning: Float too large for page by 17.40492pt on input line 251.
 
-<results/img/eezs_per_ecoregion.png, id=159, 3556.28625pt x 3556.28625pt>
+<results/img/eezs_per_ecoregion.png, id=177, 3556.28625pt x 3556.28625pt>
 File: results/img/eezs_per_ecoregion.png Graphic file (type png)
 <use results/img/eezs_per_ecoregion.png>
 Package pdftex.def Info: results/img/eezs_per_ecoregion.png  used on input line
- 261.
+ 253.
 (pdftex.def)             Requested size: 469.71342pt x 469.71342pt.
-[14pdfTeX warning (ext4): destination with the same identifier (name{table.3}) 
-has been already used, duplicate ignored
+[15 <./results/img/eezs_per_ecoregion.png>] [16pdfTeX warning (ext4): destinati
+on with the same identifier (name{figure.10}) has been already used, duplicate 
+ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.263 \clearpage
-                ] [15pdfTeX warning (ext4): destination with the same identifie
-r (name{table.4}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.263 \clearpage
-                ] [16pdfTeX warning (ext4): destination with the same identifie
-r (name{figure.11}) has been already used, duplicate ignored
-
-\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
-                                                  \fi \fi 
-l.263 \clearpage
-                 <./results/img/eezs_per_province.png>] [17 <./results/img/eezs
-_per_ecoregion.png>]
-<results/img/benefit_map.png, id=188, 1777.64125pt x 829.0975pt>
+l.255 \clearpage
+                 <./results/img/eezs_per_province.png>]
+<results/img/realm_map.png, id=190, 2370.8575pt x 1185.42876pt>
+File: results/img/realm_map.png Graphic file (type png)
+<use results/img/realm_map.png>
+Package pdftex.def Info: results/img/realm_map.png  used on input line 262.
+(pdftex.def)             Requested size: 469.74959pt x 234.87479pt.
+<results/img/benefit_map.png, id=197, 1777.64125pt x 829.0975pt>
 File: results/img/benefit_map.png Graphic file (type png)
 <use results/img/benefit_map.png>
 Package pdftex.def Info: results/img/benefit_map.png  used on input line 277.
 (pdftex.def)             Requested size: 469.74359pt x 219.08989pt.
-[18
+[17
 
-pdfTeX warning (ext4): destination with the same identifier (name{figure.12}) h
+pdfTeX warning (ext4): destination with the same identifier (name{figure.11}) h
 as been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
 l.282 
-       <./results/img/benefit_map.png>]
-<results/img/cost_map.png, id=210, 1777.64125pt x 829.0975pt>
+       <./results/img/realm_map.png>]
+<results/img/cost_map.png, id=216, 1777.64125pt x 829.0975pt>
 File: results/img/cost_map.png Graphic file (type png)
 <use results/img/cost_map.png>
 Package pdftex.def Info: results/img/cost_map.png  used on input line 285.
 (pdftex.def)             Requested size: 469.74359pt x 219.08989pt.
+[18pdfTeX warning (ext4): destination with the same identifier (name{figure.12}
+) has been already used, duplicate ignored
 
-Package natbib Warning: Citation `mayorga_2020' on page 19 undefined on input l
-ine 294.
-
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.289 \FloatBarrier
+                    <./results/img/benefit_map.png>]
+<results/img/bcr_map.png, id=229, 1777.64125pt x 829.0975pt>
+File: results/img/bcr_map.png Graphic file (type png)
+<use results/img/bcr_map.png>
+Package pdftex.def Info: results/img/bcr_map.png  used on input line 306.
+(pdftex.def)             Requested size: 469.74359pt x 219.08989pt.
 [19pdfTeX warning (ext4): destination with the same identifier (name{figure.13}
 ) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.300 \]
-         <./results/img/cost_map.png>]
-<results/img/bcr_map.png, id=228, 1777.64125pt x 829.0975pt>
-File: results/img/bcr_map.png Graphic file (type png)
-<use results/img/bcr_map.png>
-Package pdftex.def Info: results/img/bcr_map.png  used on input line 306.
-(pdftex.def)             Requested size: 469.74359pt x 219.08989pt.
-<results/img/eez_supply_curve.png, id=230, 1422.31375pt x 592.2125pt>
+l.311 
+       <./results/img/cost_map.png>]
+<results/img/eez_supply_curve.png, id=243, 1422.31375pt x 592.2125pt>
 File: results/img/eez_supply_curve.png Graphic file (type png)
 <use results/img/eez_supply_curve.png>
 Package pdftex.def Info: results/img/eez_supply_curve.png  used on input line 3
@@ -825,11 +821,8 @@ cate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.28 
-      <./results/img/eez_supply_curve.png>])
-
-Package natbib Warning: There were undefined citations.
-
+l.30 \bibitem{lucifora_2011}
+                             <./results/img/eez_supply_curve.png>])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 329.
 [22]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 329.
@@ -838,13 +831,13 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 329.
 Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 329.
  ) 
 Here is how much of TeX's memory you used:
- 14626 strings out of 480608
- 216219 string characters out of 5903631
- 527175 words of memory out of 5000000
- 30023 multiletter control sequences out of 15000+600000
- 609683 words of font info for 135 fonts, out of 8000000 for 9000
+ 14671 strings out of 480608
+ 217099 string characters out of 5903631
+ 526984 words of memory out of 5000000
+ 30056 multiletter control sequences out of 15000+600000
+ 606961 words of font info for 136 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,10n,42p,1202b,451s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,10n,42p,1202b,459s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/lo
 cal/texlive/2020/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/20
 20/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2020/texmf-dist/
@@ -857,10 +850,10 @@ al/texlive/2020/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/
 dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2020/texmf-dist/fonts/t
 ype1/public/lm/lmr8.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/public/
 lm/lmri12.pfb>
-Output written on draft.pdf (22 pages, 4469553 bytes).
+Output written on draft.pdf (22 pages, 4470744 bytes).
 PDF statistics:
- 357 PDF objects out of 1000 (max. 8388607)
- 286 compressed objects within 3 object streams
- 80 named destinations out of 1000 (max. 500000)
+ 359 PDF objects out of 1000 (max. 8388607)
+ 289 compressed objects within 3 object streams
+ 89 named destinations out of 1000 (max. 500000)
  16561 words of extra memory for PDF output out of 17280 (max. 10000000)
 
