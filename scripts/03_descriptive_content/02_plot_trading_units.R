@@ -77,8 +77,8 @@ lazy_ggsave(plot = rlm_per_eez,
 # Map marine ecoregions
 
 realm_map <- ggplot() +
-  geom_sf(data = coast) +
-  geom_sf(data = eez_meow, aes(fill = realm)) +
+  geom_sf(data = coast, color = "black", size = 0.1) +
+  geom_sf(data = eez_meow, aes(fill = realm), color = "black", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
   labs(fill = "Realm") +
@@ -86,6 +86,22 @@ realm_map <- ggplot() +
 
 lazy_ggsave(plot = realm_map,
             filename = "realm_map",
+            width = 20, 
+            height = 10)
+
+
+# Provinces map
+
+provinces_map <- ggplot() +
+  geom_sf(data = coast, color = "black", size = 0.1) +
+  geom_sf(data = eez_meow, aes(fill = province), color = "black", size = 0.1) +
+  ggtheme_map() +
+  scale_fill_viridis_d() +
+  # labs(fill = "Realm") +
+  theme(legend.position = "None")
+
+lazy_ggsave(plot = provinces_map,
+            filename = "provinces_map",
             width = 20, 
             height = 10)
 

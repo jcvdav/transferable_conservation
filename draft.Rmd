@@ -8,17 +8,19 @@ author:
       institute: bren
       correspondence: true
   - name: Darcy Bradley
-    institute: bren
+    institute: bren, emlab
   - name: Christopher Costello
-    institute: bren
+    institute: bren, emlab, econ
   - name: Juan S. Mayorga-Henao
-    institute: bren
+    institute: bren, emlab
   - name: Andrew Plantinga
-    institute: bren
+    institute: bren, econ
 institute:
-  - bren: Bren School of Environmental Science and Management, University of California Santa Barbara
+  - bren: Bren School of Environmental Science & Management, University of California, Santa Barbara, Santa Barbara, CA, USA
+  - emlab: Environmental Market Solutions Lab, University of California, Santa Barbara, Santa Barbara, CA, USA
+  - econ: Department of Economics, University of California, Santa Barbara, Santa Barbara, CA, USA
 date: "Prepared on `r format(Sys.time(), '%B %d, %Y')`"
-abstract: "Humanity depends on the ocean for livelihood, subsitance, and way of life. Yet, many of our activities continiously pose a threat to marine populations and ecosystems. The implementation of Marine Protected Areas (MPAs), where extractive activities are regulated or prohibited on the basis of spatial deliniations, are one of many ways to manage the oceans. Current intenrational agreements call to achieve a certain amount of within-country conservation. Here we explore the benefits from implementing a market for conservation in which nations trade conservation towards a global target. We find that such a market reduces the costs of conservation by 46%, relative to a BAU scenario without a market where each country protects a fixed portion of their waters. When creating 12 distinct markets based on biogeography regionalization, we find that costs are reduced by 34.8%."
+abstract: "Freewriteplaceholder, not actually an abstract: Can environmental markets be designed to induce global cooperation towards conservation of the marine environment? We propose a new institution where nations facing large costs of conserving in their waters can purchase conservation credits from nations with a surplus of habitat to protect. We will build a spatially-explicit bio-economic model of trade and conservation, and leverage high-resolution spatial data and state-of-the-art computation modeling to simulate the conservation and cost-reduction outcomes of cooperation. We derive the conditions uner which a market can produce gains, and show how the design features can incentivize meaningful conservation. We find that a market alwaysr educes teh costs of conservation."
 fontsize: 12pt
 output:
   bookdown::pdf_document2:
@@ -65,128 +67,126 @@ knitr::opts_chunk$set(echo = FALSE,
 
 More than three decades of conservation science have shown us that well-designed Marine Protected Areas (MPAs) can deliver large economic and ecological benefits\cite{halpern_2008,cabral_2019, cabral_2020}. Various international goals seek to protect anywhere between 10\% and 30\% of the global ocean with MPAs.  Along with these commitments, the scientific roadmap on where to site them\cite{roberts_2002,worm_2003,lucifora_2011,wallace_2011,albouy_2017,sala_2021} should be enough to see these goals realized. Why, then, have some nations achieved (and even surpassed) the ambitious 30\% target, while others lag behind even the modest 10\% target? Partly, because under the current unilateral conservation framework some nations face higher costs of conservation than others. Here, we show how an environmental market can be designed to lower the costs of conservation and induce cooperation towards a more efficient and equitable protection of the marine environment.
 
-Habitat suitability, and the costs of protecting it, are heterogeneously distributed across the globe and non-perfectly correlated \cite{halpern_2008,roberts_2002,kroodsma_2018}. As a result, different nations can attain the same amount of conservation for dramatically different costs, questioning the efficiency and equity of the current unilateral approach to marine conservation. But what if there were a way to maximize global conservation while lowering national costs of conserving? We propose a new institution where nations facing large costs of conserving in their Exclusive Economic Zones (EEZ) can purchase conservation credits from nations with a surplus of habitat worth protecting, and show that the costs of conservation can be dramatically reduced.
+Habitat suitability, and the costs of protecting it, are heterogeneously distributed across the globe \cite{halpern_2008,roberts_2002,kroodsma_2018}. As a result, different nations can attain the same amount of conservation for dramatically different costs, questioning the efficiency and equity of the current unilateral approach to marine conservation. But what if there were a way to maximize global conservation while lowering national costs of conserving? We propose a new institution where nations facing large costs of conserving in their Exclusive Economic Zones (EEZ) can purchase conservation credits from nations with a surplus of habitat worth protecting, and show that the costs of conservation can be dramatically reduced.
 
-The latest findings on marine conservation prioritization  show that a globally coordinated effort is more efficient than unilateral conservation efforts\cite{sala_2021}. While these results can point out where protection is most warranted and highlight the importance of coordination, they do little to incentivize nations to engage in it. Instead, institutions are needed to align actions with the desired conservation outcomes. One way to induce this desired cooperation is by allowing nations to conserve *in situ* (\emph{i.e.} within their EEZ) or pay to conserve *ex situ* (\emph{i.e.} in another nation's EEZ) to meet an aggregate target.
+The latest work on marine conservation prioritization shows that a globally coordinated effort to conserve the ocean is more efficient than unilateral conservation efforts\cite{sala_2021}. While these results highlight the importance of coordination and identify where protection is warranted, they are not enough to incentivize nations. But how can we induce cooperation on globa marine conservation? One way to induce this desired cooperation is by giving nations the option to meet their conservation targets *in situ* (\emph{i.e.} within their EEZ) or pay to conserve *ex situ* (\emph{i.e.} in another nation's EEZ, who have a surpluss of area to conserve).
 
 A market for conservation credits would allow just that. However, in designing such a market, two main challenges arise. First, not all ecosystems are created equally. Protecting one hectare of coral reef is not the same as protecting one hectare of kelp forest. A conservation market that ignores this could inadvertently fail to protect important habitat. Secondly, we live in a highly dynamic and connected world, one in which the biodiversity and costs of a patch of ocean depend on what else has been (or will be) protected, as well as it's own protection status. We provide solutions to both of these problems, and then simulate the trade outcomes of a global market for marine conservation credits and compare them to the business-as-usual baseline of unilateral conservation. For a range MPA coverage targets (1\% - 99\%), we find that a market always reduces the cost of conservation, resulting in a more efficient and equitable outcome.
 
+# Spatial heterogeneity
+
+The motivation from a market-based approach to conservation relies on two premises. First, that habitat worth protecting is heterogeneously distributed across nations. And, secondly, that the costs of protecting habitat are non-perfectly correlated with the protection value of the pixel. Together, these two features make it possible to lower costs by using trade to protect the most cost-effective places. The magnitude of market gains (that is, cost savings relative to BAU unilateral conservation with no trade) will depend on the correlation between costs and benefits. To illustrate this point, we generate synthetic data to simulate 20 girded worlds where the conservation value of a pixel is heterogeneously distributed, and where costs and benefits exhibit varying degrees of correlation (R from -1 to 1; See methods for a detailed description on synthetic data generation). For each scenario, we calculate the gains from trade for a series of protection targets (1 - 100%). We find that unless the costs and benefits are perfectly correlated (\emph{i.e.} R = 1), a market will always lower the costs of conservation for any desired target.
+
 # Designing a market for conservation credits
 
-The first challenge in designing a market for conservation credits is to ensure that all ecosystems are properly protected. A coral reef can not be substituted for a kelp forest - they complement each other to produce our world's rich biodiversity. One way to avoid trading credits across different ecosystems is by using a "bubble policy" \cite{fr_1979}. In air quality management, this approach enables polluting plants to flexibly manage their air emissions. By placing a “bubble” over a city with multiple polluting plants and applying a single emission cap to the “bubbled” city, each plant can decide how to internally manage production and trade emissions permits accordingly.
+Unlike the synthetic world described above, our planet contains a diverse array of different ecosystems, all of which are worth protecting. The first challenge in designing a market for conservation credits is to ensure that all ecosystems are properly protected. A colorful coral reef can not be substituted for a productive kelp forest - they complement each other to produce our world's rich biodiversity. How then, do we ensure that a market does not bias protection to one ecosystem or the other? A potential solution is to use a "bubble policy" \cite{fr_1979}. First introduced in air quality management, this approach enables polluting plants to flexibly manage their air emissions. By placing a “bubble” over a city with multiple polluting plants and applying a single emission cap to the “bubbled” city, each plant can decide how to internally manage production and trade emissions permits accordingly.
 
 We use biogeographic regionalization (Realms and Provinces \cite{spalding_2007} Fig S1) to create ecologically-coherent "blue bubbles" where nations trade conservation credits for similar habitats. For example, for Realm-based bubbles, Mexico and the United States trade conservation credits under two blue bubbles (Temperate Eastern Pacific [TEP] and Tropcial Atlantic [TA]), using bubble-specific conservation credits (\emph{e.g.} Kelp forest in the TEP and coral reefs in the TA).
 
-The second challenge a market faces is in the deffinition of conservation targets. In the air pollution example, the target can be a fixed amount or ambient concentration of a pollutant, both of which are measurable quantities. Moreover, the amount of pollution in one bubble is not affected by the management status of the adjacent bubbles. However, biodiversity is an elusive variable, with multiple nuanced indices implicitly assigning weighs to different features (\emph{e.g.} species richness does not weigh abundance, while biomass does not acount for richness). Moreover, the biodiversity for any pixel in the world will be influenced by the protection status of itself, but also the network of connected pixels.
+The second challenge a market faces is defining conservation targets. In the air quality example, the target can easily be set to be an amount (\emph{e.g.} tons of CO2) or ambient concentration (\emph{e.g.} ppm) of a pollutant, both of which are measurable quantities. An important feature is that the amount of pollution in one bubble can be determined independently of the management and amounts of pollution in adjacent bubbles. However, biodiversity is an elusive variable with multiple nuanced indices that implicitly assign weighs to different features (\emph{e.g.} species richness ignores abundance, while biomass ignores richness). Moreover, the biodiversity for any pixel in the world will be influenced by the protection status of said pixel, but also the network of connected pixels. The network of MPAs required to contain 100 species may not nessesarily be a subset of the network required to protect 101 species.
 
-Instead, we define the value of a pixel based on its surface area and the suitability of the habitat it contains for the species distributed there. Habitat suitability is defined as X. Conveniently, the habitat suitability of any pixel in the ocean can be defined independently of the habitat suitability and protection status of other pixels. Habitat suitability maps for 4,000 (exact number here) marine species, as indicated by the probability of occurrence which is a function of X, Y and Z \cite{ready_2010}. The habitat suitability of any pixel in the world can be calculated as the average suitability across all species, conditional on the pixel being suitable (i.e. p > 0.5).
+To work around this problem, we define the value of a pixel based on its surface area and the suitability of the habitat it contains for the species distributed there. Habitat suitability is defined as the joint probability of encountering a species, conditional on th abiotic characteristics of a pixel (\emph{e.g.} salinity, temperature, productivity, depth). We use habitat suitability maps for 4,000 **(exact number here)** marine species \cite{ready_2010} to calculate average suitability across all species. Conveniently, the habitat suitability of any pixel in the ocean can be defined independently of the habitat suitability and protection status of all other pixels. Moreover, Marine Protected Areas are spatial conservation interventions that seek to directly protect habitat and, indirectly, the species that reside there. The siting of MPAs can therefore be guided by abiotic characteristics that are conducive to the persistence of species.
 
-Marine Protected Areas are spatial conservation interventions that seek to directly protect habitat and, indirectly, the species that reside there. The siting of MPAs can therefore be guided by abiotic characteristics that are conducive to the persistence of species. Together, these abiotic characteristics define the habitat suitability of a patch for a given species. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Simulations
-
-We combine habitat suitability and fisheries revenue to generate supply curves for each nation, as well as a global biodiversity supply curve. While in practice this approach can be used for any given biodiversity target, I produce an example using the 30% area-based target (*i.e.* We translate this area-based target into biodiversity units). We then find the trading price in the global supply curve and use the country-level supply curves to calculate in-situ and ex-situ conservation for every country. We can then calculate the differences in costs, and estimate the gains from trade.
-
-The same approach can then be repeated for any level of spatial aggregation. As an example, I repeat the conservation excercise by subdividing the world into 12 Realms, and calculate realm-level supply curves to estimate the trading price for all countries that are part of that market.
-
-The following sections go into more detail to describe my methods. The first section describes the data, and important caveats are mentioned at this stage. The second section describes how nation-level and aggregate supply curves were built. The third section dives into translating area-based targets into biodiversity benefit targets and the corresponding trading prices. Finally, we discuss how the analysis can be replicated by creating markets at different spatial scales.
-
-## Spatial considerations
-
-When combining different data sources, we also include pixel-level information about the Hemisphere, Realm, Province, and Ecoregion in which they reside. This allows us to repeat the exercise of finding supply curves for any level of spatial division in order to simulate markets within them. This is better described in the results section, where I present detailed methods and results in parallel.
+To provide a working example of a market for conservation credits, we must define costs. The real world is unlikely to exhibit perfect correlation between costs and benefits of conservation. We use spatially explicit data ob average fisheries revenue (2000 - 2015) \cite{melnychuk_2017,sumaila_2007,swartz_2013}. MPAs may certainly have positive impacts on fisheries revenue. Instead, our use of mean fisheries revenue should be interpreted as a proxy for the short-term political cost of displacing fishers, even if those same fishers might be better off in the future \cite{cabral_2020, cabral_2021}. In practice, the deffinition of costs will include other considerations, and may even vary from nation to nation. Special attention is given to this in our discussion section.
 
 # Results
 
-The main purpose of this project is to identify the gains from trade. But in order to get there, there are other minor findings that are worth mentioning here. This sections presents some preliminary results. The first section shows findings for a global market, where I calculate the gains from trade for a given target and it's corresponding trading price. I then turn to the realm-level markets, and present the same information for each realm. Whenever relevant, I mention opportunities for improvements, and I later discuss them in the discussion section.
+We simulate with syntthetic data, and then provide an example of an operationalization of the concept. We present results for blue bubbles defined by biogeographic realms, but our suplementary materials present results for provinces, hemispheres, and oceans. We then focus our attention on the often-cited target of protecting 30% of the world. We show the directionality of trade (who pays to conserve and who gets paid to conserve), a comparision of area that would be protected under either or both scenarios. Lastly, we explore whether a realm-based market results in biased conservation for different taxa.
 
-## Global
+Our simulation with synthetic data, where the correlations and distributions are known, shows that gains from trade are positive so long as costs and benefits are not perfectly correlated. Importantly, the gains from trade grow as spatial concordance decreases. This is an important insight, because it suggests that unless the real world exhibits perfect correlsation, there are potential gains frome trade.
 
-By combining costs and benefits of conservation and anticipating the ways in which countries may conserve within their waters, we can translate the (percent) area-based targets into biodiversity benefit targets. We find that a 30% target yields a global biodiversity benefit of 3 to 106, depending on the approach taken (Figure \ref{fig:eez-supply-curve-approaches}; Table \ref{tab:trading-prices}).
+## Operationaling of a conservation credit market
 
-![\label{fig:eez-supply-curve-approaches}Five sequential conservation approaches. Each line represents one nation. The y-axis shows how much conservation is achieved by protecting a given percentage (x-axis) of a nation's EEZ. The numbers show the totl biodiversity, summing across all nations.](results/img/eez_supply_curves_approaches.png)
+We combine habitat suitability and fisheries revenue to generate supply curves for each nation, with markets ipperating under five different bubble policies (global, hemisphere, realm, sea, and province). Since benefits and costs are not perfectly correlated (fig X with corr betwieen habitat suitability and fisheries revenue), we find that trade always results in cost-savings. Increasing the number of bubbles reduces market gains, because there is less opportunity for trade. Increasing the number of constraints often limits win-wins \cite{burgiuess_2021}.
 
-\newpage
 
-Our global supply curve allows us to take any biodiversity target and find its corresponding costs. In doing so, we can identify the trading price for any possible target. We find that the trading price for conservation lies between 0.08 and 483,528^[I must stress that these figures represent losses in fisheries landings, not dollars, and that more work needs to be done.]. Figure \ref{fig:global-conservation-targets-and-trading-prices} shows the corresponding trading prices for each of the targets outlined above. Table \ref{tab:trading-prices} shows the five targets and their trading prices. While these figures and table show only the values for the five approaches mentioned above, the same can be done for any given biodiversity target.
+![\label{fig:all-segs-all-scen}All segmetns all scenarios.](results/img/gain_from_trade_segmented_market_plot.png)
 
-![\label{fig:global-conservation-targets-and-trading-prices} The global conservation supply curve, showing the costs for each of the biodiversity benefit targets.](results/img/global_conservation_targets_and_trading_prices.png)
-
-\input{results/tab/trading-prices.tex}
-
-\newpage
-
-In translating the area-based target into a biodiversity benefit target we identified the global conservation benefits, but also the costs to each nation (Figure \ref{fig:equilibrium-supply-curves} left). We can use the nation-level supply curves and trading price to find the market's equilibrium for conservation (Figure \ref{fig:equilibrium-supply-curves} right). Under a market-based approach, in-situ conservation will decrease for some nations (those for which costs are higher than the trading price), while some may see increased in-situ conservation (those under the trading price). The additional conservation in some nations (red lines in Figure \ref{fig:equilibrium-supply-curves}) can only be achieved through a market, where nations whose in-situ conservation would exceed the trading price are willing to pay to conserve elsewhere.
-
-![\label{fig:equilibrium-supply-curves} Supply curves for a case where nations efficiently conserve 30% in-situ (left) or with a market-based approach (right). The horizontal dashed line shows the trading price (131,241.92). Red lines in the right-side panel show the portion of additional conservation that is incentiviez by trade.](results/img/equilibrum_supply_curves.png)
-
-By knowing the equilibrium under each approach we can compare the total costs and calculate the gains from trade. We find that a market-based approach can produce the same biodiversity benefit of 71.56 units for just 54% of the costs (Table \ref{tab:gains-from-trade}). Of course, gains from trade are heterogeneously distributed among nations. The map below (Figure \ref{fig:map-of-trade}) shows which countries would rather pay to conserve elsewhere, and which countries get paid to conserve in-place. Figure \ref{ref:two-states-map} shows the outcome of each approach.
-
-\input{results/tab/gains_from_trade.tex}
-
+Each target protection level has a distinct market equilibrium. The following sections focus on the often-cited conservation target of protecting 30% of the oceans. For the purpose of the main text, we focus on the case where bubbles are defined by realms. We find that in every realm, there are at least two nations engaging in trade. This is important, because it shows that the results are not driven by trade ocurring in just one realm. The trading status of each nation in is shown globaly in figure \ref{fig:map-of-trade} and for each realm in figure \ref{fig:rlm-map-of-trade}.
 
 ![\label{fig:map-of-trade}Map of trade. Blue indicates nations that reach the trading price before meeting their target, and therefore chose to pay to conserve elsewhere. Red nations get paid to conserve in their waters, due to the low costs relative to blue nations.](results/img/map_of_trade.png)
 
-![\label{ref:two-states-map} Map of two possible conservation outcomes.](results/img/two_states_map.png)
+![\label{fig:rlm-map-of-trade}Map of trade for each realm. Blue indicates nations that reach the trading price before meeting their target, and therefore chose to pay to conerve elsewhere. Red nations get paid to conserve in their waters, due to the low costs relative to blue nations.](results/img/rlm_map_of_trade.png)
+
+A pervasive finding on environmental markets is that market forces can lead to conglomeration of rights. In this case, this could be interpreted as one nation holding all effective conservation, or one nation not conserving at all. To test for conglomeration, we compare the MPA networks created by the market and BAU scenarios. Figure \ref{fig:two-states-map} shows the four possible categories for all pixels in the world: protected under BAU and market scenarios, protected only under BAU, protected only with a market, and not protected at all. We find no conglomeration.
+
+![\label{fig:two-states-map} Map of two possible conservation outcomes.](results/img/two_states_map.png)
+
+The spatial configuration shows no bias. But the aggregagate results may mask defficient protection for some taxa. Figure X shows the the density distribution of % habitat protected for each major taxa, under a market and BAU scenario with a 30% protection target. We find no evidence of bias in protection status between or within taxa groups. As with customary MPA implementation, more targeted policy interventions will be necessary for particularly vulnerable species (\emph{e.g.} harvest bans, export bans).
+
+
+<!-- ![Some figure should probably go here, showing the ggridges for each taxa group.](results/img/two_states_map.png) -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- # Simulations -->
+
+
+<!-- The same approach can then be repeated for any level of spatial aggregation. As an example, I repeat the conservation excercise by subdividing the world into 12 Realms, and calculate realm-level supply curves to estimate the trading price for all countries that are part of that market. -->
+
+<!-- The following sections go into more detail to describe my methods. The first section describes the data, and important caveats are mentioned at this stage. The second section describes how nation-level and aggregate supply curves were built. The third section dives into translating area-based targets into biodiversity benefit targets and the corresponding trading prices. Finally, we discuss how the analysis can be replicated by creating markets at different spatial scales. -->
+
+<!-- ## Spatial considerations -->
+
+<!-- When combining different data sources, we also include pixel-level information about the Hemisphere, Realm, Province, and Ecoregion in which they reside. This allows us to repeat the exercise of finding supply curves for any level of spatial division in order to simulate markets within them. This is better described in the results section, where I present detailed methods and results in parallel. -->
+
+<!-- # Results -->
+
+<!-- The main purpose of this project is to identify the gains from trade. But in order to get there, there are other minor findings that are worth mentioning here. This sections presents some preliminary results. The first section shows findings for a global market, where I calculate the gains from trade for a given target and it's corresponding trading price. I then turn to the realm-level markets, and present the same information for each realm. Whenever relevant, I mention opportunities for improvements, and I later discuss them in the discussion section. -->
+
+<!-- ## Global -->
+
+<!-- By combining costs and benefits of conservation and anticipating the ways in which countries may conserve within their waters, we can translate the (percent) area-based targets into biodiversity benefit targets. We find that a 30% target yields a global biodiversity benefit of 3 to 106, depending on the approach taken (Figure \ref{fig:eez-supply-curve-approaches}; Table \ref{tab:trading-prices}). -->
+
+
+<!-- \newpage -->
+
+<!-- In translating the area-based target into a biodiversity benefit target we identified the global conservation benefits, but also the costs to each nation (Figure \ref{fig:equilibrium-supply-curves} left). We can use the nation-level supply curves and trading price to find the market's equilibrium for conservation (Figure \ref{fig:equilibrium-supply-curves} right). Under a market-based approach, in-situ conservation will decrease for some nations (those for which costs are higher than the trading price), while some may see increased in-situ conservation (those under the trading price). The additional conservation in some nations (red lines in Figure \ref{fig:equilibrium-supply-curves}) can only be achieved through a market, where nations whose in-situ conservation would exceed the trading price are willing to pay to conserve elsewhere. -->
+
+<!-- ![\label{fig:equilibrium-supply-curves} Supply curves for a case where nations efficiently conserve 30% in-situ (left) or with a market-based approach (right). The horizontal dashed line shows the trading price (131,241.92). Red lines in the right-side panel show the portion of additional conservation that is incentiviez by trade.](results/img/equilibrum_supply_curves.png) -->
+
+<!-- By knowing the equilibrium under each approach we can compare the total costs and calculate the gains from trade. We find that a market-based approach can produce the same biodiversity benefit of 71.56 units for just 54% of the costs (Table \ref{tab:gains-from-trade}). Of course, gains from trade are heterogeneously distributed among nations. The map below (Figure \ref{fig:map-of-trade}) shows which countries would rather pay to conserve elsewhere, and which countries get paid to conserve in-place. Figure \ref{fig:two-states-map} shows the outcome of each approach. -->
+
+<!-- \input{results/tab/gains_from_trade.tex} -->
+
+
+
+
 
 \newpage
 
-## Realms
+<!-- ## Realms -->
 
-The results presented so far assume that a unit of biodiversity is worth the same anywhere around the world. However, we might want to ensure that no single type of habitat or region is left out. To overcome this, markets can be established at different spatial scales. Here, we use different scales of zoning in the marine environment (*i.e.* Biogeographic zoning). \cite{spalding_2007} divided the oceans using a hierarchical approach with Realms (n = 12) containing Provinces (n = 60), which in turn contain Ecoregions (n = 219).
+<!-- The results presented so far assume that a unit of biodiversity is worth the same anywhere around the world. However, we might want to ensure that no single type of habitat or region is left out. To overcome this, markets can be established at different spatial scales. Here, we use different scales of zoning in the marine environment (*i.e.* Biogeographic zoning). \cite{spalding_2007} divided the oceans using a hierarchical approach with Realms (n = 12) containing Provinces (n = 60), which in turn contain Ecoregions (n = 219). -->
 
-The same approach as above can be repeated for any level of spatial aggregation that allows for more than one country. For example, this can be done for each of the 12 realms (Figure \ref{fig:realm-map}). Each Realm contains more than one nation, which would allow for trade to occur (Figure \ref{fig:eezs-per-realm}). For example, the Tropical Atlantic contains more than 60 nations, while Temperate Australasia contains just three. Any given country may also be part of more than one realm (Figure \ref{fig:realms-per-eezs}). For example, Mexico is present across four realms (Tropical Eastern Pacific, Temperate Northern Pacific, Temperate Northern Atlantic, and Tropical Atlantic).
+<!-- The same approach as above can be repeated for any level of spatial aggregation that allows for more than one country. For example, this can be done for each of the 12 realms (Figure \ref{fig:realm-map}). Each Realm contains more than one nation, which would allow for trade to occur (Figure \ref{fig:eezs-per-realm}). For example, the Tropical Atlantic contains more than 60 nations, while Temperate Australasia contains just three. Any given country may also be part of more than one realm (Figure \ref{fig:realms-per-eezs}). For example, Mexico is present across four realms (Tropical Eastern Pacific, Temperate Northern Pacific, Temperate Northern Atlantic, and Tropical Atlantic). -->
 
-As done before for the global analysis, we can generate the biodiversity supply curves of each country-realm combination, and calculate the realm-level supply curve for biodiversity benefit. Then, for any desired level of biodiversity benefit, we can estimate the realm-specific trading price, and derive the market equilibrium. From there, we can estimate the gains from trade, and identify who gains from this approach.
+<!-- As done before for the global analysis, we can generate the biodiversity supply curves of each country-realm combination, and calculate the realm-level supply curve for biodiversity benefit. Then, for any desired level of biodiversity benefit, we can estimate the realm-specific trading price, and derive the market equilibrium. From there, we can estimate the gains from trade, and identify who gains from this approach. -->
 
-We first must find the target amount of biodiversity. We do this by finding how much biodiversity would be protected if every country were to protect 30% of each realm present within their Exclusive Economic Zone ^[This is more closely aligned with what the IUCN 30% target is: the International Union for the Conservation of Nature (IUCN) has suggested that at least 30% of each marine habitat should be protected in areas with no extractive activities.]. We then sum the realm-level biodiversity to obtain the aggregate biodiversity (Table \ref{tab:rlm-trading-prices}). Using the realm-level supply curves (Figure \ref{fig:eez-rlm-supply-curve} bottom) we can identify the trading prices. When the market is segmented by realms, a market approach produces the same amount of conservation for just 65.2% of the costs in the BAU scenario. The realm-level gains from trade for such a market are shown in Table \ref{tab:rlm-gains-from-trade}, and Figure \ref{fig:rlm-map-of-trade} shows the realm-level transactions. Note how for the Temperate Northern Pacific Mexico gets paid to conserve, while in the Tropical Atlantic it pays to conserve elsewhere.
-
-
-So far, I have performed preliminary analyses for a global market and outlined how it would be done for 12 realms. I believe there is room (and need) to try a few more approaches. The first approach would involve "zooming out" to create four markets, one for each hemisphere. The second approach would then increase the scale by repeating the exercise for each ocean basin. Then, I would further increase the scale by taking the market at the province-level (Figure \ref{fig:eezs-per-province}). Doing it at the ecoregion-level (the next biogeographical scale) would yield less benefits from trade, since many Ecoregions contain only one nation. I expect gains from trade to decrease as spatial resolution (or segmentation of the markets) increases. In the end I will have six levels of spatial aggregation: global, hemisphere, ocean, realm, province, and EEZ (BAU). 
+<!-- We first must find the target amount of biodiversity. We do this by finding how much biodiversity would be protected if every country were to protect 30% of each realm present within their Exclusive Economic Zone ^[This is more closely aligned with what the IUCN 30% target is: the International Union for the Conservation of Nature (IUCN) has suggested that at least 30% of each marine habitat should be protected in areas with no extractive activities.]. We then sum the realm-level biodiversity to obtain the aggregate biodiversity (Table \ref{tab:rlm-trading-prices}). Using the realm-level supply curves (Figure \ref{fig:eez-rlm-supply-curve} bottom) we can identify the trading prices. When the market is segmented by realms, a market approach produces the same amount of conservation for just 65.2% of the costs in the BAU scenario. The realm-level gains from trade for such a market are shown in Table \ref{tab:rlm-gains-from-trade}, and Figure \ref{fig:rlm-map-of-trade} shows the realm-level transactions. Note how for the Temperate Northern Pacific Mexico gets paid to conserve, while in the Tropical Atlantic it pays to conserve elsewhere. -->
 
 
-![\label{fig:eezs-per-realm} Number of nations contained within each of the realms described by \cite{spalding_2007}. The vertical dashed line lies at 2,  the minimum number of nations required for trade to occur.](results/img/eezs_per_realm.png)
+<!-- So far, I have performed preliminary analyses for a global market and outlined how it would be done for 12 realms. I believe there is room (and need) to try a few more approaches. The first approach would involve "zooming out" to create four markets, one for each hemisphere. The second approach would then increase the scale by repeating the exercise for each ocean basin. Then, I would further increase the scale by taking the market at the province-level (Figure \ref{fig:eezs-per-province}). Doing it at the ecoregion-level (the next biogeographical scale) would yield less benefits from trade, since many Ecoregions contain only one nation. I expect gains from trade to decrease as spatial resolution (or segmentation of the markets) increases. In the end I will have six levels of spatial aggregation: global, hemisphere, ocean, realm, province, and EEZ (BAU).  -->
 
-
-
-![\label{fig:realms-per-eezs} Number of realms in each Exclusive Economic Zone](results/img/realms_per_eez.png)
-
-
-![\label{fig:eez-rlm-supply-curve} Biodiversity supply curves for all nations within each realm (top panels), and realm-level biodiversity supply curves (bottom). For the small panels, each line represents a country. In the large bottom panel, each line represents the horizontally-summed supply curve for each realm (color coded).](results/img/eez_rlm_supply_curve.png)
-
-\input{results/tab/trading_prices_rlm.tex}
-
-\input{results/tab/gains_from_trade_rlm.tex}
-
-![\label{fig:rlm-map-of-trade}Map of trade for each realm. Blue indicates nations that reach the trading price before meeting their target, and therefore chose to pay to conerve elsewhere. Red nations get paid to conserve in their waters, due to the low costs relative to blue nations.](results/img/rlm_map_of_trade.png)
 
 
 \newpage
 
 # Other figures and tables
+
+![\label{fig:eezs-per-realm} Number of nations contained within each of the realms described by \cite{spalding_2007}. The vertical dashed line lies at 2,  the minimum number of nations required for trade to occur.](results/img/eezs_per_realm.png)
+
+![\label{fig:realms-per-eezs} Number of realms in each Exclusive Economic Zone](results/img/realms_per_eez.png)
 
 ![\label{fig:eezs-per-province} Number of Exclusive Economic Zones in each province](results/img/eezs_per_province.png)
 
@@ -196,9 +196,11 @@ So far, I have performed preliminary analyses for a global market and outlined h
 
 # Supplementary Information
 
+Bubbles
+
 ![\label{fig:realm-map}Map of the 12 realms, as defined by \cite{spalding_2007}.](results/img/realm_map.png)
 
-Map of provinces
+![\label{fig:realm-map}Map of the 60 provinces, as defined by \cite{spalding_2007}.](results/img/provinces_map.png)
 
 ## Data description
 
