@@ -41,16 +41,18 @@ rlm_per_eez <- ggplot() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black"))
 
-pro_per_eez <- ggplot(meows_per_eez, aes(fill = n_pro)) +
-  geom_sf() +
+pro_per_eez <- ggplot() +
+  geom_sf(data = meows_per_eez, aes(fill = n_pro)) +
+  geom_sf(data = coast) +
   scale_fill_viridis_c() +
   ggtheme_map() +
   labs(fill = "# of\nProvinces") +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black"))
 
-eco_per_eez <- ggplot(meows_per_eez, aes(fill = n_eco)) +
-  geom_sf() +
+eco_per_eez <- ggplot() +
+  geom_sf(data = meows_per_eez, aes(fill = n_eco)) +
+  geom_sf(data = coast) +
   scale_fill_viridis_c() +
   ggtheme_map() +
   labs(fill = "# of\nEcoregions") +
@@ -67,12 +69,6 @@ lazy_ggsave(plot = meows_per_eez_plot,
             filename = "meows_per_eez",
             width = 10,
             height = 15)
-
-lazy_ggsave(plot = rlm_per_eez,
-            filename = "realms_per_eez",
-            width = 10,
-            height = 5)
-
 
 # Map marine ecoregions
 

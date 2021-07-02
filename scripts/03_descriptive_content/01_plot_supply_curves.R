@@ -59,8 +59,8 @@ global <- ggplot(data = eez_h_sum,
                  mapping = aes(x = tb, y = mc)) +
   geom_line(size = 1) +
   ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Marginal Costs")
+  labs(x = bquote("Surface area (HS weighted;"~Km^2~")"),
+       y = bquote("Fisheries revenue ($"~Km^-2~")"))
 
 # Country-level supply curves
 eez <- ggplot(data = eez_cb,
@@ -68,8 +68,8 @@ eez <- ggplot(data = eez_cb,
   geom_line() +
   guides(color = F) +
   ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Marginal Costs")
+  labs(x = bquote("Surface area (HS weighted;"~Km^2~")"),
+       y = bquote("Fisheries revenue ($"~Km^-2~")"))
 
 eez_supply_curve <- plot_grid(eez, global, ncol = 2, labels = "AUTO")
 
@@ -82,8 +82,8 @@ eez_rlm <-
   scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Marginal Costs")
+  labs(x = bquote("Surface area (HS weighted;"~Km^2~")"),
+       y = bquote("Fisheries revenue ($"~Km^-2~")"))
 
 # realm summed
 rlm <- ggplot(data = rlm_h_sum,
@@ -91,8 +91,8 @@ rlm <- ggplot(data = rlm_h_sum,
   geom_line() +
   scale_color_viridis_d() +
   ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Marginal Costs")
+  labs(x = bquote("Surface area (HS weighted;"~Km^2~")"),
+       y = bquote("Fisheries revenue ($"~Km^-2~")"))
 
 eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
 
@@ -105,20 +105,9 @@ eez_pro <-
   scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Marginal Costs")
+  labs(x = bquote("Surface area (HS weighted;"~Km^2~")"),
+       y = bquote("Fisheries revenue ($"~Km^-2~")"))
 
-# Country ecoregion, for each realm
-eez_eco <-
-  ggplot(data = eco_eez_cb,
-         mapping = aes(x = tb,y = mc, color = iso3, group = paste(ecoregion, province, iso3))) +
-  geom_line() +
-  guides(color = F) +
-  scale_color_viridis_d() +
-  facet_wrap( ~ realm, scales = "free") +
-  ggtheme_plot() +
-  labs(x = "Biodiversity",
-       y = "Marginal Costs")
 
 # EXPORT PLOTS ##############################################################################################
 lazy_ggsave(plot = eez_supply_curve,
@@ -132,8 +121,5 @@ lazy_ggsave(plot = eez_rlm_supply_curve ,
 
 lazy_ggsave(plot = eez_pro,
             filename = "eez_pro_supply_curve")
-
-lazy_ggsave(plot = eez_eco,
-            filename = "eez_eco_supply_curve")
 
 # END OF SCRIPT

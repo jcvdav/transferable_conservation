@@ -18,15 +18,6 @@ library(tidyverse)
 
 # Load data
 
-# Raw data
-benefits <- raster(file.path(project_path, "processed_data", "suitability.tif")) %>% 
-  as.data.frame(xy = T) %>% 
-  drop_na(suitability)
-
-costs <- raster(file.path(project_path, "processed_data", "revenue_raster.tif")) %>% 
-  as.data.frame(xy = T) %>% 
-  drop_na(revenue_raster)
-
 ## master data
 master_cb <- readRDS(
   file = file.path(project_path, "processed_data", "master_costs_and_benefits.rds")

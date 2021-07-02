@@ -77,7 +77,7 @@ watson_intensity_raster_moll <-
                 over = T,                                                 # Allow interpolation over the dateline
                 method = "bilinear")                                      # Use bilinear interpolation
 
-watson_raster_moll <- watson_intensity_raster_moll #* 2500          NOT       # Convert intensity back to USD
+watson_raster_moll <- watson_intensity_raster_moll * 2500                 # Convert intensity back to USD
 watson_raster_moll <- watson_raster_moll * ocean_mask
 
 # Export data
