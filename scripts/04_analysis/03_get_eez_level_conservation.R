@@ -27,9 +27,10 @@ eez_cb <- readRDS(
 )
 
 ## Read trading prices
-trading_prices <- readRDS(
-  file = file.path(project_path, "output_data", "global_trading_prices.rds")
-)
+trading_price <- eez_h_sum_cb %>% 
+  filter(pct_area <= 0.3) %>% 
+  pull(mc) %>% 
+  max()
 
 # Load a coastline
 coast <- ne_countries(returnclass = "sf") %>% 
@@ -56,16 +57,16 @@ conserving_nations <- eez_cb %>%
 
 ## Identify conserved patches
 # Get the most efficient trading price
-trading_price <- trading_prices %>% 
-  filter(type == "efficient") %>% 
-  pull(mc)
+# trading_price <- trading_prices %>% 
+  # filter(type == "efficient") %>% 
+  # pull(mc)
 
 # Filter to keep only the protected places
 bau <- eez_cb %>% 
   group_by(iso3) %>% 
-  mutate(min_pct = min(pct, na.rm = T)) %>% 
+  mutate(min_pct = min(pct_area, na.rm = T)) %>% 
   ungroup() %>% 
-  filter(pct <= 0.3 | pct <= min_pct) %>%      # Keep the most efficient 30% of each country OR the first patch
+  filter(pct_area <= 0.3 | pct_area <= min_pct) %>%      # Keep the most efficient 30% of each country OR the first patch
   mutate(approach = "bau")
   
 mkt <- eez_cb %>% 
@@ -154,23 +155,6 @@ benefit_supply_curves <- bau %>%
        caption = "NOTE: Axis have been cropped for visualization purposes") +
   guides(color = FALSE)
 
-market_gains_plot <- combined_outcomes %>% 
-  select_if(is.numeric) %>% 
-  select(-contains("stop")) %>% 
-  summarize_all(sum, na.rm = T) %>% 
-  gather(variable, value) %>% 
-  separate(variable, into = c("approach", "variable")) %>% 
-  mutate(variable = case_when(variable == "tc" ~ "Total costs",
-                              variable == "tb" ~ "Quality-weighed area",
-                              variable == "area" ~ "Area")) %>% 
-  ggplot(aes(x = approach, y = value, fill = approach)) +
-  geom_col(position = "dodge", color = "black") +
-  facet_wrap(~variable, scale = "free_y", ncol = 1) +
-  scale_fill_brewer(palette = "Set1", guide = F) +
-  ggtheme_plot() +
-  labs(x = "Approach", y = "Value") +
-  scale_x_discrete(labels = c("BAU", "Market"))
-
 map_contrasting_scenarios <- ggplot() +
   geom_sf(data = filter(eez_with_results,!variable == "gets_paid"),
           aes(fill = value), color = "black") +
@@ -181,20 +165,10 @@ map_contrasting_scenarios <- ggplot() +
   guides(fill = guide_colorbar(title = "Total costs\nmillion USD",
                                frame.colour = "black",
                                ticks.colour = "black"))
-  
-eez_with_results %>% 
-  filter(variable == "mkt_gains") %>% 
-  mutate(iso3 = fct_reorder(.f = iso3, .x = value)) %>% 
-  ggplot(aes(x = iso3,
-             y = value)) +
-  geom_col() +
-  coord_flip()
 
-
-map_of_trade <- eez %>% 
-  left_join(got_paid, by = c("iso3")) %>% 
+map_of_trade <- eez_with_results %>% 
   filter(variable == "gets_paid") %>% 
-  mutate(gets_paid = ifelse(value == 1, "Got paid", "Pays")) %>% 
+  mutate(gets_paid = ifelse(value == 1, "Gets paid", "Pays")) %>% 
   ggplot() +
   geom_sf(aes(fill = gets_paid), color = "black") +
   geom_sf(data = coast, color = "black") +
@@ -212,6 +186,7 @@ two_states_map <- eez_cb %>%
                             a == 1 & is.na(b) ~ "Protected only under BAU",
                             is.na(a) & b == 1 ~ "Protected only under market",
                             is.na(a) & is.na(b) ~ NA_character_)) %>% 
+  drop_na(status) %>% 
   ggplot() +
   geom_sf(data = coast, color = "black", fill = "transparent") +
   geom_tile(aes(x = lon, y = lat, fill = status)) +
@@ -221,11 +196,6 @@ two_states_map <- eez_cb %>%
   theme(legend.position = "bottom")
 
 ## EXPORT FIGURES #########################################################################
-
-lazy_ggsave(plot = market_gains_plot,
-            filename = "market_gains_plot",
-            width = 7.5,
-            height = 10)
 
 lazy_ggsave(plot = benefit_supply_curves,
             filename = "equilibrum_supply_curves",
