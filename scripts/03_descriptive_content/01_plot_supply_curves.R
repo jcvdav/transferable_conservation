@@ -42,16 +42,6 @@ pro_h_sum <- readRDS(
   file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds")
 )
 
-#E Ecoregion eez
-## For each ecoregion, province, realm, and EEZ
-eco_eez_cb <- readRDS(
-  file = file.path( project_path, "processed_data", "eco_eez_costs_and_benefits.rds")
-)
-### Horizonbtaly summed for each ecoregion
-eco_eez_cb <- readRDS(
-  file = file.path( project_path, "processed_data", "eco_h_sum_costs_and_benefits.rds")
-)
-
 # PROCESSING ############################################################################################
 
 # Global curve
