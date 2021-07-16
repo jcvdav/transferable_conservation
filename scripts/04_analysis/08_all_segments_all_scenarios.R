@@ -40,13 +40,6 @@ pro_h_sum <- readRDS(
   file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds")
 )
 
-sea_eez_cb <- readRDS(
-  file = file.path( project_path, "processed_data", "sea_eez_costs_and_benefits.rds")
-  )
-sea_h_sum <- readRDS(
-  file = file.path( project_path, "processed_data", "sea_h_sum_costs_and_benefits.rds")
-  )
-
 
 get_global_market_gains <- function(eez_cb, r, trading_price) {
   
@@ -58,9 +51,9 @@ get_global_market_gains <- function(eez_cb, r, trading_price) {
   
   bau <- eez_cb %>% 
     group_by(iso3) %>% 
-    mutate(min_pct = min(pct, na.rm = T)) %>% 
+    mutate(min_pct = min(pct_area, na.rm = T)) %>% 
     ungroup() %>% 
-    filter(pct <= r | pct <= min_pct) %>% # Keep the most efficient r% of each country - hemisphere
+    filter(pct_area <= r | pct_area <= min_pct) %>% # Keep the most efficient r% of each country - hemisphere
     mutate(approach = "bau") %>% 
     group_by(approach, iso3) %>% 
     summarize(bau_tb = sum(benefit, na.rm = T),
@@ -116,9 +109,9 @@ get_segmented_market_gains <- function(curves, r, trading_prices, group) {
   # Filter to keep only the protected places
   bau <- curves %>% 
     group_by_at(c("iso3", group)) %>% 
-    mutate(min_pct = min(pct, na.rm = T)) %>% 
+    mutate(min_pct = min(pct_area, na.rm = T)) %>% 
     ungroup() %>% 
-    filter(pct <= r | pct <= min_pct) %>%                       # Keep the most efficient 30% of each country - hemisphere
+    filter(pct_area <= r | pct_area <= min_pct) %>%                       # Keep the most efficient 30% of each country - hemisphere
     mutate(approach = "bau")
   
   mkt <- curves %>% 
@@ -238,20 +231,11 @@ gains_from_trade_multiple_scenarios_pro <-
     group = "province"
   )
 
-gains_from_trade_multiple_scenarios_sea <- 
-  market_segmenter(
-    rs = rs,
-    curves = sea_eez_cb,
-    agg_curves = sea_h_sum,
-    group = "sea_name"
-  )
-
 gains_from_trade_multiple_scenarios <- rbind(
   gains_from_trade_multiple_scenarios_global,
   gains_from_trade_multiple_scenarios_hem,
   gains_from_trade_multiple_scenarios_rlm,
-  gains_from_trade_multiple_scenarios_pro,
-  gains_from_trade_multiple_scenarios_sea
+  gains_from_trade_multiple_scenarios_pro#,
   ) %>% 
   mutate(market = stringr::str_to_sentence(market),
          market = fct_relevel(market, "Province", after = Inf)) %>% 
