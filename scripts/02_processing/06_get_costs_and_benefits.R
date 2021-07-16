@@ -62,11 +62,7 @@ pro_code <-
   raster(file.path(project_path, "processed_data", "pro_raster.tif")) %>% 
   crop(benefits_raster)
 
-eco_code <-
-  raster(file.path(project_path, "processed_data", "eco_raster.tif")) %>% 
-  crop(benefits_raster)
-
-seas_code <- raster(file.path(project_path, "processed_data", "world_seas_raster.tif")) %>% 
+hem_code <- raster(file.path(project_path, "processed_data", "hemispheres.tif")) %>% 
   crop(benefits_raster)
 
 # Load the EEZ vector data
@@ -74,19 +70,9 @@ eez_meow <-
   st_read(file.path(
     project_path,
     "processed_data",
-    "intersected_eez_and_meow.gpkg"
+    "intersected_eez_meow_hem.gpkg"
   )) %>% 
   st_drop_geometry() %>% 
-  as_tibble()
-
-# Load the world seas vectotr data
-world_seas <- st_read(file.path(
-  project_path,
-  "processed_data",
-  "clean_world_seas.gpkg"
-)) %>% 
-  st_drop_geometry() %>% 
-  rename(sea_name = name) %>% 
   as_tibble()
 
 ## PROCESSING ########################################################################
@@ -95,8 +81,7 @@ cb <-
   stack(iso3n,                   # Start by creating a raster stack of all features
         rlm_code,
         pro_code,
-        eco_code,
-        seas_code,
+        hem_code,
         benefits_raster,
         costs_raster) %>%
   as.data.frame(xy = T) %>%       # Convert to data.frame, but keep coordinates
@@ -106,61 +91,57 @@ cb <-
     iso3n = eez_raster,
     rlm_code = rlm_raster,
     pro_code = pro_raster,
-    eco_code = eco_raster,
-    sea_code = world_seas_raster,
-    benefit = suitability,
+    hem_code = hemispheres,
     cost = revenue_raster
   ) %>%
-  drop_na(iso3n, cost, benefit) %>%                             # Drop areas beyond national jurisdiction
-  mutate(hemisphere = case_when(lon > 0 & lat > 0 ~ "NE",
-                                lon < 0 & lat > 0 ~ "NW",
-                                lon > 0 & lat <= 0 ~ "SE",
-                                lon < 0 & lat <= 0 ~ "SW"),
-         cost = pmax(cost, 0),
-         benefit = 2500 * benefit)
+  drop_na(iso3n, cost, suitability) %>%                             # Drop areas beyond national jurisdiction
+  mutate(cost = pmax(cost, 0),
+         benefit = 2500 * suitability)
 
 # Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
-  select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>% 
-  left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%            # Join to the data.frame from rasters
-  left_join(world_seas, by = c("sea_code" = "mrgid")) %>% 
-  select(lon, lat, iso3, ecoregion, province, realm, sea_name, hemisphere, benefit, cost) %>% # Select columns
-  filter(benefit > 0) %>% 
-  mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
-         mc = cost / benefit,
-         neg = bcr > 0) %>%                                                         # Create dummy variable for negative costs
-  drop_na(lat, lon, benefit, cost)
+  select(iso3, province, realm, hemisphere, iso3n, contains("code")) %>% 
+  distinct() %>% 
+  left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "hem_code")) %>%            # Join to the data.frame from rasters
+  select(lon, lat, iso3, province, realm, hemisphere, suitability, benefit, cost) %>% # Select columns
+  filter(suitability > 0) %>%
+  mutate(cost = pmax(cost, 1),
+         bcr = benefit / cost,                                                       # Calculate marginal benefit
+         mc = cost / benefit)
   
 ## AT THE EEZ LEVEL ####
 # Calculate country-level supply curve
 eez_data <- master_data %>%
   group_by(iso3) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
 # Calculate global supply curve by summing horizontally
 eez_h_sum <- master_data %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   )
 
 ## AT THE HEMISPHERE LEVEL
 # Calculate hemisphere-eez level supply curve
 hem_data <- master_data %>%
   group_by(iso3, hemisphere) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
@@ -168,11 +149,12 @@ hem_data <- master_data %>%
 # Calculate global supply curve by summing horizontally
 hem_h_sum <- master_data %>% 
   group_by(hemisphere) %>% 
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
@@ -180,22 +162,24 @@ hem_h_sum <- master_data %>%
 # Calculate realm and country level supply curve
 rlm_eez <- master_data %>%
   group_by(iso3, realm) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
 # Sum horizontally for each realm
 rlm_h_sum <- master_data %>% 
   group_by(realm) %>% 
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
@@ -203,45 +187,24 @@ rlm_h_sum <- master_data %>%
 # Calculate countyr level and province supply curve
 pro_eez <- master_data %>%
   group_by(iso3, province) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
 # Sum horizontally for each province
 pro_h_sum <- master_data %>%
   group_by(province) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
-  ) %>%
-  ungroup()
-
-## AT THE ECOREIGON LEVEL ####
-# Calculate country level and ecoregion supplu curve
-eco_eez <- master_data %>%
-  group_by(iso3, ecoregion) %>%
-  arrange(neg, desc(bcr)) %>%
-  mutate(
-    tb = cumsum(benefit),
-    tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
-  ) %>%
-  ungroup()
-
-# Sum horizzontally for each realm
-eco_h_sum <- master_data %>%
-  group_by(ecoregion) %>%
-  arrange(neg, desc(bcr)) %>%
-  mutate(
-    tb = cumsum(benefit),
-    tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
@@ -249,22 +212,24 @@ eco_h_sum <- master_data %>%
 # Calculate country level and sea supply curve
 sea_eez <- master_data %>%
   group_by(iso3, sea_name) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
 # Sum horizzontally for each realm
 sea_h_sum <- master_data %>%
   group_by(sea_name) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
@@ -316,24 +281,6 @@ saveRDS(pro_eez,
 # Export horizontally summed province level data
 saveRDS(pro_h_sum,
         file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds")
-)
-
-# Export ecoregion level data
-saveRDS(eco_eez,
-        file = file.path( project_path, "processed_data", "eco_eez_costs_and_benefits.rds")
-)
-
-saveRDS(eco_h_sum,
-        file = file.path( project_path, "processed_data", "eco_h_sum_costs_and_benefits.rds")
-)
-
-# Export sea level data
-saveRDS(sea_eez,
-        file = file.path( project_path, "processed_data", "sea_eez_costs_and_benefits.rds")
-)
-
-saveRDS(sea_h_sum,
-        file = file.path( project_path, "processed_data", "sea_h_sum_costs_and_benefits.rds")
 )
 
 ## END OF SCRIPT ##
