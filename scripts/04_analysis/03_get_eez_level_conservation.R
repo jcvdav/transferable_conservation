@@ -28,7 +28,7 @@ eez_cb <- readRDS(
 
 ## Read trading prices
 trading_price <- eez_h_sum_cb %>% 
-  filter(pct_area <= 0.3) %>% 
+  filter(pct <= 0.3) %>% 
   pull(mc) %>% 
   max()
 
@@ -64,9 +64,9 @@ conserving_nations <- eez_cb %>%
 # Filter to keep only the protected places
 bau <- eez_cb %>% 
   group_by(iso3) %>% 
-  mutate(min_pct = min(pct_area, na.rm = T)) %>% 
+  mutate(min_pct = min(pct, na.rm = T)) %>% 
   ungroup() %>% 
-  filter(pct_area <= 0.3 | pct_area <= min_pct) %>%      # Keep the most efficient 30% of each country OR the first patch
+  filter(pct <= 0.3 | pct <= min_pct) %>%      # Keep the most efficient 30% of each country OR the first patch
   mutate(approach = "bau")
   
 mkt <- eez_cb %>% 
@@ -79,7 +79,7 @@ realized_bau_cb <- bau %>%
   group_by(approach, iso3) %>% 
   summarize(bau_tb = sum(benefit, na.rm = T),
             bau_tc = sum(cost, na.rm = T),
-            mc_stop = max(mc, na.rm = T),
+            bau_mc = max(mc, na.rm = T),
             bau_area = n() * 2500) %>% 
   ungroup()
 
@@ -88,6 +88,7 @@ realized_mkt_cb <- mkt %>%
   group_by(approach, iso3) %>% 
   summarize(mkt_tb = sum(benefit, na.rm = T),
             mkt_tc = sum(cost, na.rm = T),
+            mkt_mc = max(mc, na.rm = T),
             mkt_area = n() * 2500) %>% 
   ungroup()
 
@@ -99,14 +100,14 @@ combined_outcomes <- conserving_nations %>%
     mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
     bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
   select(-contains("app")) %>% 
-  mutate(mkt_tc2 = mkt_tc + ((bau_tb - mkt_tb) * trading_price),
-         mkt_tc = ifelse(mkt_tc2 <=0, bau_tc, mkt_tc2)) %>% 
-  select(-mkt_tc2)
+  mutate(transaction = ifelse(mkt_tc < bau_tc, "Pays", "Gets paid"),
+         mkt_tc_else = mkt_tc - bau_tc) %>% 
+  select(iso3, contains("bau"), contains("mkt"), transaction)
 
 # Find stopping prices
 stops <- combined_outcomes %>% 
   filter(bau_tb <= mkt_tb) %>% 
-  select(iso3, mc_stop) %>% 
+  select(iso3, bau_mc) %>% 
   mutate(approach = "mkt")
 
 
@@ -131,7 +132,7 @@ got_paid <- combined_outcomes %>%
                            T ~ NA_character_))
 
 eez_with_results <- eez %>% 
-  left_join(got_paid, by = "iso3")
+  left_join(combined_outcomes, by = "iso3")
 
 ## FIGURES #########################################################################
 ## Plot the supply curves where they stop
@@ -167,10 +168,8 @@ map_contrasting_scenarios <- ggplot() +
                                ticks.colour = "black"))
 
 map_of_trade <- eez_with_results %>% 
-  filter(variable == "gets_paid") %>% 
-  mutate(gets_paid = ifelse(value == 1, "Gets paid", "Pays")) %>% 
   ggplot() +
-  geom_sf(aes(fill = gets_paid), color = "black") +
+  geom_sf(aes(fill = transaction), color = "black") +
   geom_sf(data = coast, color = "black") +
   scale_fill_brewer(palette = "Set1", direction = -1, na.value = "gray") +
   ggtheme_map() +

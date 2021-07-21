@@ -75,7 +75,7 @@ A market for conservation credits would allow just that. However, in designing s
 
 # Spatial heterogeneity
 
-The motivation from a market-based approach to conservation relies on two premises. First, that habitat worth protecting is heterogeneously distributed across nations. And, secondly, that the costs of protecting habitat are non-perfectly correlated with the protection value of the pixel. Together, these two features make it possible to lower costs by using trade to protect the most cost-effective places. The magnitude of market gains (that is, cost savings relative to BAU unilateral conservation with no trade) will depend on the correlation between costs and benefits. To illustrate this point, we generate synthetic data to simulate 20 girded worlds where the conservation value of a pixel is heterogeneously distributed, and where costs and benefits exhibit varying degrees of correlation (R from -1 to 1; See methods for a detailed description on synthetic data generation). For each scenario, we calculate the gains from trade for a series of protection targets (1 - 100%). We find that unless the costs and benefits are perfectly correlated (\emph{i.e.} R = 1), a market will always lower the costs of conservation for any desired target.
+The motivation from a market-based approach to conservation relies on two premises. First, that habitat worth protecting is heterogeneously distributed across nations. And, secondly, that the costs of protecting habitat are non-perfectly correlated with the protection value of the pixel and are thus also heterogeneous in space. Together, these two features make it possible to lower costs of conservation by using trade to protect the most cost-effective places. The magnitude of market gains (that is, cost savings relative to BAU unilateral conservation with no trade) will depend on the spatial distribution of costs and benefits. To illustrate this point, we generate synthetic data to simulate girded worlds where the conservation value of a pixel is heterogeneously distributed, and where costs and benefits exhibit different correlation coefficients (R from -1 to 1; See methods for a detailed description on synthetic data generation). For each scenario, we calculate the gains from trade for a series of protection targets (1 - 100%). We find that unless the costs and benefits are spatially homogeous and perfectly correlated (\emph{i.e.} R = 1), a market will always lower the costs of conservation for any desired target.
 
 # Designing a market for conservation credits
 
@@ -106,7 +106,7 @@ Each target protection level has a distinct market equilibrium. The following se
 
 ![\label{fig:map-of-trade}Map of trade. Blue indicates nations that reach the trading price before meeting their target, and therefore chose to pay to conserve elsewhere. Red nations get paid to conserve in their waters, due to the low costs relative to blue nations.](results/img/map_of_trade.png)
 
-![\label{fig:rlm-map-of-trade}Map of trade for each realm. Blue indicates nations that reach the trading price before meeting their target, and therefore chose to pay to conerve elsewhere. Red nations get paid to conserve in their waters, due to the low costs relative to blue nations.](results/img/rlm_map_of_trade.png)
+![\label{fig:rlm-map-of-trade}Map of trade for each Hemisphere. Blue indicates nations that reach the trading price before meeting their target, and therefore chose to pay to conerve elsewhere. Red nations get paid to conserve in their waters, due to the low costs relative to blue nations.](results/img/map_of_trade_hem.png)
 
 A pervasive finding on environmental markets is that market forces can lead to conglomeration of rights. In this case, this could be interpreted as one nation holding all effective conservation, or one nation not conserving at all. To test for conglomeration, we compare the MPA networks created by the market and BAU scenarios. Figure \ref{fig:two-states-map} shows the four possible categories for all pixels in the world: protected under BAU and market scenarios, protected only under BAU, protected only with a market, and not protected at all. We find no conglomeration.
 
@@ -186,7 +186,6 @@ The spatial configuration shows no bias. But the aggregagate results may mask de
 
 ![\label{fig:eezs-per-realm} Number of nations contained within each of the realms described by \cite{spalding_2007}. The vertical dashed line lies at 2,  the minimum number of nations required for trade to occur.](results/img/eezs_per_realm.png)
 
-![\label{fig:realms-per-eezs} Number of realms in each Exclusive Economic Zone](results/img/realms_per_eez.png)
 
 ![\label{fig:eezs-per-province} Number of Exclusive Economic Zones in each province](results/img/eezs_per_province.png)
 
