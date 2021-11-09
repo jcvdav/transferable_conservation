@@ -49,8 +49,8 @@ update_geom_defaults(geom = "point", list(color = "black",
 update_geom_defaults(geom = "line", list(color = "steelblue",
                                          size = 0.2))
 
-update_geom_defaults(geom = "sf", list(color = "transparent",
+update_geom_defaults(geom = "sf", list(color = "black",
                                        fill = "gray",
-                                       size = 0.3))
+                                       size = 0.1))
 
 

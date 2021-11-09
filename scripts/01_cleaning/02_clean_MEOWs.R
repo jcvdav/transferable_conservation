@@ -48,9 +48,11 @@ meow <- st_read(dsn = file.path(project_path,
           ymin = -90L, ymax = 90L) %>% 
   st_transform(proj_moll) %>%                # Reproject to Moll
   st_make_valid() %>%                           # Make sure all elements are valid
-  select(ecoregion, eco_code,                   # Select relevant colmns
-         province, pro_code = prov_code,
-         realm, rlm_code)
+  rename(pro_code = prov_code) %>% 
+  group_by(realm, rlm_code, province, pro_code) %>% 
+  summarize(a = 1) %>% 
+  ungroup() %>% 
+  select(-a)
 
 ## Export ###########################################################################
 meow_fn <- file.path(project_path, "processed_data", "clean_meow.gpkg")      # Define filename

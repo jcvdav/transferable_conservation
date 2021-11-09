@@ -27,9 +27,10 @@ eez_cb <- readRDS(
 )
 
 ## Read trading prices
-trading_prices <- readRDS(
-  file = file.path(project_path, "output_data", "global_trading_prices.rds")
-)
+trading_price <- eez_h_sum_cb %>% 
+  filter(pct <= 0.3) %>% 
+  pull(mc) %>% 
+  max()
 
 # Load a coastline
 coast <- ne_countries(returnclass = "sf") %>% 
@@ -55,10 +56,6 @@ conserving_nations <- eez_cb %>%
   distinct()
 
 ## Identify conserved patches
-# Get the most efficient trading price
-trading_price <- trading_prices %>% 
-  filter(type == "efficient") %>% 
-  pull(mc)
 
 # Filter to keep only the protected places
 bau <- eez_cb %>% 
@@ -78,7 +75,7 @@ realized_bau_cb <- bau %>%
   group_by(approach, iso3) %>% 
   summarize(bau_tb = sum(benefit, na.rm = T),
             bau_tc = sum(cost, na.rm = T),
-            mc_stop = max(mc, na.rm = T),
+            bau_mc = max(mc, na.rm = T),
             bau_area = n() * 2500) %>% 
   ungroup()
 
@@ -87,6 +84,7 @@ realized_mkt_cb <- mkt %>%
   group_by(approach, iso3) %>% 
   summarize(mkt_tb = sum(benefit, na.rm = T),
             mkt_tc = sum(cost, na.rm = T),
+            mkt_mc = max(mc, na.rm = T),
             mkt_area = n() * 2500) %>% 
   ungroup()
 
@@ -98,39 +96,43 @@ combined_outcomes <- conserving_nations %>%
     mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
     bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
   select(-contains("app")) %>% 
-  mutate(mkt_tc2 = mkt_tc + ((bau_tb - mkt_tb) * trading_price),
-         mkt_tc = ifelse(mkt_tc2 <=0, bau_tc, mkt_tc2)) %>% 
-  select(-mkt_tc2)
+  mutate(transaction = ifelse(mkt_tc < bau_tc, "Buyers", "Sellers"),
+         rect = abs(bau_tb - mkt_tb) * trading_price,
+         mkt_tc_b = bau_tc - mkt_tc - rect,
+         mkt_tc_s = rect - mkt_tc + bau_tc,
+         savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s),
+         ratio = savings / bau_tc) %>% 
+  select(iso3, contains("bau"), contains("mkt"), savings, transaction, rect, ratio, everything())
 
 # Find stopping prices
 stops <- combined_outcomes %>% 
   filter(bau_tb <= mkt_tb) %>% 
-  select(iso3, mc_stop) %>% 
+  select(iso3, bau_mc) %>% 
   mutate(approach = "mkt")
 
 
-gains_from_trade <- combined_outcomes %>% 
-  select_if(is.numeric) %>% 
-  select(-contains("stop")) %>% 
-  summarize_all(sum, na.rm = T) %>% 
-  gather(variable, value) %>% 
-  separate(variable, into = c("approach", "variable")) %>% 
-  spread(approach, value) %>% 
-  mutate(difference = bau - mkt,
-         ratio = mkt / bau)
+# gains_from_trade <- combined_outcomes %>% 
+#   select_if(is.numeric) %>% 
+#   select(-contains("stop")) %>% 
+#   summarize_all(sum, na.rm = T) %>% 
+#   gather(variable, value) %>% 
+#   separate(variable, into = c("approach", "variable")) %>% 
+#   spread(approach, value) %>% 
+#   mutate(difference = bau - mkt,
+#          ratio = mkt / bau)
 
-got_paid <- combined_outcomes %>% 
-  mutate(gets_paid = mc_stop <= trading_price,
-         mkt_gains = bau_tc - mkt_tc) %>% 
-  select(iso3, gets_paid, bau_tc, mkt_tc, mkt_gains) %>% 
-  pivot_longer(cols = c(gets_paid, bau_tc, mkt_tc, mkt_gains), names_to = "variable", values_to = "value") %>% 
-  mutate(label = case_when(variable == "bau_tc" ~ "A) Business-as-usual",
-                           variable == "mkt_tc" ~ "B) Market-based (global)",
-                           variable == "mkt_gains" ~ "C) Gains from trade",
-                           T ~ NA_character_))
+# got_paid <- combined_outcomes %>% 
+#   mutate(gets_paid = mc_stop <= trading_price,
+#          mkt_gains = bau_tc - mkt_tc) %>% 
+#   select(iso3, gets_paid, bau_tc, mkt_tc, mkt_gains) %>% 
+#   pivot_longer(cols = c(gets_paid, bau_tc, mkt_tc, mkt_gains), names_to = "variable", values_to = "value") %>% 
+#   mutate(label = case_when(variable == "bau_tc" ~ "A) Business-as-usual",
+#                            variable == "mkt_tc" ~ "B) Market-based (global)",
+#                            variable == "mkt_gains" ~ "C) Gains from trade",
+#                            T ~ NA_character_))
 
 eez_with_results <- eez %>% 
-  left_join(got_paid, by = "iso3")
+  left_join(combined_outcomes, by = "iso3")
 
 ## FIGURES #########################################################################
 ## Plot the supply curves where they stop
@@ -154,23 +156,6 @@ benefit_supply_curves <- bau %>%
        caption = "NOTE: Axis have been cropped for visualization purposes") +
   guides(color = FALSE)
 
-market_gains_plot <- combined_outcomes %>% 
-  select_if(is.numeric) %>% 
-  select(-contains("stop")) %>% 
-  summarize_all(sum, na.rm = T) %>% 
-  gather(variable, value) %>% 
-  separate(variable, into = c("approach", "variable")) %>% 
-  mutate(variable = case_when(variable == "tc" ~ "Total costs",
-                              variable == "tb" ~ "Quality-weighed area",
-                              variable == "area" ~ "Area")) %>% 
-  ggplot(aes(x = approach, y = value, fill = approach)) +
-  geom_col(position = "dodge", color = "black") +
-  facet_wrap(~variable, scale = "free_y", ncol = 1) +
-  scale_fill_brewer(palette = "Set1", guide = F) +
-  ggtheme_plot() +
-  labs(x = "Approach", y = "Value") +
-  scale_x_discrete(labels = c("BAU", "Market"))
-
 map_contrasting_scenarios <- ggplot() +
   geom_sf(data = filter(eez_with_results,!variable == "gets_paid"),
           aes(fill = value), color = "black") +
@@ -181,22 +166,10 @@ map_contrasting_scenarios <- ggplot() +
   guides(fill = guide_colorbar(title = "Total costs\nmillion USD",
                                frame.colour = "black",
                                ticks.colour = "black"))
-  
-eez_with_results %>% 
-  filter(variable == "mkt_gains") %>% 
-  mutate(iso3 = fct_reorder(.f = iso3, .x = value)) %>% 
-  ggplot(aes(x = iso3,
-             y = value)) +
-  geom_col() +
-  coord_flip()
 
-
-map_of_trade <- eez %>% 
-  left_join(got_paid, by = c("iso3")) %>% 
-  filter(variable == "gets_paid") %>% 
-  mutate(gets_paid = ifelse(value == 1, "Got paid", "Pays")) %>% 
+map_of_trade <- eez_with_results %>% 
   ggplot() +
-  geom_sf(aes(fill = gets_paid), color = "black") +
+  geom_sf(aes(fill = transaction), color = "black") +
   geom_sf(data = coast, color = "black") +
   scale_fill_brewer(palette = "Set1", direction = -1, na.value = "gray") +
   ggtheme_map() +
@@ -212,6 +185,7 @@ two_states_map <- eez_cb %>%
                             a == 1 & is.na(b) ~ "Protected only under BAU",
                             is.na(a) & b == 1 ~ "Protected only under market",
                             is.na(a) & is.na(b) ~ NA_character_)) %>% 
+  drop_na(status) %>% 
   ggplot() +
   geom_sf(data = coast, color = "black", fill = "transparent") +
   geom_tile(aes(x = lon, y = lat, fill = status)) +
@@ -220,12 +194,24 @@ two_states_map <- eez_cb %>%
   guides(fill = guide_legend(title = "Status")) +
   theme(legend.position = "bottom")
 
-## EXPORT FIGURES #########################################################################
+sellers <- eez_with_results %>% 
+  filter(transaction == "Gets paid") %>% 
+  mutate(Sellers = pmin(ratio, 10))
 
-lazy_ggsave(plot = market_gains_plot,
-            filename = "market_gains_plot",
-            width = 7.5,
-            height = 10)
+buyers <- eez_with_results %>% 
+  filter(!transaction == "Gets paid") %>% 
+  mutate(Buyers = ratio)
+
+savings_map <- ggplot() +
+  geom_sf(data = coast) +
+  geom_sf(data = buyers, aes(fill = Buyers)) +
+  scale_fill_gradient(low = "white", high = "steelblue") +
+  new_scale_fill() +
+  geom_sf(data = sellers, aes(fill = Sellers)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  ggtheme_map()
+
+## EXPORT FIGURES #########################################################################
 
 lazy_ggsave(plot = benefit_supply_curves,
             filename = "equilibrum_supply_curves",
@@ -244,6 +230,11 @@ lazy_ggsave(plot = map_contrasting_scenarios,
 
 lazy_ggsave(plot = map_of_trade,
             filename = "map_of_trade",
+            width = 20,
+            height = 10)
+
+lazy_ggsave(plot = savings_map,
+            filename = "savings_map",
             width = 20,
             height = 10)
 
@@ -272,7 +263,8 @@ gains_from_trade %>%
 
 
 
-
+write.csv(x = combined_outcomes,
+          file = file.path(project_path, "output_data", "costs_and_benefits_global_30.csv"))
 
 
 
