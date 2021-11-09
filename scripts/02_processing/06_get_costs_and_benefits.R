@@ -69,7 +69,7 @@ eez_meow <-
   st_read(file.path(
     project_path,
     "processed_data",
-    "intersected_eez_and_meow.gpkg"
+    "intersected_eez_meow_hem.gpkg"
   )) %>% 
   st_drop_geometry() %>% 
   as_tibble()
@@ -84,7 +84,6 @@ world_seas <- st_read(file.path(
   rename(sea_name = name) %>% 
   as_tibble()
 
-area_raster <- raster::area(benefits_raster)
 
 ## PROCESSING ########################################################################
 # Extract codes for each pixel
@@ -123,37 +122,41 @@ master_data <- eez_meow %>%
          mc = cost / benefit,
          neg = bcr > 0) %>%                                                         # Create dummy variable for negative costs
   drop_na(lat, lon, benefit, cost)
+
   
 ## AT THE EEZ LEVEL ####
 # Calculate country-level supply curve
 eez_data <- master_data %>%
   group_by(iso3) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
 # Calculate global supply curve by summing horizontally
 eez_h_sum <- master_data %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   )
 
 ## AT THE HEMISPHERE LEVEL
 # Calculate hemisphere-eez level supply curve
 hem_data <- master_data %>%
   group_by(iso3, hemisphere) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
@@ -161,11 +164,12 @@ hem_data <- master_data %>%
 # Calculate global supply curve by summing horizontally
 hem_h_sum <- master_data %>% 
   group_by(hemisphere) %>% 
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
@@ -173,22 +177,24 @@ hem_h_sum <- master_data %>%
 # Calculate realm and country level supply curve
 rlm_eez <- master_data %>%
   group_by(iso3, realm) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
 # Sum horizontally for each realm
 rlm_h_sum <- master_data %>% 
   group_by(realm) %>% 
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
@@ -196,25 +202,51 @@ rlm_h_sum <- master_data %>%
 # Calculate countyr level and province supply curve
 pro_eez <- master_data %>%
   group_by(iso3, province) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
 # Sum horizontally for each province
 pro_h_sum <- master_data %>%
   group_by(province) %>%
-  arrange(neg, desc(bcr)) %>%
+  arrange(desc(bcr)) %>%
   mutate(
     tb = cumsum(benefit),
     tc = cumsum(cost),
-    pct = cumsum(benefit / sum(benefit, na.rm = T))
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
   ) %>%
   ungroup()
 
+## AT THE SEALEVEL ####
+# Calculate country level and sea supply curve
+sea_eez <- master_data %>%
+  group_by(iso3, sea_name) %>%
+  arrange(desc(bcr)) %>%
+  mutate(
+    tb = cumsum(benefit),
+    tc = cumsum(cost),
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
+  ) %>%
+  ungroup()
+
+# Sum horizzontally for each realm
+sea_h_sum <- master_data %>%
+  group_by(sea_name) %>%
+  arrange(desc(bcr)) %>%
+  mutate(
+    tb = cumsum(benefit),
+    tc = cumsum(cost),
+    pct = tb / sum(benefit),
+    pct_area = 1:n() / n()
+  ) %>%
+  ungroup()
 
 ## DATA EXPORT ############################################################################
 # Export master data

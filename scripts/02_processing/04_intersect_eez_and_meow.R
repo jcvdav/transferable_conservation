@@ -30,7 +30,7 @@ eez_meow <- eez %>%
          realm, rlm_code)
 
 ## Export -----------------------------------------------------------------------------------------------------------
-intersected_eez_and_meow_fn <- file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg") # File name
+intersected_eez_and_meow_fn <- file.path(project_path, "processed_data", "intersected_eez_meow_hem.gpkg") # File name
 file.remove(intersected_eez_and_meow_fn)                                     # Remove any existing files
 st_write(obj = eez_meow, dsn = intersected_eez_and_meow_fn)                  # Write geopackage to disk
 

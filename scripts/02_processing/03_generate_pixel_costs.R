@@ -75,7 +75,9 @@ summary <- merged %>%
 # Rasterization
 watson_raster <- summary %>%
   select(LonCentre, LatCentre, revenue) %>%                               # Select coordinates and variable
-  raster::rasterFromXYZ(crs = proj_longlat)                               # Rasterize the revenue data into longlat coords
+  raster::rasterFromXYZ(res = 0.5,                                        # Resolution is 0.5 deg
+                        crs = proj_longlat)                               # Rasterize the revenue data into longlat coords
+
 
 # Export data
 writeRaster(

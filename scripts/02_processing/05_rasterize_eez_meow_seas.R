@@ -15,7 +15,7 @@ base_raster <-
   )
 
 # Load the vector data
-eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg")) %>% 
+eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_meow_hem.gpkg")) %>% 
   select(iso3n, contains("code")) 
 
 # Load the vector data
@@ -26,6 +26,7 @@ world_seas <- st_read(file.path(project_path, "processed_data", "clean_world_sea
 eez_raster <- fasterize(eez_meow, base_raster, field = "iso3n")
 realm_raster <- fasterize(eez_meow, base_raster, field = "rlm_code")
 province_raster <- fasterize(eez_meow, base_raster, field = "pro_code")
+
 
 # Export rasters
 writeRaster(x = eez_raster,
