@@ -204,7 +204,11 @@ gains_from_trade_multiple_scenarios <- rbind(
   gains_from_trade_multiple_scenarios_rlm,
   gains_from_trade_multiple_scenarios_pro) %>% 
   mutate(bubble = stringr::str_to_sentence(bubble),
-         bubble = fct_relevel(bubble, "Province", after = Inf))
+         bubble = case_when(bubble == "Global" ~ "Global (N = 1)",
+                            bubble == "Hemisphere" ~ "Hemisphere (N = 4)",
+                            bubble == "Realm" ~ "Realm (N = 12)",
+                            bubble == "Province" ~ "Province (N = 60)"),
+         bubble = fct_relevel(bubble, "Province (N = 60)", after = Inf))
 
 # Visualize 
 abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = difference, color = bubble)) +

@@ -73,6 +73,20 @@ lazy_ggsave(plot = realm_map,
             width = 20, 
             height = 10)
 
+# Hemisphere map
+
+hemisphere_map <- ggplot() +
+  geom_sf(data = coast, color = "black", size = 0.1) +
+  geom_sf(data = eez_meow, aes(fill = hemisphere), color = "black", size = 0.1) +
+  ggtheme_map() +
+  scale_fill_viridis_d() +
+  labs(fill = "Hemisphere") +
+  theme(legend.position = "bottom")
+
+lazy_ggsave(plot = hemisphere_map,
+            filename = "hemisphere_map",
+            width = 20, 
+            height = 10)
 
 # Provinces map
 
