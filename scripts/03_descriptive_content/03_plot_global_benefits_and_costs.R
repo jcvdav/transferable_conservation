@@ -23,8 +23,7 @@ master_cb <- readRDS(
   file = file.path(project_path, "processed_data", "master_costs_and_benefits.rds")
 )
 
-coastline <- ne_countries(returnclass = "sf") %>% 
-  st_transform(epsg_moll)
+coastline <- ne_countries(returnclass = "sf")
 
 ## PLOT IT
 

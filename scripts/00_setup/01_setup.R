@@ -33,6 +33,9 @@ proj_longlat <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "             
 epsg_moll <- "ESRI:54009"
 epsg_longlat <- 4326
 
+# Turn off the use of espherical geometries
+sf::sf_use_s2(FALSE)
+
 ##########################
 ## Plot-related things ##
 ##########################

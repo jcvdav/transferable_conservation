@@ -47,7 +47,9 @@ costs_raster <-
       "processed_data",
       "revenue_raster.tif"
     )
-  )
+  ) %>% 
+  crop(benefits_raster) %>% 
+  extend(benefits_raster)
 
 # Load spatial metadata rasters
 iso3n <-
@@ -62,9 +64,6 @@ pro_code <-
   raster(file.path(project_path, "processed_data", "pro_raster.tif")) %>% 
   crop(benefits_raster)
 
-hem_code <- raster(file.path(project_path, "processed_data", "hemispheres.tif")) %>% 
-  crop(benefits_raster)
-
 # Load the EEZ vector data
 eez_meow <-
   st_read(file.path(
@@ -75,15 +74,26 @@ eez_meow <-
   st_drop_geometry() %>% 
   as_tibble()
 
+# Load the world seas vectotr data
+world_seas <- st_read(file.path(
+  project_path,
+  "processed_data",
+  "clean_world_seas.gpkg"
+)) %>% 
+  st_drop_geometry() %>% 
+  rename(sea_name = name) %>% 
+  as_tibble()
+
+
 ## PROCESSING ########################################################################
 # Extract codes for each pixel
 cb <-
   stack(iso3n,                   # Start by creating a raster stack of all features
         rlm_code,
         pro_code,
-        hem_code,
         benefits_raster,
-        costs_raster) %>%
+        costs_raster,
+        area_raster) %>%
   as.data.frame(xy = T) %>%       # Convert to data.frame, but keep coordinates
   rename(                         # Select and rename columns
     lon = x,
@@ -91,23 +101,28 @@ cb <-
     iso3n = eez_raster,
     rlm_code = rlm_raster,
     pro_code = pro_raster,
-    hem_code = hemispheres,
-    cost = revenue_raster
+    benefit = suitability,
+    cost = revenue_raster,
+    area = layer
   ) %>%
-  drop_na(iso3n, cost, suitability) %>%                             # Drop areas beyond national jurisdiction
-  mutate(cost = pmax(cost, 0),
-         benefit = 2500 * suitability)
+  drop_na(iso3n, cost, benefit) %>%                             # Drop areas beyond national jurisdiction
+  mutate(hemisphere = case_when(lon > 0 & lat > 0 ~ "NE",
+                                lon < 0 & lat > 0 ~ "NW",
+                                lon > 0 & lat <= 0 ~ "SE",
+                                lon < 0 & lat <= 0 ~ "SW"),
+         benefit = area * benefit)
 
 # Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
-  select(iso3, province, realm, hemisphere, iso3n, contains("code")) %>% 
-  distinct() %>% 
-  left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "hem_code")) %>%            # Join to the data.frame from rasters
-  select(lon, lat, iso3, province, realm, hemisphere, suitability, benefit, cost) %>% # Select columns
-  filter(suitability > 0) %>%
-  mutate(cost = pmax(cost, 1),
-         bcr = benefit / cost,                                                       # Calculate marginal benefit
-         mc = cost / benefit)
+  select(iso3, province, realm, iso3n, contains("code")) %>% 
+  left_join(cb, by = c("iso3n", "rlm_code", "pro_code")) %>%            # Join to the data.frame from rasters
+  select(lon, lat, iso3, province, realm, hemisphere, benefit, cost) %>% # Select columns
+  filter(benefit > 0) %>% 
+  mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
+         mc = cost / benefit,
+         neg = bcr > 0) %>%                                                         # Create dummy variable for negative costs
+  drop_na(lat, lon, benefit, cost)
+
   
 ## AT THE EEZ LEVEL ####
 # Calculate country-level supply curve
@@ -282,6 +297,7 @@ saveRDS(pro_eez,
 saveRDS(pro_h_sum,
         file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds")
 )
+
 
 ## END OF SCRIPT ##
 

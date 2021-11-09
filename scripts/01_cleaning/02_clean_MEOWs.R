@@ -44,15 +44,12 @@ meow <- st_read(dsn = file.path(project_path,
                                 "raw_data", "MEOW"),
                 layer = "meow_ecos") %>% 
   clean_names() %>%                             # Clean column names
-  st_crop(xmin = -180L, xmax = 180L,
-          ymin = -90L, ymax = 90L) %>% 
-  st_transform(proj_moll) %>%                # Reproject to Moll
-  st_make_valid() %>%                           # Make sure all elements are valid
-  rename(pro_code = prov_code) %>% 
-  group_by(realm, rlm_code, province, pro_code) %>% 
+  select(province, pro_code = prov_code,
+         realm, rlm_code) %>% 
+  group_by(province, pro_code,
+           realm, rlm_code) %>% 
   summarize(a = 1) %>% 
-  ungroup() %>% 
-  select(-a)
+  ungroup()
 
 ## Export ###########################################################################
 meow_fn <- file.path(project_path, "processed_data", "clean_meow.gpkg")      # Define filename
