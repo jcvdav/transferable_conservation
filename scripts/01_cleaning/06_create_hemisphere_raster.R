@@ -41,9 +41,7 @@ hemispheres <- as.data.frame(base_raster, xy = T) %>%
     x > 0 & y < 0 ~ 4
   )) %>% 
   select(x, y, r) %>% 
-  rasterFromXYZ(crs = proj_moll)
-
-hemispheres_raster <- hemispheres * base_raster
+  rasterFromXYZ(crs = proj_longlat)
 
 hemispheres_raster_fn <- file.path(project_path, "processed_data", "hemispheres.tif")      # Define filename
 
