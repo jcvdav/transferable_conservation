@@ -40,17 +40,11 @@ eez <- st_read(dsn = file.path(data_path,
                         iso_sov1,
                         iso_ter1)) %>% 
   select(iso3) %>%                                    # Select relevant columns
-  st_wrap_dateline() %>% 
-  st_make_valid() %>%                                 # Make all polygons valid
   group_by(iso3) %>%                                  # Union geometries
   summarize(a = 1) %>%
   ungroup() %>%
   select(-a) %>% 
   st_make_valid() %>%
-  ms_simplify(keep_shapes = T) %>%
-  st_make_valid() %>% 
-  st_transform(crs = proj_moll) %>%                   # Reproject to moll
-  st_make_valid() %>% 
   mutate(iso3n = countrycode(iso3, "iso3c", "iso3n")) %>% 
   select(iso3, iso3n)
 

@@ -34,9 +34,7 @@ library(tidyverse)
 world_seas <- st_read(dsn = file.path(data_path,
                                 "world-seas-v3", "World_Seas_IHO_v3"),
                 layer = "World_Seas_IHO_v3") %>% 
-  clean_names() %>%                             # Clean column names
-  st_transform(proj_moll) %>%                  # Reproject to Moll
-  st_make_valid() %>%                          # Make sure all elements are valid
+  clean_names() %>%                            # Clean column names
   select(name, mrgid) %>%                      # Select relevant columns
   st_collection_extract()                      # Make sure we don't have geometry collections
 

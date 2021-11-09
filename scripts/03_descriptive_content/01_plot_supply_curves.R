@@ -12,7 +12,7 @@ library(cowplot)
 library(tidyverse)
 
 # Load data
-## National data
+## Global market
 ### By country
 eez_cb <- readRDS(
   file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")
@@ -20,6 +20,17 @@ eez_cb <- readRDS(
 ### Horizontally summed
 eez_h_sum <- readRDS(
   file = file.path(project_path,"processed_data","eez_h_sum_costs_and_benefits.rds")
+)
+
+## Hemisphere market
+### By country-hemisphere
+hem_cb <- readRDS(
+  file = file.path(project_path, "processed_data", "hem_eez_costs_and_benefits.rds")
+)
+
+### Horizontally summed for each hemishpere
+hem_h_sum <- readRDS(
+  file = file.path(project_path,"processed_data","hem_h_sum_costs_and_benefits.rds")
 )
 
 ## Realm eez
@@ -42,15 +53,6 @@ pro_h_sum <- readRDS(
   file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds")
 )
 
-#E Ecoregion eez
-## For each ecoregion, province, realm, and EEZ
-eco_eez_cb <- readRDS(
-  file = file.path( project_path, "processed_data", "eco_eez_costs_and_benefits.rds")
-)
-### Horizonbtaly summed for each ecoregion
-eco_eez_cb <- readRDS(
-  file = file.path( project_path, "processed_data", "eco_h_sum_costs_and_benefits.rds")
-)
 
 # PROCESSING ############################################################################################
 
@@ -72,6 +74,31 @@ eez <- ggplot(data = eez_cb,
        y = "Marginal Costs")
 
 eez_supply_curve <- plot_grid(eez, global, ncol = 2, labels = "AUTO")
+
+# Hemisphere
+
+eez_hem <- 
+  ggplot(data = hem_cb,
+         mapping = aes(x = tb, y = mc, group = iso3)) +
+  geom_line() +
+  guides(color = "none") +
+  scale_color_viridis_d() +
+  facet_wrap( ~ hemisphere, scales = "free") +
+  ggtheme_plot() +
+  labs(x = "Biodiversity",
+       y = "Marginal Costs")
+
+# Hem summed
+hem <- ggplot(data = hem_h_sum,
+              mapping = aes(x = tb, y = mc, color = hemisphere)) +
+  geom_line() +
+  scale_color_viridis_d() +
+  ggtheme_plot() +
+  labs(x = "Biodiversity",
+       y = "Marginal Costs")
+
+eez_hem_supply_curve <- plot_grid(eez_hem, hem, ncol = 1, labels = "AUTO")
+
 
 # Country realm
 eez_rlm <-
