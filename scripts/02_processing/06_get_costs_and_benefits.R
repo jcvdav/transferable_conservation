@@ -63,6 +63,11 @@ pro_code <-
   raster(file.path(project_path, "processed_data", "pro_raster.tif")) %>% 
   crop(benefits_raster)
 
+hem_code <- raster(file.path(project_path, "processed_data", "hemispheres.tif")) %>% 
+  crop(benefits_raster)
+
+area_raster <- raster::area(benefits_raster)
+
 # Load the EEZ vector data
 eez_meow <-
   st_read(file.path(
@@ -83,13 +88,13 @@ world_seas <- st_read(file.path(
   rename(sea_name = name) %>% 
   as_tibble()
 
-
 ## PROCESSING ########################################################################
 # Extract codes for each pixel
 cb <-
   stack(iso3n,                   # Start by creating a raster stack of all features
         rlm_code,
         pro_code,
+        hem_code,
         benefits_raster,
         costs_raster,
         area_raster) %>%
@@ -98,6 +103,7 @@ cb <-
     lon = x,
     lat = y,
     iso3n = eez_raster,
+    hem_code = hemispheres,
     rlm_code = rlm_raster,
     pro_code = pro_raster,
     benefit = suitability,
