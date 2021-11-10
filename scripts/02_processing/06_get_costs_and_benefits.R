@@ -120,7 +120,7 @@ cb <-
 # Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
   select(iso3, province, realm, iso3n, contains("code")) %>% 
-  left_join(cb, by = c("iso3n", "rlm_code", "pro_code")) %>%            # Join to the data.frame from rasters
+  left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "hem_code")) %>%            # Join to the data.frame from rasters
   select(lon, lat, iso3, province, realm, hemisphere, benefit, cost) %>% # Select columns
   filter(benefit > 0) %>% 
   mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
