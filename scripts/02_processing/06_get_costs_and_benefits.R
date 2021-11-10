@@ -23,7 +23,6 @@
 
 ## SETUP #############################################################################
 # Load packages
-library(startR)
 library(raster)
 library(sf)
 library(tidyverse)
