@@ -216,7 +216,7 @@ abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = difference, co
   ggtheme_plot() +
   labs(x = bquote("% Benefits ("~HS[i]*A[i]~")"), 
        y = "Costs avoided (BAU - MKT)",
-       color = "Segment") +
+       color = "Bubble policy") +
   scale_x_continuous(labels = scales::percent) +
   scale_color_brewer(palette = "Set1") +
   theme(legend.justification = c(0, 1),
@@ -238,8 +238,8 @@ gain_from_trade_segmented_market_plot <- plot_grid(abs, rel, ncol = 2, labels = 
 
 lazy_ggsave(plot = gain_from_trade_segmented_market_plot,
             file = "gain_from_trade_segmented_market_plot",
-            width = 20,
-            height = 7.5)
+            width = 25,
+            height = 10)
 
 write.csv(x = gains_from_trade_multiple_scenarios,
           file = file.path(project_path, "output_data", "gains_from_trade_bubbles.csv"),

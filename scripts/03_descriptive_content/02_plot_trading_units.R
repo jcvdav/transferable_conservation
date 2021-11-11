@@ -1,3 +1,12 @@
+######################################################
+#title#
+######################################################
+# 
+# Purpose
+#
+######################################################
+
+## SET UP ######################################################################
 # Load packages
 library(startR)
 library(cowplot)
@@ -9,10 +18,10 @@ library(tidyverse)
 
 # Load data
 
-eez_h_sum_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_h_sum_costs_and_benefits.rds"))
-eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds"))
-rlm_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "rlm_eez_costs_and_benefits.rds"))
-pro_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "pro_eez_costs_and_benefits.rds"))
+# eez_h_sum_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_h_sum_costs_and_benefits.rds"))
+# eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds"))
+# rlm_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "rlm_eez_costs_and_benefits.rds"))
+# pro_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "pro_eez_costs_and_benefits.rds"))
 
 eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg")) %>% 
   ms_simplify(keep_shapes = T)
@@ -20,58 +29,18 @@ eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_a
 # Load a coastline
 coast <- ne_countries(returnclass = "sf")
 
-# How many MEOWS per country?
-meows_per_eez <- eez_meow %>% 
-  group_by(iso3) %>% 
-  summarize(n_rlm = n_distinct(realm),
-            n_pro = n_distinct(province)) %>% 
-  ungroup() %>% 
-  arrange(desc(n_pro))
 
-rlm_per_eez <- ggplot() +
-  geom_sf(data = coast) +
-  geom_sf(data = meows_per_eez, aes(fill = n_rlm)) +
-  scale_fill_viridis_c() +
-  ggtheme_map() +
-  labs(fill = "# of\nRealms") +
-  guides(fill = guide_colorbar(frame.colour = "black",
-                               ticks.colour = "black"))
+## FIGURES #####################################################################
 
-pro_per_eez <- ggplot() +
-  geom_sf(data = meows_per_eez, aes(fill = n_pro)) +
-  geom_sf(data = coast) +
-  scale_fill_viridis_c() +
-  ggtheme_map() +
-  labs(fill = "# of\nProvinces") +
-  guides(fill = guide_colorbar(frame.colour = "black",
-                               ticks.colour = "black"))
-
-meows_per_eez_plot <- plot_grid(rlm_per_eez,
-                           pro_per_eez,
-                           ncol = 1,
-                           labels = "AUTO")
-
-lazy_ggsave(plot = meows_per_eez_plot,
-            filename = "meows_per_eez",
-            width = 10,
-            height = 15)
-
-# Map marine ecoregions
-
-realm_map <- ggplot() +
+# Global bubble
+ggplot() +
+  geom_sf(data = eez_meow, fill = "steelblue", color = "transparent") +
   geom_sf(data = coast, color = "black", size = 0.1) +
-  geom_sf(data = eez_meow, aes(fill = realm), color = "black", size = 0.1) +
   ggtheme_map() +
-  scale_fill_viridis_d() +
-  labs(fill = "Realm") +
   theme(legend.position = "bottom")
 
-lazy_ggsave(plot = realm_map,
-            filename = "realm_map",
-            width = 20, 
-            height = 10)
 
-# Hemisphere map
+# Hemisphere bubble
 
 hemisphere_map <- ggplot() +
   geom_sf(data = coast, color = "black", size = 0.1) +
@@ -81,8 +50,27 @@ hemisphere_map <- ggplot() +
   labs(fill = "Hemisphere") +
   theme(legend.position = "bottom")
 
+
+
+
 lazy_ggsave(plot = hemisphere_map,
             filename = "hemisphere_map",
+            width = 20, 
+            height = 10)
+
+
+# Map marine ecoregions
+realm_map <- ggplot() +
+  geom_sf(data = coast, color = "black", size = 0.1) +
+  geom_sf(data = eez_meow, aes(fill = realm), color = "black", size = 0.1) +
+  ggtheme_map() +
+  scale_fill_viridis_d() +
+  labs(fill = "Realm") +
+  theme(legend.position = "bottom")
+
+
+lazy_ggsave(plot = realm_map,
+            filename = "realm_map",
             width = 20, 
             height = 10)
 

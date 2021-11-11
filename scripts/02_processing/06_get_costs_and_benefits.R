@@ -73,19 +73,9 @@ eez_meow <-
   st_read(file.path(
     project_path,
     "processed_data",
-    "intersected_eez_meow_hem.gpkg"
+    "intersected_eez_and_meow.gpkg"
   )) %>% 
   st_drop_geometry() %>% 
-  as_tibble()
-
-# Load the world seas vectotr data
-world_seas <- st_read(file.path(
-  project_path,
-  "processed_data",
-  "clean_world_seas.gpkg"
-)) %>% 
-  st_drop_geometry() %>% 
-  rename(sea_name = name) %>% 
   as_tibble()
 
 ## PROCESSING ########################################################################
@@ -120,7 +110,7 @@ cb <-
 # Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
   select(iso3, province, realm, iso3n, contains("code")) %>% 
-  left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "hem_code")) %>%            # Join to the data.frame from rasters
+  left_join(cb, by = c("iso3n", "rlm_code", "pro_code")) %>%            # Join to the data.frame from rasters
   select(lon, lat, iso3, province, realm, hemisphere, benefit, cost) %>% # Select columns
   filter(benefit > 0) %>% 
   mutate(bcr = benefit / cost,                                                       # Calculate marginal benefit
@@ -228,30 +218,6 @@ pro_h_sum <- master_data %>%
   ) %>%
   ungroup()
 
-## AT THE SEALEVEL ####
-# Calculate country level and sea supply curve
-sea_eez <- master_data %>%
-  group_by(iso3, sea_name) %>%
-  arrange(desc(bcr)) %>%
-  mutate(
-    tb = cumsum(benefit),
-    tc = cumsum(cost),
-    pct = tb / sum(benefit),
-    pct_area = 1:n() / n()
-  ) %>%
-  ungroup()
-
-# Sum horizzontally for each realm
-sea_h_sum <- master_data %>%
-  group_by(sea_name) %>%
-  arrange(desc(bcr)) %>%
-  mutate(
-    tb = cumsum(benefit),
-    tc = cumsum(cost),
-    pct = tb / sum(benefit),
-    pct_area = 1:n() / n()
-  ) %>%
-  ungroup()
 
 ## DATA EXPORT ############################################################################
 # Export master data

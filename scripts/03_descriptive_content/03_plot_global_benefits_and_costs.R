@@ -69,21 +69,21 @@ pannel <- plot_grid(benefit_map, cost_map, bcr_map,
 
 # Export figures
 lazy_ggsave(benefit_map,
-            "benefit_map",
+            "benefit_and_cost_maps/benefit_map",
             width = 15,
             height = 7)
 
 lazy_ggsave(cost_map,
-            "cost_map",
+            "benefit_and_cost_maps/cost_map",
             width = 15,
             height = 7)
 
 lazy_ggsave(bcr_map,
-            "bcr_map",
+            "benefit_and_cost_maps/bcr_map",
             width = 15,
             height = 7)
 
 lazy_ggsave(pannel,
-            "input_data_maps_panel",
+            "benefit_and_cost_maps/input_data_maps_panel",
             width = 15,
             height = 5)

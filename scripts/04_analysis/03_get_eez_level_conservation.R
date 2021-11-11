@@ -11,6 +11,7 @@
 # Load packages
 library(startR)
 library(cowplot)
+library(ggnewscale)
 library(rnaturalearth)
 library(sf)
 library(tidyverse)
@@ -34,7 +35,6 @@ trading_price <- eez_h_sum_cb %>%
 
 # Load a coastline
 coast <- ne_countries(returnclass = "sf") %>% 
-  st_transform(crs = epsg_moll) %>% 
   mutate(in_mkt = iso_a3 %in% unique(eez_cb$iso3))
 
 # Load EEZ geopackage
@@ -75,8 +75,7 @@ realized_bau_cb <- bau %>%
   group_by(approach, iso3) %>% 
   summarize(bau_tb = sum(benefit, na.rm = T),
             bau_tc = sum(cost, na.rm = T),
-            bau_mc = max(mc, na.rm = T),
-            bau_area = n() * 2500) %>% 
+            bau_mc = max(mc, na.rm = T)) %>% 
   ungroup()
 
 # For a market
@@ -84,8 +83,7 @@ realized_mkt_cb <- mkt %>%
   group_by(approach, iso3) %>% 
   summarize(mkt_tb = sum(benefit, na.rm = T),
             mkt_tc = sum(cost, na.rm = T),
-            mkt_mc = max(mc, na.rm = T),
-            mkt_area = n() * 2500) %>% 
+            mkt_mc = max(mc, na.rm = T)) %>% 
   ungroup()
 
 # Create a data.frame with the combined summarized outcomes
@@ -110,62 +108,27 @@ stops <- combined_outcomes %>%
   select(iso3, bau_mc) %>% 
   mutate(approach = "mkt")
 
-
-# gains_from_trade <- combined_outcomes %>% 
-#   select_if(is.numeric) %>% 
-#   select(-contains("stop")) %>% 
-#   summarize_all(sum, na.rm = T) %>% 
-#   gather(variable, value) %>% 
-#   separate(variable, into = c("approach", "variable")) %>% 
-#   spread(approach, value) %>% 
-#   mutate(difference = bau - mkt,
-#          ratio = mkt / bau)
-
-# got_paid <- combined_outcomes %>% 
-#   mutate(gets_paid = mc_stop <= trading_price,
-#          mkt_gains = bau_tc - mkt_tc) %>% 
-#   select(iso3, gets_paid, bau_tc, mkt_tc, mkt_gains) %>% 
-#   pivot_longer(cols = c(gets_paid, bau_tc, mkt_tc, mkt_gains), names_to = "variable", values_to = "value") %>% 
-#   mutate(label = case_when(variable == "bau_tc" ~ "A) Business-as-usual",
-#                            variable == "mkt_tc" ~ "B) Market-based (global)",
-#                            variable == "mkt_gains" ~ "C) Gains from trade",
-#                            T ~ NA_character_))
-
 eez_with_results <- eez %>% 
   left_join(combined_outcomes, by = "iso3")
 
 ## FIGURES #########################################################################
-## Plot the supply curves where they stop
-benefit_supply_curves <- bau %>% 
-  select(-min_pct) %>% 
-  rbind(mkt) %>%
-  left_join(stops, by = c("iso3", "approach"),
-            fill = list(mc_stop = 0, mkt_tb = 0, mkt_tc = 0, mkt_area = 0)) %>% 
-  mutate(mkt_gain = mc >= mc_stop,
-         approach = ifelse(approach == "bau", "BAU", "Market")) %>% 
-  replace_na(replace = list(mkt_gain = F)) %>%
-  ggplot(aes(x = tb, y = mc, group = iso3, color = mkt_gain)) +
-  geom_line(size = 0.2) +
-  geom_hline(yintercept = trading_price, linetype = "dashed") +
-  facet_wrap(~approach, scales = "free_y") +
-  scale_color_brewer(palette = "Set1", direction = -1) +
-  # lims(y = c(0, trading_price * 2)) +
-  ggtheme_plot() +
-  labs(x = "Quality-weighted area protected",
-       y = "Marginal Costs ($ USD / km2)",
-       caption = "NOTE: Axis have been cropped for visualization purposes") +
-  guides(color = FALSE)
 
-map_contrasting_scenarios <- ggplot() +
-  geom_sf(data = filter(eez_with_results,!variable == "gets_paid"),
-          aes(fill = value), color = "black") +
-  geom_sf(data = coast, color = "black") +
-  facet_wrap(~label, ncol = 1) +
-  scale_fill_viridis_c(na.value = "gray") +
-  ggtheme_map() +
-  guides(fill = guide_colorbar(title = "Total costs\nmillion USD",
-                               frame.colour = "black",
-                               ticks.colour = "black"))
+sellers <- eez_with_results %>% 
+  filter(transaction == "Sellers") %>% 
+  mutate(Sellers = pmin(ratio, 10))
+
+buyers <- eez_with_results %>% 
+  filter(!transaction == "Sellers") %>% 
+  mutate(Buyers = ratio)
+
+savings_map <- ggplot() +
+  geom_sf(data = coast) +
+  geom_sf(data = buyers, aes(fill = Buyers)) +
+  scale_fill_gradient(low = "white", high = "steelblue") +
+  new_scale_fill() +
+  geom_sf(data = sellers, aes(fill = Sellers)) +
+  scale_fill_gradient(low = "white", high = "red") +
+  ggtheme_map()
 
 map_of_trade <- eez_with_results %>% 
   ggplot() +
@@ -194,93 +157,19 @@ two_states_map <- eez_cb %>%
   guides(fill = guide_legend(title = "Status")) +
   theme(legend.position = "bottom")
 
-sellers <- eez_with_results %>% 
-  filter(transaction == "Gets paid") %>% 
-  mutate(Sellers = pmin(ratio, 10))
-
-buyers <- eez_with_results %>% 
-  filter(!transaction == "Gets paid") %>% 
-  mutate(Buyers = ratio)
-
-savings_map <- ggplot() +
-  geom_sf(data = coast) +
-  geom_sf(data = buyers, aes(fill = Buyers)) +
-  scale_fill_gradient(low = "white", high = "steelblue") +
-  new_scale_fill() +
-  geom_sf(data = sellers, aes(fill = Sellers)) +
-  scale_fill_gradient(low = "white", high = "red") +
-  ggtheme_map()
-
 ## EXPORT FIGURES #########################################################################
 
-lazy_ggsave(plot = benefit_supply_curves,
-            filename = "equilibrum_supply_curves",
-            width = 12,
-            height = 6)
-
-lazy_ggsave(plot = two_states_map,
-            filename = "two_states_map",
+lazy_ggsave(plot = savings_map,
+            filename = "30_global/savings_map",
             width = 20,
             height = 10)
-
-lazy_ggsave(plot = map_contrasting_scenarios,
-            filename = "map_contrasting_scenarios_global",
-            width = 15,
-            height = 20)
 
 lazy_ggsave(plot = map_of_trade,
-            filename = "map_of_trade",
+            filename = "30_global/map_of_trade",
             width = 20,
             height = 10)
 
-lazy_ggsave(plot = savings_map,
-            filename = "savings_map",
+lazy_ggsave(plot = two_states_map,
+            filename = "30_global/two_states_map",
             width = 20,
             height = 10)
-
-# Tables
-percent_of_bau_costs <- gains_from_trade %>% 
-  filter(variable == "tc") %>% 
-  pull(ratio)
-
-gains_from_trade %>% 
-  select(variable, difference) %>% 
-  spread(variable, difference) %>% 
-  mutate(percent_of_bau = percent_of_bau_costs,
-         market = "global",
-         segments = 1L) %>% 
-  saveRDS(file = file.path(project_path, "output_data", "gains_from_trade_glb.rds"))
-
-gains_from_trade %>% 
-  mutate(variable = c("Area", "Biodiversity benefits", "Total costs")) %>% 
-  knitr::kable(format = "latex",
-               digits = 2, 
-               col.names = c("Variable", "BAU", "Market", "Difference", "Ratio"),
-               label = "gains-from-trade",
-               caption = "Gains from trade from protecting 71.56 units of biodiversity. Difference shows BAU - Market, ratio shows Market / BAU.") %>% 
-  cat(file = here::here("results", "tab", "gains_from_trade.tex"))
-
-
-
-
-write.csv(x = combined_outcomes,
-          file = file.path(project_path, "output_data", "costs_and_benefits_global_30.csv"))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
