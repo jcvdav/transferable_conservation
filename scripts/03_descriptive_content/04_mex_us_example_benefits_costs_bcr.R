@@ -29,8 +29,7 @@ eez_cb <- readRDS(
   filter(!realm %in% c("Arctic", "Eastern Indo-Pacific"))
 
 coastline <- ne_countries(returnclass = "sf",scale = "large") %>% 
-  filter(iso_a3 %in% c("MEX", "USA")) %>% 
-  st_transform(epsg_moll)
+  filter(iso_a3 %in% c("MEX", "USA"))
 
 ## PLOT IT
 
@@ -46,8 +45,8 @@ benefit_map <- ggplot() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
   # theme(legend.position = "bottom") +
-  lims(y = c(1500000, 5900000),
-       x = c(-11900000, -5500000)) +
+  # lims(y = c(1500000, 5900000),
+       # x = c(-11900000, -5500000)) +
   ggtitle(label = "Habitat suitability is heterogeneously\ndistributed between and within nations",
           subtitle = "All pixels are 50 X 50 km")
 
