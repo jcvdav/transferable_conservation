@@ -68,7 +68,7 @@ global <- ggplot(data = eez_h_sum,
 eez <- ggplot(data = eez_cb,
               mapping = aes(x = tb / 1e3, y = mc, group = iso3)) +
   geom_line() +
-  guides(color = F) +
+  guides(color = "none") +
   ggtheme_plot() +
   labs(x = bquote("Surface area (HS weighted; Thousand "~Km^2~")"),
        y = bquote("Fisheries revenue ($"~Km^-2~")"))
@@ -105,7 +105,7 @@ eez_rlm <-
   ggplot(data = rlm_eez_cb,
          mapping = aes(x = tb, y = mc, group = iso3)) +
   geom_line() +
-  guides(color = F) +
+  guides(color = "none") +
   scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
@@ -128,7 +128,7 @@ eez_pro <-
   ggplot(data = pro_h_sum,
          mapping = aes(x = tb, y = mc, color = iso3, group = paste(province, iso3))) +
   geom_line() +
-  guides(color = F) +
+  guides(color = "none") +
   scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
@@ -138,15 +138,22 @@ eez_pro <-
 
 # EXPORT PLOTS ##############################################################################################
 lazy_ggsave(plot = eez_supply_curve,
-            filename = "eez_supply_curve",
+            filename = "supply_curves/eez_supply_curve",
             width = 18, height = 7)
 
+lazy_ggsave(plot = eez_hem_supply_curve ,
+            filename = "supply_curves/eez_hem_supply_curve",
+            width = 20,
+            height = 20)
+
 lazy_ggsave(plot = eez_rlm_supply_curve ,
-            filename = "eez_rlm_supply_curve",
+            filename = "supply_curves/eez_rlm_supply_curve",
             width = 20,
             height = 20)
 
 lazy_ggsave(plot = eez_pro,
-            filename = "eez_pro_supply_curve")
+            filename = "supply_curves/eez_pro_supply_curve",
+            width = 20,
+            height = 20)
 
 # END OF SCRIPT

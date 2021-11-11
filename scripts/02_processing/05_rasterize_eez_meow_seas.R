@@ -15,12 +15,8 @@ base_raster <-
   )
 
 # Load the vector data
-eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_meow_hem.gpkg")) %>% 
+eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg")) %>% 
   select(iso3n, contains("code")) 
-
-# Load the vector data
-world_seas <- st_read(file.path(project_path, "processed_data", "clean_world_seas.gpkg"))
-
 
 # Rasterize
 eez_raster <- fasterize(eez_meow, base_raster, field = "iso3n")

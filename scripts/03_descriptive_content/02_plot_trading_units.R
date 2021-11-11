@@ -14,12 +14,11 @@ eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_costs_an
 rlm_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "rlm_eez_costs_and_benefits.rds"))
 pro_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "pro_eez_costs_and_benefits.rds"))
 
-eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_meow_hem.gpkg")) %>% 
-  ms_simplify()
+eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg")) %>% 
+  ms_simplify(keep_shapes = T)
 
 # Load a coastline
-coast <- ne_countries(returnclass = "sf") %>% 
-  st_transform(crs = epsg_moll) 
+coast <- ne_countries(returnclass = "sf")
 
 # How many MEOWS per country?
 meows_per_eez <- eez_meow %>% 
@@ -27,8 +26,7 @@ meows_per_eez <- eez_meow %>%
   summarize(n_rlm = n_distinct(realm),
             n_pro = n_distinct(province)) %>% 
   ungroup() %>% 
-  arrange(desc(n_pro)) %>% 
-  ms_simplify(keep_shapes = TRUE)
+  arrange(desc(n_pro))
 
 rlm_per_eez <- ggplot() +
   geom_sf(data = coast) +

@@ -1,13 +1,13 @@
 ####################################################
-# Now that we have the targets and prices, we can 
+# Now that we have the targets and prices, we can
 # move forward and identify where biodiversity is
 # protected, and the associated costs of doing so.
-# 
+#
 # The benefits should be equivalent, since we are
 # using the same target.
 ####################################################
 
-# SET UP ################################################################################################
+# SET UP #######################################################################
 # Load packages
 library(startR)
 library(raster)
@@ -19,17 +19,20 @@ library(tidyverse)
 # Load data
 
 ## master data
-master_cb <- readRDS(file = file.path(project_path, "processed_data", "master_costs_and_benefits.rds")) %>% 
-  filter(iso3 %in% c("MEX", "USA")) %>% 
+master_cb <-
+  readRDS(file = file.path(
+    project_path,
+    "processed_data",
+    "master_costs_and_benefits.rds"
+  )) %>%
+  filter(iso3 %in% c("MEX", "USA")) %>%
   filter(!realm %in% c("Arctic", "Eastern Indo-Pacific"))
 
-eez_cb <- readRDS(
-  file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")) %>% 
-  filter(iso3 %in% c("MEX", "USA")) %>% 
+eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")) %>%
+  filter(iso3 %in% c("MEX", "USA")) %>%
   filter(!realm %in% c("Arctic", "Eastern Indo-Pacific"))
 
-coastline <- ne_countries(returnclass = "sf",scale = "large") %>% 
-  filter(iso_a3 %in% c("MEX", "USA"))
+coastline <- ne_countries(country = c("Mexico", "United States of America"), returnclass = "sf", scale = 50) 
 
 ## PLOT IT
 
@@ -44,9 +47,8 @@ benefit_map <- ggplot() +
   scale_fill_viridis_c() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
-  # theme(legend.position = "bottom") +
-  # lims(y = c(1500000, 5900000),
-       # x = c(-11900000, -5500000)) +
+  lims(x = c(-135, -65),
+       y = c(10, 50)) +
   ggtitle(label = "Habitat suitability is heterogeneously\ndistributed between and within nations",
           subtitle = "All pixels are 50 X 50 km")
 
@@ -62,8 +64,8 @@ cost_map <- ggplot() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
   # theme(legend.position = "bottom") +
-  lims(y = c(1500000, 5900000),
-       x = c(-11900000, -5500000)) +
+  lims(x = c(-135, -65),
+       y = c(10, 50)) +
   ggtitle(label = "Costs are heterogeneously\ndistributed between and within nations",
           subtitle = "All pixels are 50 X 50 km")
 
@@ -77,9 +79,8 @@ bcr_map <- ggplot() +
   scale_fill_viridis_c(trans = "log10") +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
-  # theme(legend.position = "bottom") +
-  lims(y = c(1500000, 5900000),
-       x = c(-11900000, -5500000)) +
+  lims(x = c(-135, -65),
+       y = c(10, 50)) +
   ggtitle(label = "Benefit-to-cost ratio is heterogeneously\ndistributed between and within nations",
           subtitle = "All pixels are 50 X 50 km")
 
