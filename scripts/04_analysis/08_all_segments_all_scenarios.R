@@ -2,7 +2,17 @@
 #
 #######################################################
 
+eez_h_sum_cb <- global_supply_curve_w_mpas 
+eez_cb <- eez_supply_curves_w_mpas
 
+hem_eez_cb <- hemisphere_eez_supply_curves_w_mpas 
+hem_h_sum <- hemisphere_supply_curves_w_mpas
+
+rlm_eez_cb <- realm_eez_supply_curves_w_mpas
+rlm_h_sum <- realm_supply_curves_w_mpas
+
+pro_eez_cb <- province_eez_supply_curves_w_mpas
+pro_h_sum <- province_supply_curves_w_mpas
 
 # SET UP ################################################################################################
 # Load packages
@@ -41,6 +51,7 @@ get_global_market_gains <- function(curves, agg_curves, r) {
     distinct()
   
   bau <- curves %>% 
+    filter(pct_proteced <= r) %>% 
     group_by(iso3) %>% 
     mutate(min_pct = min(pct, na.rm = T)) %>% 
     ungroup() %>% 
@@ -105,6 +116,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
   
   # Filter to keep only the protected places
   bau <- curves %>% 
+    filter(pct_proteced <= r) %>% 
     group_by_at(c("iso3", group)) %>% 
     mutate(min_pct = min(pct, na.rm = T)) %>% 
     ungroup() %>% 

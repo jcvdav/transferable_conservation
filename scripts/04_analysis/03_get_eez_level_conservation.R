@@ -16,20 +16,38 @@ library(rnaturalearth)
 library(sf)
 library(tidyverse)
 
+eez_h_sum_cb <- global_supply_curves_w_mpas
+eez_cb <- eez_supply_curves_w_mpas
+
 # Load data
 ## Global data
 eez_h_sum_cb <- readRDS(
-  file = file.path(project_path,"processed_data","eez_h_sum_costs_and_benefits.rds")
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "no_mpas",
+    "global_supply_curve_no_mpas.rds"
+  )
 )
+
 
 ## National data
 eez_cb <- readRDS(
-  file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "no_mpas",
+    "global_eez_supply_curves_no_mpas.rds"
+  )
 )
+
+r <- 0.9
 
 ## Read trading prices
 trading_price <- eez_h_sum_cb %>% 
-  filter(pct <= 0.3) %>% 
+  filter(pct <= r) %>% 
   pull(mc) %>% 
   max()
 
@@ -59,10 +77,11 @@ conserving_nations <- eez_cb %>%
 
 # Filter to keep only the protected places
 bau <- eez_cb %>% 
+  filter(pct_proteced <= r) %>% 
   group_by(iso3) %>% 
   mutate(min_pct = min(pct, na.rm = T)) %>% 
   ungroup() %>% 
-  filter(pct <= 0.3 | pct <= min_pct) %>%      # Keep the most efficient 30% of each country OR the first patch
+  filter(pct <= r | pct <= min_pct) %>%      # Keep the most efficient 30% of each country OR the first patch
   mutate(approach = "bau")
   
 mkt <- eez_cb %>% 
@@ -73,7 +92,7 @@ mkt <- eez_cb %>%
 # For BAU
 realized_bau_cb <- bau %>% 
   group_by(approach, iso3) %>% 
-  summarize(bau_tb = sum(benefit, na.rm = T),
+  summarize(bau_tb = max(tb, na.rm = T), #sum(benefit, na.rm = T),
             bau_tc = sum(cost, na.rm = T),
             bau_mc = max(mc, na.rm = T)) %>% 
   ungroup()
@@ -81,7 +100,7 @@ realized_bau_cb <- bau %>%
 # For a market
 realized_mkt_cb <- mkt %>% 
   group_by(approach, iso3) %>% 
-  summarize(mkt_tb = sum(benefit, na.rm = T),
+  summarize(mkt_tb = max(tb, na.rm = T),#sum(benefit, na.rm = T),
             mkt_tc = sum(cost, na.rm = T),
             mkt_mc = max(mc, na.rm = T)) %>% 
   ungroup()
@@ -90,9 +109,9 @@ realized_mkt_cb <- mkt %>%
 combined_outcomes <- conserving_nations %>% 
   left_join(realized_mkt_cb, by = "iso3") %>%
   left_join(realized_bau_cb, by = "iso3") %>% 
-  replace_na(replace = list(
-    mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
-    bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
+  # replace_na(replace = list(
+    # mkt_tb = 0, mkt_tc = 0,
+    # bau_tb = 0, bau_tc = 0)) %>% 
   select(-contains("app")) %>% 
   mutate(transaction = ifelse(mkt_tc < bau_tc, "Buyers", "Sellers"),
          rect = abs(bau_tb - mkt_tb) * trading_price,
@@ -121,6 +140,9 @@ buyers <- eez_with_results %>%
   filter(!transaction == "Sellers") %>% 
   mutate(Buyers = ratio)
 
+dont_participate <- eez_with_results %>% 
+  filter(is.na(transaction)) 
+
 savings_map <- ggplot() +
   geom_sf(data = coast) +
   geom_sf(data = buyers, aes(fill = Buyers)) +
@@ -128,6 +150,7 @@ savings_map <- ggplot() +
   new_scale_fill() +
   geom_sf(data = sellers, aes(fill = Sellers)) +
   scale_fill_gradient(low = "white", high = "red") +
+  geom_sf(data = dont_participate) +
   ggtheme_map()
 
 map_of_trade <- eez_with_results %>% 
