@@ -15,42 +15,75 @@ library(tidyverse)
 ## Global market
 ### By country
 eez_cb <- readRDS(
-  file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")
+  file = file.path(project_path,
+                   "processed_data", 
+                   "supply_curves",
+                   "no_mpas",
+                   "global_eez_supply_curves_no_mpas.rds")
 )
 ### Horizontally summed
 eez_h_sum <- readRDS(
-  file = file.path(project_path,"processed_data","eez_h_sum_costs_and_benefits.rds")
+  file = file.path(project_path,
+                   "processed_data",
+                   "supply_curves",
+                   "no_mpas",
+                   "global_supply_curve_no_mpas.rds")
 )
 
 ## Hemisphere market
 ### By country-hemisphere
 hem_cb <- readRDS(
-  file = file.path(project_path, "processed_data", "hem_eez_costs_and_benefits.rds")
+  file = file.path(project_path,
+                   "processed_data",
+                   "supply_curves",
+                   "no_mpas",
+                   "hemisphere_eez_supply_curves_no_mpas.rds")
 )
 
 ### Horizontally summed for each hemishpere
 hem_h_sum <- readRDS(
-  file = file.path(project_path,"processed_data","hem_h_sum_costs_and_benefits.rds")
+  file = file.path(project_path,
+                   "processed_data",
+                   "supply_curves",
+                   "no_mpas",
+                   "hemisphere_supply_curves_no_mpas.rds")
 )
 
 ## Realm eez
 ### For each realm and country
 rlm_eez_cb <- readRDS(
-  file = file.path( project_path, "processed_data", "rlm_eez_costs_and_benefits.rds")
+  file = file.path( project_path,
+                    "processed_data",
+                    "supply_curves",
+                    "no_mpas",
+                    "realm_eez_supply_curves_no_mpas.rds")
 ) 
+
 ### Horizontally summed for each realm
 rlm_h_sum <- readRDS(
-  file = file.path( project_path, "processed_data", "rlm_h_sum_costs_and_benefits.rds")
+  file = file.path(project_path,
+                   "processed_data",
+                   "supply_curves",
+                   "no_mpas",
+                   "realm_supply_curves_no_mpas.rds")
 ) 
 
 ## Province eez
 ### For each province, realm and country
 pro_eez_cb <- readRDS(
-  file = file.path( project_path, "processed_data", "pro_eez_costs_and_benefits.rds")
+  file = file.path(project_path,
+                   "processed_data",
+                   "supply_curves",
+                   "no_mpas",
+                   "province_eez_supply_curves_no_mpas.rds")
 )
 ### Horizontaly summed for each province
 pro_h_sum <- readRDS(
-  file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds")
+  file = file.path(project_path,
+                   "processed_data",
+                   "supply_curves",
+                   "no_mpas",
+                   "province_supply_curves_no_mpas.rds")
 )
 
 
@@ -123,36 +156,18 @@ rlm <- ggplot(data = rlm_h_sum,
 
 eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
 
-# Country province, for each Realm
-eez_pro <-
-  ggplot(data = pro_h_sum,
-         mapping = aes(x = tb, y = mc, color = iso3, group = paste(province, iso3))) +
-  geom_line() +
-  guides(color = "none") +
-  scale_color_viridis_d() +
-  facet_wrap( ~ realm, scales = "free") +
-  ggtheme_plot() +
-  labs(x = bquote("Surface area (HS weighted;"~Km^2~")"),
-       y = bquote("Fisheries revenue ($"~Km^-2~")"))
-
-
 # EXPORT PLOTS ##############################################################################################
 lazy_ggsave(plot = eez_supply_curve,
-            filename = "supply_curves/eez_supply_curve",
+            filename = "supply_curves/eez_supply_curve_no_mpas",
             width = 18, height = 7)
 
 lazy_ggsave(plot = eez_hem_supply_curve ,
-            filename = "supply_curves/eez_hem_supply_curve",
+            filename = "supply_curves/eez_hem_supply_curve_no_mpas",
             width = 20,
             height = 20)
 
 lazy_ggsave(plot = eez_rlm_supply_curve ,
-            filename = "supply_curves/eez_rlm_supply_curve",
-            width = 20,
-            height = 20)
-
-lazy_ggsave(plot = eez_pro,
-            filename = "supply_curves/eez_pro_supply_curve",
+            filename = "supply_curves/eez_rlm_supply_curve_no_mpas",
             width = 20,
             height = 20)
 
