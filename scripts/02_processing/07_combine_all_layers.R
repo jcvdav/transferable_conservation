@@ -119,7 +119,7 @@ master_data <- eez_meow %>%
   drop_na(iso3n, cost, benefit) %>%                                             # Drop areas beyond national jurisdiction and areas with no cost / benefit data
   filter(benefit > 0) %>%
   mutate(bcr = benefit / cost,                                                  # Calculate marginal benefit
-         mc = cost / benefit) %>%                                                     # Create dummy variable for negative costs
+         mc = cost / benefit) %>%                                               
   drop_na(lat, lon, benefit, cost) %>% 
   select(hemisphere, realm, province, iso3, everything())
 
