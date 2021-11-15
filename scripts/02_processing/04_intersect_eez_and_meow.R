@@ -22,7 +22,6 @@ meow <- st_read(dsn = file.path(project_path, "processed_data", "clean_meow.gpkg
 ## Process #########################################################################################################
 # Intersect two shapefiles and generate some summary statistics ----------------------------------------------------
 eez_meow <- eez %>% 
-  # st_crop(xmin = -180, ymin = -90, xmax = 180, ymax = 90) %>%
   st_intersection(meow) %>% 
   select(iso3, iso3n,                                                 # Keep only relevant columns
          province, pro_code,
