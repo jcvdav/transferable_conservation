@@ -39,19 +39,24 @@ pro_h_sum <- readRDS(file = file.path( project_path, "processed_data", "pro_h_su
 
 
 get_global_market_gains <- function(curves, agg_curves, r) {
+  conserving_nations <- curves %>% 
+    select(iso3) %>% 
+    distinct()  
   
-  # browser()
+  already_reached <- curves %>% 
+    filter(pct_protected >= r) %>% 
+    select(iso3, pct_protected) %>% 
+    distinct()
+  
   trading_price <- agg_curves %>% 
     filter(pct <= r) %>% 
     pull(mc) %>% 
     max()
   
-  conserving_nations <- curves %>% 
-    select(iso3) %>% 
-    distinct()
+
   
   bau <- curves %>% 
-    filter(pct_proteced <= r) %>% 
+    filter(pct_protected <= r) %>% 
     group_by(iso3) %>% 
     mutate(min_pct = min(pct, na.rm = T)) %>% 
     ungroup() %>% 
@@ -60,7 +65,7 @@ get_global_market_gains <- function(curves, agg_curves, r) {
     group_by(approach, iso3) %>% 
     summarize(bau_tb = sum(benefit, na.rm = T),
               bau_tc = sum(cost, na.rm = T),
-              mc_stop = max(mc, na.rm = T),
+              bau_mc = max(mc, na.rm = T),
               bau_area = n() * 2500,
               .groups = "drop_last") %>% 
     ungroup()
@@ -71,21 +76,47 @@ get_global_market_gains <- function(curves, agg_curves, r) {
     group_by(approach, iso3) %>% 
     summarize(mkt_tb = sum(benefit, na.rm = T),
               mkt_tc = sum(cost, na.rm = T),
+              mkt_mc = max(mc, na.rm  =T),
               mkt_area = n() * 2500,
               .groups = "drop_last") %>% 
     ungroup()
   
+  # combined_outcomes <- conserving_nations %>% 
+  #   left_join(mkt, by = "iso3") %>%
+  #   left_join(bau, by = "iso3") %>% 
+  #   left_join(already_reached, by = "iso3") %>% 
+  #   replace_na(replace = list(
+  #     mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
+  #     bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
+  #   select(-contains("app")) %>% 
+  #   mutate(rect = abs(bau_tb - mkt_tb) * trading_price,
+  #          mkt_tc_b = bau_tc - mkt_tc - rect,
+  #          mkt_tc_s = rect - mkt_tc + bau_tc,
+  #          savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s))
+  
   combined_outcomes <- conserving_nations %>% 
     left_join(mkt, by = "iso3") %>%
     left_join(bau, by = "iso3") %>% 
+    left_join(already_reached, by = "iso3") %>% 
     replace_na(replace = list(
       mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
       bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
     select(-contains("app")) %>% 
-    mutate(rect = abs(bau_tb - mkt_tb) * trading_price,
+    mutate(transaction = case_when(!is.na(pct_protected) ~ "Doesn't participate",
+                                   mkt_tc < bau_tc ~ "Buyers",
+                                   T ~ "Sellers"),
+           rect = abs(bau_tb - mkt_tb) * trading_price,
            mkt_tc_b = bau_tc - mkt_tc - rect,
            mkt_tc_s = rect - mkt_tc + bau_tc,
-           savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s))
+           savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s),
+           ratio = savings / bau_tc) %>% 
+    select(iso3, bau_tb, bau_tc, bau_mc, mkt_tb, mkt_tc, mkt_mc, savings, transaction, rect, ratio)
+  
+  r <- formatC(format = "f", x = r, digits = 2)
+  write_csv(x = combined_outcomes,
+            file = file.path(project_path, "output_data", "global",
+                             paste0("r_",r, "_iso3_outcomes.csv")))
+  
   
   gains_from_trade <- combined_outcomes %>% 
     select(bau_tc, difference = savings) %>% 
@@ -100,11 +131,15 @@ get_global_market_gains <- function(curves, agg_curves, r) {
 # Gains from trade hemisphere function
 
 get_segmented_market_gains <- function(r, curves, agg_curves, group) {
-  # browser()
-  
+browser()
   # Get conserving nations
   conserving_nations <- curves %>% 
     select(iso3, {{group}}) %>% 
+    distinct()
+  
+  already_reached <- curves %>%
+    filter(pct_protected >= r) %>%
+    select(iso3, pct_protected) %>%
     distinct()
   
   trading_prices <- agg_curves %>% 
@@ -116,7 +151,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
   
   # Filter to keep only the protected places
   bau <- curves %>% 
-    filter(pct_proteced <= r) %>% 
+    filter(pct_protected <= r) %>% 
     group_by_at(c("iso3", group)) %>% 
     mutate(min_pct = min(pct, na.rm = T)) %>% 
     ungroup() %>% 
@@ -152,21 +187,37 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
   combined_outcomes <- conserving_nations %>% 
     left_join(realized_mkt_cb, by = c("iso3", group)) %>%
     left_join(realized_bau_cb, by = c("iso3", group)) %>% 
+    left_join(already_reached, by = "iso3") %>% 
     replace_na(replace = list(
       mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
       bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
     select(-contains("app"), -trading_price) %>% 
     left_join(trading_prices, by = group) %>% 
-    mutate(rect = abs(bau_tb - mkt_tb) * trading_price,
+    mutate(transaction = case_when(!is.na(pct_protected) ~ "Doesn't participate",
+                                   mkt_tc < bau_tc ~ "Buyers",
+                                   mkt_tc > bau_tc ~ "Sellers"),
+           rect = abs(bau_tb - mkt_tb) * trading_price,
            mkt_tc_b = bau_tc - mkt_tc - rect,
            mkt_tc_s = rect - mkt_tc + bau_tc,
            savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s))
   
+  # r <- formatC(format = "f", x = r, digits = 2)
+  # write_csv(x = combined_outcomes,
+            # file = file.path(project_path, "output_data", group,
+                             # paste0("r_",r, "_iso3_outcomes.csv")))
+  
+  
+  a <- group_by(combined_outcomes, hemisphere, transaction) %>% 
+    summarize(n = n_distinct(iso3)) %>% 
+    pivot_wider(names_from = transaction, values_from = n)
+  
   gains_from_trade <- combined_outcomes %>% 
-    select(bau_tc, difference = savings) %>% 
+    select({{group}}, bau_tc, difference = savings) %>%
+    group_by_at(vars(any_of(group))) %>%
     summarize_all(sum, na.rm = T) %>% 
     mutate(ratio = difference / bau_tc,
-           bubble = group)
+           bubble = group) %>% 
+    left_join(a, by = "hemisphere")
   
   return(gains_from_trade)
 }
@@ -189,7 +240,9 @@ gains_from_trade_multiple_scenarios_hem <-
                     curves = hem_eez_cb,
                     agg_curves = hem_h_sum,
                     group = "hemisphere")) %>% 
-  unnest(data)
+  unnest(data) 
+
+ggplot(gains_from_trade_multiple_scenarios_hem, aes(x = r, y = Sellers + Buyers, color = hemisphere)) + geom_line()
 
 
 gains_from_trade_multiple_scenarios_rlm <- 
@@ -213,8 +266,9 @@ gains_from_trade_multiple_scenarios_pro <-
 gains_from_trade_multiple_scenarios <- rbind(
   gains_from_trade_multiple_scenarios_global,
   gains_from_trade_multiple_scenarios_hem,
-  gains_from_trade_multiple_scenarios_rlm,
-  gains_from_trade_multiple_scenarios_pro) %>% 
+  gains_from_trade_multiple_scenarios_rlm)%>% 
+  group_by(bubble, r) %>%
+  summarise_all(sum, na.rm = T) %>% 
   mutate(bubble = stringr::str_to_sentence(bubble),
          bubble = case_when(bubble == "Global" ~ "Global (N = 1)",
                             bubble == "Hemisphere" ~ "Hemisphere (N = 4)",

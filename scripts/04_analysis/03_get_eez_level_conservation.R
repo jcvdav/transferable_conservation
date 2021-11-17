@@ -16,7 +16,7 @@ library(rnaturalearth)
 library(sf)
 library(tidyverse)
 
-eez_h_sum_cb <- global_supply_curves_w_mpas
+eez_h_sum_cb <- global_supply_curve_w_mpas
 eez_cb <- eez_supply_curves_w_mpas
 
 # Load data
@@ -43,14 +43,6 @@ eez_cb <- readRDS(
   )
 )
 
-r <- 0.9
-
-## Read trading prices
-trading_price <- eez_h_sum_cb %>% 
-  filter(pct <= r) %>% 
-  pull(mc) %>% 
-  max()
-
 # Load a coastline
 coast <- ne_countries(returnclass = "sf") %>% 
   mutate(in_mkt = iso_a3 %in% unique(eez_cb$iso3))
@@ -73,11 +65,25 @@ conserving_nations <- eez_cb %>%
   select(iso3) %>% 
   distinct()
 
+r <- 0.1
+
+already_reached <- eez_cb %>% 
+  filter(pct_protected >= r) %>% 
+  select(iso3, pct_protected) %>% 
+  distinct()
+
+## Get trading prices
+trading_price <- eez_h_sum_cb %>% 
+  filter(pct <= r) %>% 
+  pull(mc) %>% 
+  max()
+
+
 ## Identify conserved patches
 
 # Filter to keep only the protected places
 bau <- eez_cb %>% 
-  filter(pct_proteced <= r) %>% 
+  filter(pct_protected <= r) %>% 
   group_by(iso3) %>% 
   mutate(min_pct = min(pct, na.rm = T)) %>% 
   ungroup() %>% 
@@ -107,13 +113,16 @@ realized_mkt_cb <- mkt %>%
 
 # Create a data.frame with the combined summarized outcomes
 combined_outcomes <- conserving_nations %>% 
-  left_join(realized_mkt_cb, by = "iso3") %>%
   left_join(realized_bau_cb, by = "iso3") %>% 
-  # replace_na(replace = list(
-    # mkt_tb = 0, mkt_tc = 0,
-    # bau_tb = 0, bau_tc = 0)) %>% 
+  left_join(realized_mkt_cb, by = "iso3") %>%
+  left_join(already_reached, by = "iso3") %>% 
+  replace_na(replace = list(
+    mkt_tb = 0, mkt_tc = 0,
+    bau_tb = 0, bau_tc = 0)) %>%
   select(-contains("app")) %>% 
-  mutate(transaction = ifelse(mkt_tc < bau_tc, "Buyers", "Sellers"),
+  mutate(transaction = case_when(!is.na(pct_protected) ~ "Doesn't participate",
+                                  mkt_tc < bau_tc ~ "Buyers",
+                                  T ~ "Sellers"),
          rect = abs(bau_tb - mkt_tb) * trading_price,
          mkt_tc_b = bau_tc - mkt_tc - rect,
          mkt_tc_s = rect - mkt_tc + bau_tc,
@@ -121,12 +130,7 @@ combined_outcomes <- conserving_nations %>%
          ratio = savings / bau_tc) %>% 
   select(iso3, contains("bau"), contains("mkt"), savings, transaction, rect, ratio, everything())
 
-# Find stopping prices
-stops <- combined_outcomes %>% 
-  filter(bau_tb <= mkt_tb) %>% 
-  select(iso3, bau_mc) %>% 
-  mutate(approach = "mkt")
-
+# Add results to the EEZ
 eez_with_results <- eez %>% 
   left_join(combined_outcomes, by = "iso3")
 
@@ -137,12 +141,12 @@ sellers <- eez_with_results %>%
   mutate(Sellers = pmin(ratio, 10))
 
 buyers <- eez_with_results %>% 
-  filter(!transaction == "Sellers") %>% 
+  filter(transaction == "Buyers") %>% 
   mutate(Buyers = ratio)
 
-dont_participate <- eez_with_results %>% 
-  filter(is.na(transaction)) 
-
+dont_participate <- eez_with_results %>%
+  filter(transaction == "Doesn't participate")
+  
 savings_map <- ggplot() +
   geom_sf(data = coast) +
   geom_sf(data = buyers, aes(fill = Buyers)) +
@@ -150,7 +154,7 @@ savings_map <- ggplot() +
   new_scale_fill() +
   geom_sf(data = sellers, aes(fill = Sellers)) +
   scale_fill_gradient(low = "white", high = "red") +
-  geom_sf(data = dont_participate) +
+  geom_sf(data = dont_participate, fill = "gray") +
   ggtheme_map()
 
 map_of_trade <- eez_with_results %>% 

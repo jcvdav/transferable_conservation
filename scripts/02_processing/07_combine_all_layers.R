@@ -121,7 +121,8 @@ master_data <- eez_meow %>%
   mutate(bcr = benefit / cost,                                                  # Calculate marginal benefit
          mc = cost / benefit) %>%                                               
   drop_na(lat, lon, benefit, cost) %>% 
-  select(hemisphere, realm, province, iso3, everything())
+  mutate(global = "Global") %>% 
+  select(global, hemisphere, realm, province, iso3, everything())
 
 
 ## DATA EXPORT ############################################################################

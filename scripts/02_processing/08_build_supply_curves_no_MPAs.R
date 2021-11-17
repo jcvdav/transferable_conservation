@@ -23,7 +23,7 @@ master_data <- readRDS(file = file.path(
 build_curve_without_mpas <- function(data, by = NULL) {
   curves <- data %>%
     select({{by}}, lon, lat, suitability, cost, area, benefit, bcr, mc) %>%
-    group_by_at(vars(one_of(by))) %>%
+    group_by_at(vars(all_of(by))) %>%
     arrange(desc(bcr)) %>%
     mutate(
       tb = cumsum(benefit),
@@ -36,8 +36,8 @@ build_curve_without_mpas <- function(data, by = NULL) {
 }
 
 # Global trading market
-eez_supply_curves <- build_curve_without_mpas(master_data, "iso3")
-global_supply_curve <- build_curve_without_mpas(eez_supply_curves)
+eez_supply_curves <- build_curve_without_mpas(master_data, c("iso3", "global"))
+global_supply_curve <- build_curve_without_mpas(eez_supply_curves, "global")
 
 # Hemisphere markets
 hemisphere_eez_supply_curves <-
