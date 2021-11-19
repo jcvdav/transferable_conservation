@@ -36,7 +36,7 @@ coast <- ne_countries(returnclass = "sf") %>%
 eez <- st_read(
   file.path(project_path,
             "processed_data",
-            "intersected_eez_meow_hem.gpkg")) %>% 
+            "intersected_eez_and_meow.gpkg")) %>% 
   rmapshaper::ms_simplify(keep_shapes = T, sys = T) %>% 
   st_make_valid() %>% 
   filter(iso3 %in% unique(hem_eez_cb$iso3))
@@ -148,7 +148,7 @@ got_paid <- full_join(realized_mkt_cb, realized_bau_cb, by = c("hemisphere", "is
   mutate(gets_paid = bau_tc <= mkt_tc)
 
 eez_with_results <- eez %>% 
-  left_join(got_paid, by = c("iso3", "hemisphere"))
+  left_join(p_30, by = c("iso3", "hemisphere"))
 
 
 # FIGURES

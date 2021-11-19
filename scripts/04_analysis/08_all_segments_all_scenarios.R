@@ -24,8 +24,8 @@ eez_h_sum_cb <-
     project_path,
     "processed_data",
     "supply_curves",
-    "no_mpas",
-    "global_supply_curve_no_mpas.rds"
+    "with_mpas",
+    "global_supply_curve_with_mpas.rds"
   )) %>%
   mutate(type = "efficient") 
 
@@ -63,6 +63,26 @@ rlm_h_sum <-
     "realm_supply_curves_with_mpas.rds"
   ))
 
+
+# Realm
+pro_eez_cb <- readRDS(
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "province_eez_supply_curves_with_mpas.rds"
+  )
+)
+pro_h_sum <- readRDS(
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "province_supply_curves_with_mpas.rds"
+  )
+)
 
 #################
 # Gains from trade hemisphere function
@@ -137,7 +157,10 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
   
   r <- formatC(format = "f", x = r, digits = 2)
   write_csv(x = combined_outcomes,
-  file = file.path(project_path, "output_data", group,
+  file = file.path(project_path,
+                   "output_data",
+                   "trade_outcomes",
+                   group,
   paste0("r_",r, "_iso3_outcomes.csv")))
   
   
@@ -180,16 +203,29 @@ gains_from_trade_multiple_scenarios_rlm <-
                     group = "realm")) %>% 
     unnest(data)
 
+gains_from_trade_multiple_scenarios_pro <- 
+  tibble(r = rs) %>% 
+  mutate(data = map(r,
+                    get_segmented_market_gains,
+                    curves = pro_eez_cb,
+                    agg_curves = pro_h_sum,
+                    group = "province")) %>% 
+  unnest(data)
+
 gains_from_trade_multiple_scenarios <- rbind(
   gains_from_trade_multiple_scenarios_global,
   gains_from_trade_multiple_scenarios_hem,
-  gains_from_trade_multiple_scenarios_rlm) %>% 
+  gains_from_trade_multiple_scenarios_rlm,
+  gains_from_trade_multiple_scenarios_pro) %>% 
   group_by(bubble, r) %>%
   summarise_all(sum, na.rm = T) %>% 
+  ungroup() %>% 
   mutate(bubble = stringr::str_to_sentence(bubble),
          bubble = case_when(bubble == "Global" ~ "Global (N = 1)",
                             bubble == "Hemisphere" ~ "Hemisphere (N = 4)",
-                            bubble == "Realm" ~ "Realm (N = 12)"))
+                            bubble == "Realm" ~ "Realm (N = 12)",
+                            bubble == "Province" ~ "Province (N = 60)"),
+         bubble = fct_relevel(bubble, "Province (N = 60)", after = Inf))
 
 # Visualize 
 abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = difference, color = bubble)) +
