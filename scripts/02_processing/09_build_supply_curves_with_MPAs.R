@@ -56,3 +56,102 @@ province_supply_curves_w_mpas <- build_curve_with_mpas(master_data, by = "provin
 
 
 
+## DATA EXPORT #################################################################
+# Export country-level data
+saveRDS(
+  eez_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "global_eez_supply_curves_with_mpas.rds"
+  )
+)
+
+# Export horizontally summed
+saveRDS(
+  global_supply_curve_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "global_supply_curve_with_mpas.rds"
+  )
+)
+
+# Export hemisphere-level data
+saveRDS(
+  hemisphere_eez_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "hemisphere_eez_supply_curves_with_mpas.rds"
+  )
+)
+
+# Export horizontally summed hemisphere data
+saveRDS(
+  hemisphere_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "hemisphere_supply_curves_with_mpas.rds"
+  )
+)
+
+# Export realm level data
+saveRDS(
+  realm_eez_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "realm_eez_supply_curves_with_mpas.rds"
+  )
+)
+
+# Export horizontally summed realms
+saveRDS(
+  realm_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "realm_supply_curves_with_mpas.rds"
+  )
+)
+
+
+# Export province level data
+saveRDS(
+  province_eez_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "province_eez_supply_curves_with_mpas.rds"
+  )
+)
+
+# Export horizontally summed province level data
+saveRDS(
+  province_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "province_supply_curves_with_mpas.rds"
+  )
+)
+
+

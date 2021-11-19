@@ -2,18 +2,6 @@
 #
 #######################################################
 
-eez_h_sum_cb <- global_supply_curve_w_mpas 
-eez_cb <- eez_supply_curves_w_mpas
-
-hem_eez_cb <- hemisphere_eez_supply_curves_w_mpas 
-hem_h_sum <- hemisphere_supply_curves_w_mpas
-
-rlm_eez_cb <- realm_eez_supply_curves_w_mpas
-rlm_h_sum <- realm_supply_curves_w_mpas
-
-pro_eez_cb <- province_eez_supply_curves_w_mpas
-pro_h_sum <- province_supply_curves_w_mpas
-
 # SET UP ################################################################################################
 # Load packages
 library(startR)
@@ -21,117 +9,67 @@ library(cowplot)
 library(tidyverse)
 
 # Load data
-eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds")) %>% 
-  mutate(type = "efficient") %>% 
-  select(iso3, everything())
-eez_h_sum_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_h_sum_costs_and_benefits.rds")) %>% 
-  mutate(type = "efficient") %>% 
-  select(iso3, everything())
+eez_cb <-
+  readRDS(
+    file = file.path(
+      project_path,
+      "processed_data",
+      "supply_curves",
+      "with_mpas",
+      "global_eez_supply_curves_with_mpas.rds"
+    ))
 
-hem_eez_cb <- readRDS(file = file.path( project_path, "processed_data", "hem_eez_costs_and_benefits.rds")) 
-hem_h_sum <- readRDS(file = file.path( project_path, "processed_data", "hem_h_sum_costs_and_benefits.rds")) 
+eez_h_sum_cb <-
+  readRDS(file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "no_mpas",
+    "global_supply_curve_no_mpas.rds"
+  )) %>%
+  mutate(type = "efficient") 
 
-rlm_eez_cb <- readRDS(file = file.path( project_path, "processed_data", "rlm_eez_costs_and_benefits.rds")) 
-rlm_h_sum <- readRDS(file = file.path( project_path, "processed_data", "rlm_h_sum_costs_and_benefits.rds")) 
+hem_eez_cb <-
+  readRDS(file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "hemisphere_eez_supply_curves_with_mpas.rds"
+  ))
+hem_h_sum <-
+  readRDS(file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "hemisphere_supply_curves_with_mpas.rds"
+  ))
 
-pro_eez_cb <- readRDS(file = file.path( project_path, "processed_data", "pro_eez_costs_and_benefits.rds")) 
-pro_h_sum <- readRDS(file = file.path( project_path, "processed_data", "pro_h_sum_costs_and_benefits.rds"))
+rlm_eez_cb <-
+  readRDS(file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "realm_eez_supply_curves_with_mpas.rds"
+  ))
+rlm_h_sum <-
+  readRDS(file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "realm_supply_curves_with_mpas.rds"
+  ))
 
-
-get_global_market_gains <- function(curves, agg_curves, r) {
-  conserving_nations <- curves %>% 
-    select(iso3) %>% 
-    distinct()  
-  
-  already_reached <- curves %>% 
-    filter(pct_protected >= r) %>% 
-    select(iso3, pct_protected) %>% 
-    distinct()
-  
-  trading_price <- agg_curves %>% 
-    filter(pct <= r) %>% 
-    pull(mc) %>% 
-    max()
-  
-
-  
-  bau <- curves %>% 
-    filter(pct_protected <= r) %>% 
-    group_by(iso3) %>% 
-    mutate(min_pct = min(pct, na.rm = T)) %>% 
-    ungroup() %>% 
-    filter(pct <= r | pct <= min_pct) %>% # Keep the most efficient r% of each country - hemisphere
-    mutate(approach = "bau") %>% 
-    group_by(approach, iso3) %>% 
-    summarize(bau_tb = sum(benefit, na.rm = T),
-              bau_tc = sum(cost, na.rm = T),
-              bau_mc = max(mc, na.rm = T),
-              bau_area = n() * 2500,
-              .groups = "drop_last") %>% 
-    ungroup()
-  
-  mkt <- curves %>% 
-    filter(mc <= trading_price) %>%              # Keep all patches in each country with a cost < trading price
-    mutate(approach = "mkt") %>% 
-    group_by(approach, iso3) %>% 
-    summarize(mkt_tb = sum(benefit, na.rm = T),
-              mkt_tc = sum(cost, na.rm = T),
-              mkt_mc = max(mc, na.rm  =T),
-              mkt_area = n() * 2500,
-              .groups = "drop_last") %>% 
-    ungroup()
-  
-  # combined_outcomes <- conserving_nations %>% 
-  #   left_join(mkt, by = "iso3") %>%
-  #   left_join(bau, by = "iso3") %>% 
-  #   left_join(already_reached, by = "iso3") %>% 
-  #   replace_na(replace = list(
-  #     mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
-  #     bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
-  #   select(-contains("app")) %>% 
-  #   mutate(rect = abs(bau_tb - mkt_tb) * trading_price,
-  #          mkt_tc_b = bau_tc - mkt_tc - rect,
-  #          mkt_tc_s = rect - mkt_tc + bau_tc,
-  #          savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s))
-  
-  combined_outcomes <- conserving_nations %>% 
-    left_join(mkt, by = "iso3") %>%
-    left_join(bau, by = "iso3") %>% 
-    left_join(already_reached, by = "iso3") %>% 
-    replace_na(replace = list(
-      mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
-      bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
-    select(-contains("app")) %>% 
-    mutate(transaction = case_when(!is.na(pct_protected) ~ "Doesn't participate",
-                                   mkt_tc < bau_tc ~ "Buyers",
-                                   T ~ "Sellers"),
-           rect = abs(bau_tb - mkt_tb) * trading_price,
-           mkt_tc_b = bau_tc - mkt_tc - rect,
-           mkt_tc_s = rect - mkt_tc + bau_tc,
-           savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s),
-           ratio = savings / bau_tc) %>% 
-    select(iso3, bau_tb, bau_tc, bau_mc, mkt_tb, mkt_tc, mkt_mc, savings, transaction, rect, ratio)
-  
-  r <- formatC(format = "f", x = r, digits = 2)
-  write_csv(x = combined_outcomes,
-            file = file.path(project_path, "output_data", "global",
-                             paste0("r_",r, "_iso3_outcomes.csv")))
-  
-  
-  gains_from_trade <- combined_outcomes %>% 
-    select(bau_tc, difference = savings) %>% 
-    summarize_all(sum, na.rm = T) %>% 
-    mutate(ratio = difference / bau_tc,
-           bubble = "global")
-  
-  return(gains_from_trade)
-}
 
 #################
 # Gains from trade hemisphere function
 
 get_segmented_market_gains <- function(r, curves, agg_curves, group) {
-browser()
+
+  # browser()
   # Get conserving nations
   conserving_nations <- curves %>% 
     select(iso3, {{group}}) %>% 
@@ -155,31 +93,27 @@ browser()
     group_by_at(c("iso3", group)) %>% 
     mutate(min_pct = min(pct, na.rm = T)) %>% 
     ungroup() %>% 
-    filter(pct <= r | pct <= min_pct) %>%                       # Keep the most efficient 30% of each country - hemisphere
-    mutate(approach = "bau")
-  
+    filter(pct <= r | pct <= min_pct)                       # Keep the most efficient 30% of each country - hemisphere
+
   mkt <- curves %>% 
     left_join(trading_prices, by = group) %>%
-    filter(mc <= trading_price) %>%              # Keep all patches in each country with a cost < trading price
-    mutate(approach = "mkt")
-  
+    filter(mc <= trading_price)              # Keep all patches in each country with a cost < trading price
+
   ## Calculate country-level summaries
   # For BAU
   realized_bau_cb <- bau %>% 
-    group_by_at(c("approach", "iso3", group)) %>% 
+    group_by_at(c("iso3", group)) %>% 
     summarize(bau_tb = sum(benefit, na.rm = T),
               bau_tc = sum(cost, na.rm = T),
               mc_stop = max(mc, na.rm = T),
-              bau_area = n() * 2500,
               .groups = "drop_last") %>% 
     ungroup()
   
   # For a market
   realized_mkt_cb <- mkt %>% 
-    group_by_at(c("approach", "iso3", group, "trading_price")) %>% 
+    group_by_at(c("iso3", group, "trading_price")) %>% 
     summarize(mkt_tb = sum(benefit, na.rm = T),
               mkt_tc = sum(cost, na.rm = T),
-              mkt_area = n() * 2500,
               .groups = "drop_last") %>% 
     ungroup()
   
@@ -189,48 +123,43 @@ browser()
     left_join(realized_bau_cb, by = c("iso3", group)) %>% 
     left_join(already_reached, by = "iso3") %>% 
     replace_na(replace = list(
-      mkt_tb = 0, mkt_tc = 0, mkt_area = 0,
-      bau_tb = 0, bau_tc = 0, bau_area = 0)) %>% 
+      mkt_tb = 0, mkt_tc = 0,
+      bau_tb = 0, bau_tc = 0)) %>% 
     select(-contains("app"), -trading_price) %>% 
     left_join(trading_prices, by = group) %>% 
-    mutate(transaction = case_when(!is.na(pct_protected) ~ "Doesn't participate",
-                                   mkt_tc < bau_tc ~ "Buyers",
-                                   mkt_tc > bau_tc ~ "Sellers"),
-           rect = abs(bau_tb - mkt_tb) * trading_price,
+    mutate(rect = abs(bau_tb - mkt_tb) * trading_price,
            mkt_tc_b = bau_tc - mkt_tc - rect,
            mkt_tc_s = rect - mkt_tc + bau_tc,
-           savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s))
+           savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s),
+           transaction = case_when(!is.na(pct_protected) | savings == 0 ~ "Doesn't participate",
+                                   mkt_tc < bau_tc ~ "Buyers",
+                                   mkt_tc > bau_tc ~ "Sellers"))
   
-  # r <- formatC(format = "f", x = r, digits = 2)
-  # write_csv(x = combined_outcomes,
-            # file = file.path(project_path, "output_data", group,
-                             # paste0("r_",r, "_iso3_outcomes.csv")))
+  r <- formatC(format = "f", x = r, digits = 2)
+  write_csv(x = combined_outcomes,
+  file = file.path(project_path, "output_data", group,
+  paste0("r_",r, "_iso3_outcomes.csv")))
   
-  
-  a <- group_by(combined_outcomes, hemisphere, transaction) %>% 
-    summarize(n = n_distinct(iso3)) %>% 
-    pivot_wider(names_from = transaction, values_from = n)
   
   gains_from_trade <- combined_outcomes %>% 
-    select({{group}}, bau_tc, difference = savings) %>%
-    group_by_at(vars(any_of(group))) %>%
+    select(bau_tc, difference = savings) %>%
     summarize_all(sum, na.rm = T) %>% 
     mutate(ratio = difference / bau_tc,
-           bubble = group) %>% 
-    left_join(a, by = "hemisphere")
+           bubble = group)
   
   return(gains_from_trade)
 }
 
 #################
 
-rs <- seq(0.01, 1, by = 0.01)
+rs <- seq(0.02, 1, by = 0.01)
 
 gains_from_trade_multiple_scenarios_global <- tibble(r = rs) %>% 
   mutate(data = map(r,
-                    get_global_market_gains,
+                    get_segmented_market_gains,
                     curves = eez_cb,
-                    agg_curves = eez_h_sum_cb)) %>% 
+                    agg_curves = eez_h_sum_cb,
+                    group = "global")) %>% 
   unnest(data)
 
 gains_from_trade_multiple_scenarios_hem <- 
@@ -242,9 +171,6 @@ gains_from_trade_multiple_scenarios_hem <-
                     group = "hemisphere")) %>% 
   unnest(data) 
 
-ggplot(gains_from_trade_multiple_scenarios_hem, aes(x = r, y = Sellers + Buyers, color = hemisphere)) + geom_line()
-
-
 gains_from_trade_multiple_scenarios_rlm <- 
   tibble(r = rs) %>% 
   mutate(data = map(r,
@@ -254,27 +180,16 @@ gains_from_trade_multiple_scenarios_rlm <-
                     group = "realm")) %>% 
     unnest(data)
 
-gains_from_trade_multiple_scenarios_pro <- 
-  tibble(r = rs) %>% 
-  mutate(data = map(r,
-                    get_segmented_market_gains,
-                    curves = pro_eez_cb,
-                    agg_curves = pro_h_sum,
-                    group = "province")) %>% 
-  unnest(data)
-
 gains_from_trade_multiple_scenarios <- rbind(
   gains_from_trade_multiple_scenarios_global,
   gains_from_trade_multiple_scenarios_hem,
-  gains_from_trade_multiple_scenarios_rlm)%>% 
+  gains_from_trade_multiple_scenarios_rlm) %>% 
   group_by(bubble, r) %>%
   summarise_all(sum, na.rm = T) %>% 
   mutate(bubble = stringr::str_to_sentence(bubble),
          bubble = case_when(bubble == "Global" ~ "Global (N = 1)",
                             bubble == "Hemisphere" ~ "Hemisphere (N = 4)",
-                            bubble == "Realm" ~ "Realm (N = 12)",
-                            bubble == "Province" ~ "Province (N = 60)"),
-         bubble = fct_relevel(bubble, "Province (N = 60)", after = Inf))
+                            bubble == "Realm" ~ "Realm (N = 12)"))
 
 # Visualize 
 abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = difference, color = bubble)) +
