@@ -174,13 +174,19 @@ lazy_ggsave(plot = eez_rlm_supply_curve ,
 # Presentation figures
 
 labs <- eez_cb %>%
-  filter(iso3 %in% c("MEX", "CAN", "USA", "CHN", "ECU"),
+  filter(iso3 %in% c("MEX", "PER"),
          pct == 1)
 
-eez_supply_curve_w_labels <- plot_grid(eez + geom_text(data = labs, aes(label = iso3)), global, ncol = 2, labels = "AUTO")
+eez_supply_curve_w_labels <- eez +
+  geom_line(data = filter(eez_cb, iso3 %in% c("MEX", "PER")), color = "red") +
+  geom_text(data = labs, aes(label = iso3))
+
+lazy_ggsave(plot = eez,
+            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas",
+            width = 10, height = 7)
 
 lazy_ggsave(plot = eez_supply_curve_w_labels,
-            filename = "supply_curves/eez_supply_curve_with_mpas_labeled",
-            width = 20, height = 7)
+            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas_labeled",
+            width = 10, height = 7)
 
 # END OF SCRIPT

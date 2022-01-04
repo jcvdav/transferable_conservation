@@ -18,11 +18,6 @@ library(tidyverse)
 
 # Load data
 
-# eez_h_sum_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_h_sum_costs_and_benefits.rds"))
-# eez_cb <- readRDS(file = file.path(project_path, "processed_data", "eez_costs_and_benefits.rds"))
-# rlm_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "rlm_eez_costs_and_benefits.rds"))
-# pro_eez_cb <- readRDS(file = file.path(project_path, "processed_data", "pro_eez_costs_and_benefits.rds"))
-
 eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg")) %>% 
   ms_simplify(keep_shapes = T)
 
@@ -72,7 +67,9 @@ hemisphere_map <-
   ggtheme_map() +
   scale_fill_viridis_d() +
   labs(fill = "Hemisphere") +
-  theme(legend.position = "none") 
+  theme(legend.position = "none") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
 
 hemisphere_bars <- hemisphere_data %>% 
   st_drop_geometry() %>% 
@@ -90,6 +87,12 @@ hemisphere_bars <- hemisphere_data %>%
 hemisphere_segments <- plot_grid(hemisphere_map, hemisphere_bars,
                                  ncol = 1,
                                  rel_heights = c(5, 2.5))
+
+
+lazy_ggsave(plot = hemisphere_map,
+            filename = "trading_units/hemisphere_map",
+            width = 16,
+            height = 8)
 
 lazy_ggsave(plot = hemisphere_segments,
             filename = "trading_units/hemisphere",
@@ -140,6 +143,10 @@ realm_segments_h <- plot_grid(realm_map, realm_bars,
                               ncol = 2,
                               rel_widths = c(1, 1))
 
+lazy_ggsave(plot = realm_map,
+            filename = "trading_units/realm_map",
+            width = 16,
+            height = 8)
 
 lazy_ggsave(plot = realm_segments,
             filename = "trading_units/realm",

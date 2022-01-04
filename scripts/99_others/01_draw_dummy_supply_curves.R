@@ -4,7 +4,7 @@ library(tidyverse)
 
 data <- expand_grid(
   n = c("A", "B"),
-  q = seq(0, 10, by = 0.1)
+  q = seq(0, 10, by = 1)
 ) %>% 
   mutate(p = ifelse(n == "A", 1 * q, 2 * q)) %>% 
   group_by(n) %>% 
@@ -15,94 +15,92 @@ pol1 <- tibble(q = c(0, 5, 5, 0, 0, 5, 5, 0),
               n = c("A", "A", "A", "A",
                     "B", "B", "B", "B"))
 
-pol2 <- tibble(q = c(3.35, 5, 5, 3.35, 5, 6.7, 5, 5),
-               p = c(6.7, 10, 6.7, 6.7, 6.7, 6.7, 5, 6.7),
-               n = c("A", "A", "A", "A",
-                     "B", "B", "B", "B"))
+
 
 p1 <- data %>% 
   filter(n == "B") %>% 
-  ggplot(mapping = aes(x = q, y = p)) +
-  geom_line(size = 1, color = "steelblue") +
-  geom_text(x = 10, y = 20, label = expression(MC[1])) +
+  ggplot() +
+  geom_line(mapping = aes(x = q / 10, y = p), size = 1, color = "steelblue") +
+  geom_text(x = .95, y = 20.5, label = expression(MC[1])) +
   theme_half_open() +
   labs(x = "Conservation", y = "Marginal Costs") +
   scale_x_continuous(expand = c(0, 0),
-                     # breaks = c(5),
-                     # labels = c("Q"),
-                     limits = c(0, 15)) +
+                     breaks = (1:10)/10,
+                     labels = scales::percent) +
   scale_y_continuous(expand = c(0, 0),
-                     # breaks = c(1, 5, 10, 15),
-                     # labels = c(1, 5, 10, 15),
+                     # breaks = c(5, 10, 15),
+                     # labels = c(5, 10, 15),
                      limits = c(0, 25))
 
 
 p2 <- p1 +
-  geom_segment(x = 5, xend = 5, y = 0, yend = 25, color = "black", linetype = "dashed") +
-  geom_segment(x = 0, xend = 5, y = 10, yend = 10, linetype = "dashed", color = "steelblue")
-
-
-(p1 <- ggplot(data = data, aes(x = q, y = p, color = n)) +
-  geom_line(size = 1) +
-  scale_color_brewer(palette = "Set1") +
-  theme_half_open() +
-  labs(x = "Conservation", y = "Marginal Costs") +
-  geom_segment(x = 5, xend = 5, y = 0, yend = 25, color = "black", linetype = "dashed") +
-  geom_segment(x = 0, xend = 5, y = 5, yend = 5, linetype = "dashed", color = "red") +
-  geom_segment(x = 0, xend = 5, y = 10, yend = 10, linetype = "dashed", color = "steelblue") +
-  scale_x_continuous(expand = c(0, 0),
-                     breaks = c(5),
-                     labels = c("Q"),
-                     limits = c(0, 15)) +
-  scale_y_continuous(expand = c(0, 0),
-                     breaks = c(5, 10),
-                     labels = c("P", expression(P + Delta)),
-                     limits = c(0, 20)) +
-  theme(legend.justification = c(0, 1),
-        legend.position = c(0.01, 1)) +
-  guides(color = guide_legend(title = "Nation")))
-
-p2 <- p1 +
-  geom_polygon(data = pol1 %>% filter(n == "A"), fill = "steelblue", alpha = 0.5, color = "transparent")
+  geom_vline(xintercept = 0.05, color = "black", linetype = "dashed") +
+  geom_segment(x = 0, xend = 0.05, y = 1, yend = 1, linetype = "dashed", color = "steelblue") +
+  geom_polygon(data = tibble(x = c(0, 0.05, 0.05, 0),
+                             y = c(0, 1, 0, 0)),
+               mapping = aes(x = x ,y = y),
+               fill = "steelblue",
+               alpha = 0.5)
 
 p3 <- p1 +
-  geom_polygon(data = pol1 %>% filter(n == "B"), fill = "red", alpha = 0.5, color = "transparent")
-  
+  geom_vline(xintercept = 0.3, color = "black", linetype = "dashed") +
+  geom_segment(x = 0, xend = 0.3, y = 6, yend = 6, linetype = "dashed", color = "steelblue") + 
+  geom_polygon(data = tibble(x = c(0, 0.3, 0.3, 0),
+                             y = c(0, 6, 0, 0)),
+               mapping = aes(x = x ,y = y),
+               fill = "steelblue",
+               alpha = 0.5)
 
-(p4 <- ggplot(data = data, aes(x = q, y = p, color = n)) +
-  geom_line(size = 1) +
-  geom_abline(intercept = 0, slope = 0.67, size = 1) +
-  scale_color_brewer(palette = "Set1") +
+p_full <- ggplot(data = data) +
+  geom_line(mapping = aes(x = q / 10, y = p, color = n),
+            size = 1) +
+  geom_text(x = .95, y = 20.5, label = expression(MC[1])) +
+  geom_text(x = .95, y = 10.5, label = expression(MC[2])) +
   theme_half_open() +
-  labs(x = "Conservation (q)", y = "Marginal Costs (p)") +
-  geom_segment(x = 5, xend = 5, y = 0, yend = 25, color = "gray") +
-  geom_segment(x = 10, xend = 10, y = 0, yend = 6.7, linetype = "dashed", color = "black") +
-  geom_segment(x = 3.35, xend = 3.35, y = 0, yend = 25, color = "steelblue", linetype = "dashed") +
-  geom_segment(x = 6.7, xend = 6.7, y = 0, yend = 25, color = "red", linetype = "dashed") +
-  geom_segment(x = 0, xend = 10, y = 6.7, yend = 6.7, linetype = "dashed", color = "black") +
+  labs(x = "Conservation", y = "Marginal Costs") +
+  theme(legend.position = "None") +
   scale_x_continuous(expand = c(0, 0),
-                     breaks = c(3.35, 5, 6.7, 10),
-                     labels = c(expression(Q[b]), "Q", expression(Q[a]), expression("2Q="~Q[a]+Q[b])),
-                     limits = c(0, 15)) +
+                     breaks = (1:10)/10,
+                     labels = scales::percent) +
   scale_y_continuous(expand = c(0, 0),
-                     breaks = c(5, 6.7, 10),
-                     labels = c("P", "P*", expression(P + Delta)),
-                     limits = c(0, 20)) +
-    theme(legend.justification = c(0, 1),
-          legend.position = c(0.01, 1)) +
-    guides(color = guide_legend(title = "Nation")))
+                     # breaks = c(5, 10, 15),
+                     # labels = c(5, 10, 15),
+                     limits = c(0, 25)) +
+  scale_color_manual(values = c("red", "steelblue"))
+
+p4 <- p_full +
+  geom_vline(xintercept = 0.3, color = "black", linetype = "dashed") +
+  geom_segment(x = 0, xend = 0.3, y = 6, yend = 6, linetype = "dashed", color = "steelblue") +
+  geom_segment(x = 0, xend = 0.3, y = 3, yend = 3, linetype = "dashed", color = "red")
 
 p5 <- p4 +
-  geom_polygon(data = pol2 %>% filter(n == "A"), fill = "steelblue", alpha = 0.5, color = "transparent") +
-  geom_polygon(data = pol2 %>% filter(n == "B"), fill = "red", alpha = 0.5, color = "transparent")
+  geom_hline(yintercept = 4.5, linetype = "dashed", color = "black") +
+  geom_vline(xintercept = 0.3, color = "gray", linetype = "dashed")
+
+p6 <- p_full  +
+  geom_hline(yintercept = 4.5, linetype = "dashed", color = "black") +
+  geom_vline(xintercept = 0.3, color = "gray", linetype = "dashed") +
+  geom_segment(x = 0.225, xend = 0.225, y = 0, yend = 4.5, color = "steelblue", linetype = "dashed") +
+  geom_segment(x = 0.45, xend = 0.45, y = 0, yend = 4.5, color = "red", linetype = "dashed")
+
+pol2 <- tibble(q = c(0.3, 0.3, 0.45, 0.3, 0.225, 0.3, 0.3, 0.225),
+               p = c(3, 4.5, 4.5, 3, 4.5, 4.5, 6, 4.5),
+               n = c("A", "A", "A", "A",
+                     "B", "B", "B", "B"))
+  
+p7 <- p6 +
+  geom_polygon(data = pol2 %>% filter(n == "B"), aes(x = q, y = p), fill = "steelblue", alpha = 0.5, color = "transparent") +
+  geom_polygon(data = pol2 %>% filter(n == "A"), aes(x = q, y = p), fill = "red", alpha = 0.5, color = "transparent")
 
 
 # Export figures
-lazy_ggsave(plot = p1, filename = "dummy_plots/supply_curves1", width = 9, height = 6)
-lazy_ggsave(plot = p2, filename = "dummy_plots/supply_curves2", width = 9, height = 6)
-lazy_ggsave(plot = p3, filename = "dummy_plots/supply_curves3", width = 9, height = 6)
-lazy_ggsave(plot = p4, filename = "dummy_plots/supply_curves4", width = 9, height = 6)
-lazy_ggsave(plot = p5, filename = "dummy_plots/supply_curves5", width = 9, height = 6)
+lazy_ggsave(plot = p1, filename = "dummy_plots/supply_curves1", width = 18, height = 12)
+lazy_ggsave(plot = p2, filename = "dummy_plots/supply_curves2", width = 18, height = 12)
+lazy_ggsave(plot = p3, filename = "dummy_plots/supply_curves3", width = 18, height = 12)
+lazy_ggsave(plot = p4, filename = "dummy_plots/supply_curves4", width = 18, height = 12)
+lazy_ggsave(plot = p5, filename = "dummy_plots/supply_curves5", width = 18, height = 12)
+lazy_ggsave(plot = p6, filename = "dummy_plots/supply_curves6", width = 18, height = 12)
+lazy_ggsave(plot = p7, filename = "dummy_plots/supply_curves7", width = 18, height = 12)
 
 
 sc_dat <- tibble(pixel = 1:4,
@@ -120,10 +118,10 @@ sc_dat <- tibble(pixel = 1:4,
                mc = 0), .) %>% 
   mutate(tb = cumsum(b))
 
-p6 <- ggplot(data = sc_dat, aes(x = tb, y = mc)) +
+p8 <- ggplot(data = sc_dat, aes(x = tb, y = mc)) +
   geom_step(direction = "vh", size = 1, color = "steelblue") +
   geom_text(data = sc_dat %>% filter(pixel > 0), aes(label = paste("Pixel", pixel)), nudge_x = -2, nudge_y = 0.5) +
   theme_half_open() +
   labs(x = "Conservation (q)", y = "Marginal Costs (p)")
 
-lazy_ggsave(plot = p6, filename = "dummy_plots/supply_curves6", width = 9, height = 6)
+lazy_ggsave(plot = p8, filename = "dummy_plots/supply_curves8", width = 9, height = 6)
