@@ -187,16 +187,16 @@ two_states_map <- eez_cb %>%
 ## EXPORT FIGURES #########################################################################
 
 lazy_ggsave(plot = savings_map,
-            filename = "30_global/savings_map",
+            filename = "30_by_segment/savings_map",
             width = 20,
             height = 10)
 
 lazy_ggsave(plot = map_of_trade,
-            filename = "30_global/map_of_trade",
+            filename = "30_by_segment/map_of_trade",
             width = 20,
             height = 10)
 
 lazy_ggsave(plot = two_states_map,
-            filename = "30_global/two_states_map",
+            filename = "30_by_segment/two_states_map",
             width = 20,
             height = 10)

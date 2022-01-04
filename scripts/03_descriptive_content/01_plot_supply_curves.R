@@ -159,7 +159,7 @@ eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
 # EXPORT PLOTS ##############################################################################################
 lazy_ggsave(plot = eez_supply_curve,
             filename = "supply_curves/eez_supply_curve_with_mpas",
-            width = 18, height = 7)
+            width = 20, height = 7)
 
 lazy_ggsave(plot = eez_hem_supply_curve ,
             filename = "supply_curves/eez_hem_supply_curve_with_mpas",
@@ -170,5 +170,17 @@ lazy_ggsave(plot = eez_rlm_supply_curve ,
             filename = "supply_curves/eez_rlm_supply_curve_with_mpas",
             width = 20,
             height = 20)
+
+# Presentation figures
+
+labs <- eez_cb %>%
+  filter(iso3 %in% c("MEX", "CAN", "USA", "CHN", "ECU"),
+         pct == 1)
+
+eez_supply_curve_w_labels <- plot_grid(eez + geom_text(data = labs, aes(label = iso3)), global, ncol = 2, labels = "AUTO")
+
+lazy_ggsave(plot = eez_supply_curve_w_labels,
+            filename = "supply_curves/eez_supply_curve_with_mpas_labeled",
+            width = 20, height = 7)
 
 # END OF SCRIPT

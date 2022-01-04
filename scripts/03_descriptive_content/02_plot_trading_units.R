@@ -31,6 +31,7 @@ coast <- ne_countries(returnclass = "sf")
 
 # Load hemisphere shapefile and intersect with EEZ
 hemisphere <- st_read(file.path(project_path, "processed_data", "hemispheres.gpkg")) %>% 
+  st_make_valid() %>% 
   st_intersection(eez_meow)
 
 
@@ -114,7 +115,9 @@ realm_map <-
   ggtheme_map() +
   scale_fill_viridis_d() +
   labs(fill = "Realm") +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
 
 realm_bars <- realm_data %>% 
   st_drop_geometry() %>% 
@@ -133,11 +136,21 @@ realm_segments <- plot_grid(realm_map, realm_bars,
                             ncol = 1,
                             rel_heights = c(5, 6.5))
 
+realm_segments_h <- plot_grid(realm_map, realm_bars,
+                              ncol = 2,
+                              rel_widths = c(1, 1))
+
 
 lazy_ggsave(plot = realm_segments,
             filename = "trading_units/realm",
             width = 10,
             height = 12)
+
+
+lazy_ggsave(plot = realm_segments_h,
+            filename = "trading_units/realm_h",
+            width = 16,
+            height = 9)
 
 # Provinces map
 
@@ -155,7 +168,9 @@ province_map <- ggplot() +
   geom_sf(data = coast, color = "black", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) 
 
 province_bars <- provinces_data %>% 
   st_drop_geometry() %>% 
@@ -179,6 +194,11 @@ lazy_ggsave(plot = province_segments,
             filename = "trading_units/province",
             width = 10,
             height = 32)
+
+lazy_ggsave(plot = province_map,
+            filename = "trading_units/province_map",
+            width = 16,
+            height = 8)
 
 # Export plots
 

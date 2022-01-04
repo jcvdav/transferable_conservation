@@ -154,13 +154,13 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
                                    mkt_tc < bau_tc ~ "Buyers",
                                    mkt_tc > bau_tc ~ "Sellers"))
   
-  # r <- formatC(format = "f", x = r, digits = 2)
-  # write_csv(x = combined_outcomes,
-  # file = file.path(project_path,
-  #                  "output_data",
-  #                  "trade_outcomes",
-  #                  group,
-  # paste0("r_",r, "_iso3_outcomes.csv")))
+  r <- formatC(format = "f", x = r, digits = 2)
+  write_csv(x = combined_outcomes,
+  file = file.path(project_path,
+                   "output_data",
+                   "trade_outcomes",
+                   group,
+  paste0("r_",r, "_iso3_outcomes.csv")))
   
   
   gains_from_trade <- combined_outcomes %>% 
@@ -174,7 +174,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
 
 #################
 
-rs <- seq(0.01, 1, by = 0.01)
+rs <- seq(0.03, 1, by = 0.01)
 
 gains_from_trade_multiple_scenarios_global <- tibble(r = rs) %>% 
   mutate(data = map(r,
