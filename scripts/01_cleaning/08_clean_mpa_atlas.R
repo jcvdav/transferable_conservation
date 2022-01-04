@@ -31,7 +31,7 @@ mpas <-
     file.path(data_path, "mpa-atlas/mpatlas_20201223_clean"),
     "mpatlas_20201223_clean"
   ) %>%
-  clean_names(mpas) %>%
+  clean_names() %>%
   filter(iucn_categ %in% c("Ia", "Ib", "II"),
          implemente == 1) %>%
   select(mpa_id, wdpa_id, iso3 = sovereign)
