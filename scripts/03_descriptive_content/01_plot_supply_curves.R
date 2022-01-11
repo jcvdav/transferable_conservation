@@ -95,7 +95,7 @@ global <- ggplot(data = eez_h_sum,
   geom_line(size = 1) +
   ggtheme_plot() +
   labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
-       y = bquote("Fisheries revenue ($/CB)"))
+       y = bquote("Fisheries revenue ($/Q)"))
 
 # Country-level supply curves
 eez <- ggplot(data = eez_cb,
@@ -104,7 +104,7 @@ eez <- ggplot(data = eez_cb,
   guides(color = "none") +
   ggtheme_plot() +
   labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
-       y = bquote("Fisheries revenue ($/CB)"))
+       y = bquote("Fisheries revenue ($/Q)"))
 
 eez_supply_curve <- plot_grid(eez, global, ncol = 2, labels = "AUTO")
 
@@ -119,7 +119,7 @@ eez_hem <-
   facet_wrap( ~ hemisphere, scales = "free") +
   ggtheme_plot() +
   labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
-       y = bquote("Fisheries revenue ($/CB)"))
+       y = bquote("Fisheries revenue ($/Q)"))
 
 # Hem summed
 hem <- ggplot(data = hem_h_sum,
@@ -128,7 +128,7 @@ hem <- ggplot(data = hem_h_sum,
   scale_color_viridis_d() +
   ggtheme_plot() +
   labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
-       y = bquote("Fisheries revenue ($/CB)"))
+       y = bquote("Fisheries revenue ($/Q)"))
 
 eez_hem_supply_curve <- plot_grid(eez_hem, hem, ncol = 1, labels = "AUTO")
 
@@ -143,7 +143,7 @@ eez_rlm <-
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
   labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
-       y = bquote("Fisheries revenue ($/CB)"))
+       y = bquote("Fisheries revenue ($/Q)"))
 
 # realm summed
 rlm <- ggplot(data = rlm_h_sum,
@@ -152,7 +152,7 @@ rlm <- ggplot(data = rlm_h_sum,
   scale_color_viridis_d() +
   ggtheme_plot() +
   labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
-       y = bquote("Fisheries revenue ($/CB)"))
+       y = bquote("Fisheries revenue ($/Q)"))
 
 eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
 
@@ -177,16 +177,44 @@ labs <- eez_cb %>%
   filter(iso3 %in% c("MEX", "PER"),
          pct == 1)
 
-eez_supply_curve_w_labels <- eez +
-  geom_line(data = filter(eez_cb, iso3 %in% c("MEX", "PER")), color = "red") +
+eez_all <- ggplot(
+  data = eez_cb,
+  mapping = aes(x = tb / 1e3, y = mc, group = iso3)) +
+  geom_line(color = "transparent") +
+  guides(color = "none") +
+  ggtheme_plot() +
+  labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
+       y = bquote("Fisheries revenue ($/Q)"))
+
+eez_supply_curve_PER <- eez_all +
+  geom_line(data = filter(eez_cb, iso3 == "PER"),
+            mapping = aes(x = tb / 1e3, y = mc, group = iso3),
+            size = 1) +
+  guides(color = "none") +
+  ggtheme_plot() +
+  labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
+       y = bquote("Fisheries revenue ($/Q)")) +
+  geom_text(data = labs %>% filter(iso3 == "PER"), aes(label = iso3))
+
+eez_supply_curve_PER_MEX <- eez_all +
+  geom_line(data = filter(eez_cb, iso3 %in% c("MEX", "PER")), size = 1) +
   geom_text(data = labs, aes(label = iso3))
 
-lazy_ggsave(plot = eez,
-            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas",
+eez_all <- eez_all +
+  geom_line() +
+  geom_text(data = labs, aes(label = iso3))
+
+
+lazy_ggsave(plot = eez_supply_curve_PER,
+            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas_PER",
             width = 10, height = 7)
 
-lazy_ggsave(plot = eez_supply_curve_w_labels,
-            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas_labeled",
+lazy_ggsave(plot = eez_supply_curve_PER_MEX,
+            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas_PER_MEX",
+            width = 10, height = 7)
+
+lazy_ggsave(plot = eez_all,
+            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas",
             width = 10, height = 7)
 
 # END OF SCRIPT

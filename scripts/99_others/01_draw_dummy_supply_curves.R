@@ -26,7 +26,8 @@ p1 <- data %>%
   labs(x = "Conservation", y = "Marginal Costs") +
   scale_x_continuous(expand = c(0, 0),
                      breaks = (1:10)/10,
-                     labels = scales::percent) +
+                     labels = scales::percent,
+                     limits = c(0, 1.1)) +
   scale_y_continuous(expand = c(0, 0),
                      # breaks = c(5, 10, 15),
                      # labels = c(5, 10, 15),
@@ -34,10 +35,10 @@ p1 <- data %>%
 
 
 p2 <- p1 +
-  geom_vline(xintercept = 0.05, color = "black", linetype = "dashed") +
-  geom_segment(x = 0, xend = 0.05, y = 1, yend = 1, linetype = "dashed", color = "steelblue") +
-  geom_polygon(data = tibble(x = c(0, 0.05, 0.05, 0),
-                             y = c(0, 1, 0, 0)),
+  geom_vline(xintercept = 0.1, color = "black", linetype = "dashed") +
+  geom_segment(x = 0, xend = 0.1, y = 2, yend = 2, linetype = "dashed", color = "steelblue") +
+  geom_polygon(data = tibble(x = c(0, 0.1, 0.1, 0),
+                             y = c(0, 2, 0, 0)),
                mapping = aes(x = x ,y = y),
                fill = "steelblue",
                alpha = 0.5)
@@ -61,7 +62,8 @@ p_full <- ggplot(data = data) +
   theme(legend.position = "None") +
   scale_x_continuous(expand = c(0, 0),
                      breaks = (1:10)/10,
-                     labels = scales::percent) +
+                     labels = scales::percent,
+                     limits = c(0, 1.1)) +
   scale_y_continuous(expand = c(0, 0),
                      # breaks = c(5, 10, 15),
                      # labels = c(5, 10, 15),
@@ -74,17 +76,17 @@ p4 <- p_full +
   geom_segment(x = 0, xend = 0.3, y = 3, yend = 3, linetype = "dashed", color = "red")
 
 p5 <- p4 +
-  geom_hline(yintercept = 4.5, linetype = "dashed", color = "black") +
+  geom_hline(yintercept = 4, linetype = "dashed", color = "black") +
   geom_vline(xintercept = 0.3, color = "gray", linetype = "dashed")
 
 p6 <- p_full  +
-  geom_hline(yintercept = 4.5, linetype = "dashed", color = "black") +
+  geom_hline(yintercept = 4, linetype = "dashed", color = "black") +
   geom_vline(xintercept = 0.3, color = "gray", linetype = "dashed") +
-  geom_segment(x = 0.225, xend = 0.225, y = 0, yend = 4.5, color = "steelblue", linetype = "dashed") +
-  geom_segment(x = 0.45, xend = 0.45, y = 0, yend = 4.5, color = "red", linetype = "dashed")
+  geom_segment(x = 0.2, xend = 0.2, y = 0, yend = 4, color = "steelblue", linetype = "dashed") +
+  geom_segment(x = 0.4, xend = 0.4, y = 0, yend = 4, color = "red", linetype = "dashed")
 
-pol2 <- tibble(q = c(0.3, 0.3, 0.45, 0.3, 0.225, 0.3, 0.3, 0.225),
-               p = c(3, 4.5, 4.5, 3, 4.5, 4.5, 6, 4.5),
+pol2 <- tibble(q = c(0.3, 0.3, 0.4, 0.3, 0.2, 0.3, 0.3, 0.2),
+               p = c(3, 4, 4, 3, 4, 4, 6, 4),
                n = c("A", "A", "A", "A",
                      "B", "B", "B", "B"))
   
@@ -120,7 +122,7 @@ sc_dat <- tibble(pixel = 1:4,
 
 p8 <- ggplot(data = sc_dat, aes(x = tb, y = mc)) +
   geom_step(direction = "vh", size = 1, color = "steelblue") +
-  geom_text(data = sc_dat %>% filter(pixel > 0), aes(label = paste("Pixel", pixel)), nudge_x = -2, nudge_y = 0.5) +
+  geom_text(data = sc_dat %>% filter(pixel > 0), aes(label = paste("Pixel", pixel)), nudge_x = -3, nudge_y = 0.5) +
   theme_half_open() +
   labs(x = "Conservation (q)", y = "Marginal Costs (p)")
 
