@@ -230,7 +230,7 @@ gains_from_trade_multiple_scenarios <- rbind(
 abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = difference, color = bubble)) +
   geom_line(size = 1) +
   ggtheme_plot() +
-  labs(x = bquote("% Benefits ("~HS[i]*A[i]~")"), 
+  labs(x = "% Conservation Benefits",
        y = "Costs avoided (BAU - MKT)",
        color = "Bubble policy") +
   scale_x_continuous(labels = scales::percent) +
@@ -242,8 +242,8 @@ abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = difference, co
 rel <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = ratio, color = bubble)) +
   geom_line(size = 1) +
   ggtheme_plot() +
-  labs(x = bquote("% Benefits ("~HS[i]*A[i]~")"), 
-       y = "Costs savings (difference / BAU)") +
+  labs(x = "% Conservation Benefits", 
+       y = "Costs avoided (difference / BAU)") +
   scale_x_continuous(labels = scales::percent) +
   scale_y_continuous(labels = scales::percent) +
   scale_color_brewer(palette = "Set1") +
@@ -256,6 +256,13 @@ lazy_ggsave(plot = gain_from_trade_segmented_market_plot,
             file = "gain_from_trade_segmented_market_plot",
             width = 25,
             height = 10)
+
+lazy_ggsave(plot = rel +
+              theme(legend.position = "right") +
+              guides(color = guide_legend("Bubble policy")),
+            file = "rel_gain_from_trade_segmented_market_plot",
+            width = 16,
+            height = 9)
 
 write.csv(x = gains_from_trade_multiple_scenarios,
           file = file.path(project_path, "output_data", "gains_from_trade_bubbles.csv"),

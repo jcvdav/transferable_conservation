@@ -33,5 +33,6 @@ savings_plot <- filter(outcome_data, r == r_interest) %>%
 
 lazy_ggsave(plot = savings_plot,
             filename = "savings_30",
-            width = 16,
+            width = 16.5,
             height = 9)
+s
