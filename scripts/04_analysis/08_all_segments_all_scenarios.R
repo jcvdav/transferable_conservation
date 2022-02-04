@@ -96,31 +96,23 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
   
   already_reached <- curves %>%
     filter(pct_protected >= r) %>%
-    select(iso3, pct_protected) %>%
+    select(iso3, {{group}}, pct_protected) %>%
     distinct()
   
   trading_prices <- agg_curves %>% 
     group_by_at(group) %>% 
-    filter(pct <= r) %>% 
+    mutate(pixel_fraction = pmin(1 - ((tb - ((tb * r) / pct)) / benefit), 1)) %>% 
+    filter(pixel_fraction >= 0) %>% 
     slice_max(mc) %>% 
     ungroup() %>% 
     select({{group}}, trading_price = mc)
   
-  # Filter to keep only the protected places
-  bau <- curves %>% 
-    filter(pct_protected <= r) %>% 
-    group_by_at(c("iso3", group)) %>% 
-    mutate(min_pct = min(pct, na.rm = T)) %>% 
-    ungroup() %>% 
-    filter(pct <= r | pct <= min_pct)                       # Keep the most efficient 30% of each country - hemisphere
-
-  mkt <- curves %>% 
-    left_join(trading_prices, by = group) %>%
-    filter(mc <= trading_price)              # Keep all patches in each country with a cost < trading price
-
-  ## Calculate country-level summaries
-  # For BAU
-  realized_bau_cb <- bau %>% 
+  
+  realized_bau_cb <- curves %>% 
+    mutate(pixel_fraction = pmin(1 - ((tb - ((tb * r) / pct)) / benefit), 1)) %>% 
+    filter(pixel_fraction >= 0) %>% 
+    mutate(benefit = benefit * pixel_fraction,
+           cost = cost * pixel_fraction) %>% 
     group_by_at(c("iso3", group)) %>% 
     summarize(bau_tb = sum(benefit, na.rm = T),
               bau_tc = sum(cost, na.rm = T),
@@ -129,7 +121,9 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
     ungroup()
   
   # For a market
-  realized_mkt_cb <- mkt %>% 
+  realized_mkt_cb <- curves %>% 
+    left_join(trading_prices, by = group) %>%
+    filter(mc <= trading_price) %>%               # Keep all patches in each country with a cost < trading price
     group_by_at(c("iso3", group, "trading_price")) %>% 
     summarize(mkt_tb = sum(benefit, na.rm = T),
               mkt_tc = sum(cost, na.rm = T),
@@ -140,7 +134,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
   combined_outcomes <- conserving_nations %>% 
     left_join(realized_mkt_cb, by = c("iso3", group)) %>%
     left_join(realized_bau_cb, by = c("iso3", group)) %>% 
-    left_join(already_reached, by = "iso3") %>% 
+    left_join(already_reached, by = c("iso3", group)) %>% 
     replace_na(replace = list(
       mkt_tb = 0, mkt_tc = 0,
       bau_tb = 0, bau_tc = 0)) %>% 
@@ -156,12 +150,12 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
   
   r <- formatC(format = "f", x = r, digits = 2)
   write_csv(x = combined_outcomes,
-  file = file.path(project_path,
-                   "output_data",
-                   "trade_outcomes",
-                   group,
-  paste0("r_",r, "_iso3_outcomes.csv")))
-  
+            file = file.path(project_path,
+                             "output_data",
+                             "trade_outcomes",
+                             group,
+                             paste0("r_",r, "_iso3_outcomes.csv")))
+
   
   gains_from_trade <- combined_outcomes %>% 
     select(bau_tc, difference = savings) %>%
@@ -174,7 +168,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
 
 #################
 
-rs <- seq(0.03, 1, by = 0.01)
+rs <- seq(0.1, 1, by = 0.01)
 
 gains_from_trade_multiple_scenarios_global <- tibble(r = rs) %>% 
   mutate(data = map(r,
