@@ -86,7 +86,7 @@ pro_h_sum <- readRDS(
 #################
 # Gains from trade hemisphere function
 
-get_segmented_market_gains <- function(r, curves, agg_curves, group) {
+get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) {
 
   # browser()
   # Get conserving nations
@@ -148,13 +148,15 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group) {
                                    mkt_tc < bau_tc ~ "Buyers",
                                    mkt_tc > bau_tc ~ "Sellers"))
   
-  r <- formatC(format = "f", x = r, digits = 2)
-  write_csv(x = combined_outcomes,
-            file = file.path(project_path,
-                             "output_data",
-                             "trade_outcomes",
-                             group,
-                             paste0("r_",r, "_iso3_outcomes.csv")))
+  if(write){
+    r <- formatC(format = "f", x = r, digits = 2)
+    write_csv(x = combined_outcomes,
+              file = file.path(project_path,
+                               "output_data",
+                               "trade_outcomes",
+                               group,
+                               paste0("r_",r, "_iso3_outcomes.csv")))
+  }
 
   
   gains_from_trade <- combined_outcomes %>% 
