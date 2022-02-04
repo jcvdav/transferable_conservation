@@ -14,25 +14,20 @@ r_target <- "0.30"
 file <- list.files(path = file.path(project_path,
                                     "output_data",
                                     "trade_outcomes",
-                                    "realm"),
+                                    "province"),
                    pattern = r_target,
                    full.names = T)
 
 data <- read.csv(file) %>% 
   mutate(ratio = savings/ bau_tc)
 
-eez <- st_read(
-  file.path(project_path,
-            "processed_data",
-            "clean_world_eez_v11.gpkg")
-) %>% 
-  mutate(has_obligations = iso3 %in% unique(data$iso3)) %>% 
-  rmapshaper::ms_simplify(keep_shapes = T, sys = T) %>% 
-  sf::st_make_valid() %>% 
-  filter(iso3 %in% unique(data$iso3))
 
-eez_with_results <- eez %>% 
-  left_join(data, by = c("iso3"))
+eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg")) %>% 
+  rmapshaper::ms_simplify(keep_shapes = T, sys = T) %>% 
+  sf::st_make_valid() 
+
+eez_with_results <- eez_meow %>% 
+  left_join(data, by = c("iso3", "province"))
 
 sellers <- eez_with_results %>% 
   filter(transaction == "Sellers") %>% 
@@ -57,6 +52,6 @@ savings_map <- ggplot() +
 
 
 lazy_ggsave(plot = savings_map,
-            filename = "30_by_segment/realm_savings_map",
+            filename = "30_by_segment/province_savings_map",
             width = 18.7, height = 9)
 
