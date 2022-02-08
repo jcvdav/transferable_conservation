@@ -105,7 +105,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) 
     filter(pixel_fraction >= 0) %>% 
     slice_max(mc) %>% 
     ungroup() %>% 
-    select({{group}}, trading_price = mc)
+    select({{group}}, trading_price = mc, fraction_marginal_pixel = pixel_fraction)
   
   
   realized_bau_cb <- curves %>% 
@@ -124,6 +124,11 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) 
   realized_mkt_cb <- curves %>% 
     left_join(trading_prices, by = group) %>%
     filter(mc <= trading_price) %>%               # Keep all patches in each country with a cost < trading price
+    group_by_at(group) %>% 
+    mutate(pixel_pct = ifelse(mc < max(mc), 1, fraction_marginal_pixel)) %>% 
+    ungroup() %>% 
+    mutate(benefit = pixel_pct * benefit,
+           cost = pixel_pct * cost) %>% 
     group_by_at(c("iso3", group, "trading_price")) %>% 
     summarize(mkt_tb = sum(benefit, na.rm = T),
               mkt_tc = sum(cost, na.rm = T),
@@ -160,7 +165,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) 
 
   
   gains_from_trade <- combined_outcomes %>% 
-    select(bau_tc, difference = savings) %>%
+    select(bau_tb, mkt_tb, bau_tc, difference = savings) %>%
     summarize_all(sum, na.rm = T) %>% 
     mutate(ratio = difference / bau_tc,
            bubble = group)
@@ -177,7 +182,8 @@ gains_from_trade_multiple_scenarios_global <- tibble(r = rs) %>%
                     get_segmented_market_gains,
                     curves = eez_cb,
                     agg_curves = eez_h_sum_cb,
-                    group = "global")) %>% 
+                    group = "global",
+                    write = T)) %>% 
   unnest(data)
 
 gains_from_trade_multiple_scenarios_hem <- 
@@ -186,7 +192,8 @@ gains_from_trade_multiple_scenarios_hem <-
                     get_segmented_market_gains,
                     curves = hem_eez_cb,
                     agg_curves = hem_h_sum,
-                    group = "hemisphere")) %>% 
+                    group = "hemisphere",
+                    write = T)) %>% 
   unnest(data) 
 
 gains_from_trade_multiple_scenarios_rlm <- 
@@ -195,7 +202,8 @@ gains_from_trade_multiple_scenarios_rlm <-
                     get_segmented_market_gains,
                     curves = rlm_eez_cb,
                     agg_curves = rlm_h_sum,
-                    group = "realm")) %>% 
+                    group = "realm",
+                    write = T)) %>% 
     unnest(data)
 
 gains_from_trade_multiple_scenarios_pro <- 
@@ -204,7 +212,8 @@ gains_from_trade_multiple_scenarios_pro <-
                     get_segmented_market_gains,
                     curves = pro_eez_cb,
                     agg_curves = pro_h_sum,
-                    group = "province")) %>% 
+                    group = "province",
+                    write = T)) %>% 
   unnest(data)
 
 gains_from_trade_multiple_scenarios <- rbind(
@@ -222,43 +231,7 @@ gains_from_trade_multiple_scenarios <- rbind(
                             bubble == "Province" ~ "Province (N = 60)"),
          bubble = fct_relevel(bubble, "Province (N = 60)", after = Inf))
 
-# Visualize 
-abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = difference, color = bubble)) +
-  geom_line(size = 1) +
-  ggtheme_plot() +
-  labs(x = "% Conservation Benefits",
-       y = "Costs avoided (BAU - MKT)",
-       color = "Bubble policy") +
-  scale_x_continuous(labels = scales::percent) +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.justification = c(0, 1),
-        legend.position = c(0, 1)) +
-  geom_vline(xintercept = 0.3, linetype = "dashed")
-
-rel <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = ratio, color = bubble)) +
-  geom_line(size = 1) +
-  ggtheme_plot() +
-  labs(x = "% Conservation Benefits", 
-       y = "Costs avoided (difference / BAU)") +
-  scale_x_continuous(labels = scales::percent) +
-  scale_y_continuous(labels = scales::percent) +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position  = "None") +
-  geom_vline(xintercept = 0.3, linetype = "dashed")
-
-gain_from_trade_segmented_market_plot <- plot_grid(abs, rel, ncol = 2, labels = "AUTO")
-
-lazy_ggsave(plot = gain_from_trade_segmented_market_plot,
-            file = "gain_from_trade_segmented_market_plot",
-            width = 25,
-            height = 10)
-
-lazy_ggsave(plot = rel +
-              theme(legend.position = "right") +
-              guides(color = guide_legend("Bubble policy")),
-            file = "rel_gain_from_trade_segmented_market_plot",
-            width = 16,
-            height = 9)
+# Export
 
 write.csv(x = gains_from_trade_multiple_scenarios,
           file = file.path(project_path, "output_data", "gains_from_trade_bubbles.csv"),
