@@ -31,7 +31,7 @@ p1 <- data %>%
   scale_y_continuous(expand = c(0, 0),
                      # breaks = c(5, 10, 15),
                      # labels = c(5, 10, 15),
-                     limits = c(0, 25))
+                     limits = c(0, 20))
 
 
 p2 <- p1 +
@@ -75,6 +75,23 @@ p4 <- p_full +
   geom_segment(x = 0, xend = 0.3, y = 6, yend = 6, linetype = "dashed", color = "steelblue") +
   geom_segment(x = 0, xend = 0.3, y = 3, yend = 3, linetype = "dashed", color = "red")
 
+p4_area <- p4 +
+  geom_polygon(data = tibble(x = c(0, 0.3, 0.3, 0),
+                             y = c(0, 6, 0, 0)),
+               mapping = aes(x = x ,y = y),
+               fill = "steelblue",
+               alpha = 0.5) +
+  geom_polygon(data = tibble(x = c(0, 0.3, 0.3, 0),
+                             y = c(0, 3, 0, 0)),
+               mapping = aes(x = x ,y = y),
+               fill = "red",
+               alpha = 0.5) +
+  scale_x_continuous(breaks = c(0, 0.3, 0.6), labels = c("0", "Q", "2Q"), expand = c(0, 0)) +
+  scale_y_continuous(breaks = c(0, 3, 6), labels = c("0", expression(P[low]), expression(P[high]))) +
+  labs(x = "Conservation (Q)", "Marginal Costs (P)") +
+  geom_text(x = 0.25, y = 5, label = expression(TC[1])) +
+  geom_text(x = 0.25, y = 2.5, label = expression(TC[2]))
+
 p5 <- p4 +
   geom_hline(yintercept = 4, linetype = "dashed", color = "black") +
   geom_vline(xintercept = 0.3, color = "gray", linetype = "dashed")
@@ -84,6 +101,29 @@ p6 <- p_full  +
   geom_vline(xintercept = 0.3, color = "gray", linetype = "dashed") +
   geom_segment(x = 0.2, xend = 0.2, y = 0, yend = 4, color = "steelblue", linetype = "dashed") +
   geom_segment(x = 0.4, xend = 0.4, y = 0, yend = 4, color = "red", linetype = "dashed")
+
+p6_area <- p6 +
+  geom_polygon(data = tibble(x = c(0, 0.2, 0.2, 0),
+                             y = c(0, 4, 0, 0)),
+               mapping = aes(x = x ,y = y),
+               fill = "steelblue",
+               alpha = 0.5) +
+  geom_polygon(data = tibble(x = c(0, 0.4, 0.4, 0),
+                             y = c(0, 4, 0, 0)),
+               mapping = aes(x = x ,y = y),
+               fill = "red",
+               alpha = 0.5) +
+  geom_text(x = 0.12, y = 2, label = expression(TC[1])) +
+  geom_text(x = 0.3, y = 3, label = expression(TC[2])) +
+  geom_polygon(data = pol2 %>% filter(n == "B"), aes(x = q, y = p), fill = "steelblue", alpha = 0.8, color = "transparent") +
+  geom_polygon(data = pol2 %>% filter(n == "A"), aes(x = q, y = p), fill = "red", alpha = 0.8, color = "transparent") +
+  scale_x_continuous(breaks = c(0, 0.2, 0.3, 0.4, 0.6), labels = c("0", "2/3Q", "Q", "4/3Q", "2Q"), expand = c(0, 0)) +
+  scale_y_continuous(breaks = c(0, 3, 6), labels = c("0", expression(P[low]), expression(P[high]))) +
+  labs(x = "Conservation (Q)", "Marginal Costs (P)") +
+  geom_text_repel(x = 0.3, y = 6, label = expression(Savings[1])) +
+  geom_text_repel(x = 0.3, y = 3, label = expression(Savings[2]))
+
+plot_grid(p4_area, p6_area, ncol = 1)
 
 pol2 <- tibble(q = c(0.3, 0.3, 0.4, 0.3, 0.2, 0.3, 0.3, 0.2),
                p = c(3, 4, 4, 3, 4, 4, 6, 4),
