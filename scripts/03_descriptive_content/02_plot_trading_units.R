@@ -41,7 +41,6 @@ global <- eez_meow %>%
   geom_sf(fill = "steelblue", color = "black") +
   geom_sf(data = coast, color = "black", size = 0.1) +
   ggtheme_map() +
-  ggtitle("Nations = 195") +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0))
 
@@ -207,7 +206,16 @@ lazy_ggsave(plot = province_map,
             width = 16,
             height = 8)
 
-# Export plots
+# Panel figure
+
+panel <- plot_grid(global, hemisphere_map, realm_map, province_map,
+                   ncol = 2,
+                   labels = "AUTO")
+
+lazy_ggsave(plot = panel,
+            filename = "trading_units/trading_units_panel",
+            width = 16,
+            height = 8)
 
 
 # END OF SCRIPT #

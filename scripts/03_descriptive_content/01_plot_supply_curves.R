@@ -112,7 +112,7 @@ eez_supply_curve <- plot_grid(eez, global, ncol = 2, labels = "AUTO")
 
 eez_hem <- 
   ggplot(data = hem_cb,
-         mapping = aes(x = tb, y = mc, group = iso3)) +
+         mapping = aes(x = tb / 1e3, y = mc, group = iso3)) +
   geom_line() +
   guides(color = "none") +
   scale_color_viridis_d() +
@@ -136,10 +136,8 @@ eez_hem_supply_curve <- plot_grid(eez_hem, hem, ncol = 1, labels = "AUTO")
 # Country realm
 eez_rlm <-
   ggplot(data = rlm_eez_cb,
-         mapping = aes(x = tb, y = mc, group = iso3)) +
+         mapping = aes(x = tb / 1e3, y = mc, group = iso3)) +
   geom_line() +
-  guides(color = "none") +
-  scale_color_viridis_d() +
   facet_wrap( ~ realm, scales = "free") +
   ggtheme_plot() +
   labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
@@ -156,7 +154,30 @@ rlm <- ggplot(data = rlm_h_sum,
 
 eez_rlm_supply_curve <- plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
 
+# Country province
+eez_pro <-
+  ggplot(data = pro_eez_cb,
+         mapping = aes(x = tb / 1e3, y = mc, group = iso3)) +
+  geom_line() +
+  facet_wrap( ~ province, scales = "free", ncol = 6) +
+  ggtheme_plot(font_size = 8) +
+  labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
+       y = bquote("Fisheries revenue ($/Q)"))
+
+# realm summed
+pro <- ggplot(data = pro_h_sum,
+              mapping = aes(x = tb, y = mc, color = province)) +
+  geom_line() +
+  scale_color_viridis_d() +
+  ggtheme_plot() +
+  theme(legend.position = "None") +
+  labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
+       y = bquote("Fisheries revenue ($/Q)"))
+
+eez_pro_supply_curve <- plot_grid(eez_pro, rlm, ncol = 1, labels = "AUTO")
+
 # EXPORT PLOTS ##############################################################################################
+# Panels
 lazy_ggsave(plot = eez_supply_curve,
             filename = "supply_curves/eez_supply_curve_with_mpas",
             width = 20, height = 7)
@@ -170,6 +191,27 @@ lazy_ggsave(plot = eez_rlm_supply_curve ,
             filename = "supply_curves/eez_rlm_supply_curve_with_mpas",
             width = 20,
             height = 20)
+
+# Singles
+lazy_ggsave(plot = eez,
+            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas",
+            width = 10,
+            height = 7)
+
+lazy_ggsave(plot = eez_hem,
+            filename = "supply_curves/hem_supply_curve_no_hsum_with_mpas",
+            width = 15,
+            height = 10)
+
+lazy_ggsave(plot = eez_rlm,
+            filename = "supply_curves/rlm_supply_curve_no_hsum_with_mpas",
+            width = 17.5,
+            height = 10)
+
+lazy_ggsave(plot = eez_pro,
+            filename = "supply_curves/pro_supply_curve_no_hsum_with_mpas",
+            width = 20,
+            height = 25)
 
 # Presentation figures
 
@@ -215,10 +257,6 @@ lazy_ggsave(plot = eez_supply_curve_PER_MEX,
 
 lazy_ggsave(plot = eez_all,
             filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas_PER_MEX",
-            width = 10, height = 7)
-
-lazy_ggsave(plot = eez,
-            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas",
             width = 10, height = 7)
 
 
