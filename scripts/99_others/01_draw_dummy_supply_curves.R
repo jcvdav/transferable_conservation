@@ -1,5 +1,17 @@
+######################################################
+#title#
+######################################################
+# 
+# Purpose
+#
+######################################################
+
+## SET UP ######################################################################
+# Load packages
+library(here)
 library(startR)
 library(cowplot)
+library(ggpattern)
 library(tidyverse)
 
 data <- expand_grid(
@@ -15,6 +27,18 @@ pol1 <- tibble(q = c(0, 5, 5, 0, 0, 5, 5, 0),
               n = c("A", "A", "A", "A",
                     "B", "B", "B", "B"))
 
+pol2 <- tibble(q = c(0.3, 0.3, 0.4, 0.3, 0.2, 0.3, 0.3, 0.2),
+               p = c(3, 4, 4, 3, 4, 4, 6, 4),
+               n = c("A", "A", "A", "A",
+                     "B", "B", "B", "B"))
+
+bau_text <- tibble(x = c(0.25, 0.25, 0.5, 0.55),
+                   y = c(4, 1.5, 11, 6),
+                   label = c("TC[1]", "TC[2]", "MC[1]", "MC[2]"))
+
+mkt_text <- tibble(x = c(0.12, 0.25, 0.5, 0.55, 0.275, 0.325),
+               y = c(2, 1.5, 11, 6, 5, 3.5),
+               label = c("TC[1]", "TC[2]", "MC[1]", "MC[2]", "S[1]", "S[2]"))
 
 
 p1 <- data %>% 
@@ -27,7 +51,7 @@ p1 <- data %>%
   scale_x_continuous(expand = c(0, 0),
                      breaks = (1:10)/10,
                      labels = scales::percent,
-                     limits = c(0, 1.1)) +
+                     limits = c(0, 0.6)) +
   scale_y_continuous(expand = c(0, 0),
                      # breaks = c(5, 10, 15),
                      # labels = c(5, 10, 15),
@@ -52,8 +76,9 @@ p3 <- p1 +
                fill = "steelblue",
                alpha = 0.5)
 
-p_full <- ggplot(data = data) +
-  geom_line(mapping = aes(x = q / 10, y = p, color = n),
+p_full <- ggplot() +
+  geom_line(data = data,
+            mapping = aes(x = q / 10, y = p, color = n),
             size = 1) +
   geom_text(x = .95, y = 20.5, label = expression(MC[1])) +
   geom_text(x = .95, y = 10.5, label = expression(MC[2])) +
@@ -86,11 +111,18 @@ p4_area <- p4 +
                mapping = aes(x = x ,y = y),
                fill = "red",
                alpha = 0.5) +
-  scale_x_continuous(breaks = c(0, 0.3, 0.6), labels = c("0", "Q", "2Q"), expand = c(0, 0)) +
-  scale_y_continuous(breaks = c(0, 3, 6), labels = c("0", expression(P[low]), expression(P[high]))) +
+  scale_x_continuous(breaks = c(0, 0.3, 0.6),
+                     labels = c("0", "Q", "2Q"),
+                     expand = c(0, 0),
+                     limits = c(0, 0.6)) +
+  scale_y_continuous(breaks = c(0, 3, 6),
+                     labels = c("0", expression(P[low]), expression(P[high])),
+                     limits = c(0, 12),
+                     expand = c(0, 0)) +
   labs(x = "Conservation (Q)", "Marginal Costs (P)") +
-  geom_text(x = 0.25, y = 5, label = expression(TC[1])) +
-  geom_text(x = 0.25, y = 2.5, label = expression(TC[2]))
+  geom_text(data = bau_text,
+            aes(x = x, y = y, label = label),
+            parse = T)
 
 p5 <- p4 +
   geom_hline(yintercept = 4, linetype = "dashed", color = "black") +
@@ -108,27 +140,42 @@ p6_area <- p6 +
                mapping = aes(x = x ,y = y),
                fill = "steelblue",
                alpha = 0.5) +
-  geom_polygon(data = tibble(x = c(0, 0.4, 0.4, 0),
-                             y = c(0, 4, 0, 0)),
+  geom_polygon(data = tibble(x = c(0, 0.3, 0.3, 0),
+                             y = c(0, 3, 0, 0)),
                mapping = aes(x = x ,y = y),
                fill = "red",
                alpha = 0.5) +
-  geom_text(x = 0.12, y = 2, label = expression(TC[1])) +
-  geom_text(x = 0.3, y = 3, label = expression(TC[2])) +
-  geom_polygon(data = pol2 %>% filter(n == "B"), aes(x = q, y = p), fill = "steelblue", alpha = 0.8, color = "transparent") +
-  geom_polygon(data = pol2 %>% filter(n == "A"), aes(x = q, y = p), fill = "red", alpha = 0.8, color = "transparent") +
-  scale_x_continuous(breaks = c(0, 0.2, 0.3, 0.4, 0.6), labels = c("0", "2/3Q", "Q", "4/3Q", "2Q"), expand = c(0, 0)) +
-  scale_y_continuous(breaks = c(0, 3, 6), labels = c("0", expression(P[low]), expression(P[high]))) +
+  geom_polygon_pattern(data = tibble(x = c(0.3, 0.3, 0.4, 0.4, 0.3),
+                             y = c(0, 4, 4, 0, 0)),
+               mapping = aes(x = x ,y = y),
+               fill = "red",
+               pattern_fill = "steelblue",
+               color = "transparent",
+               alpha = 0.5) +
+  geom_polygon(data = pol2 %>% filter(n == "B"), aes(x = q, y = p), fill = "steelblue", color = "black") +
+  geom_polygon(data = pol2 %>% filter(n == "A"), aes(x = q, y = p), fill = "red", color = "black", alpha = 0.5) +
+  scale_x_continuous(breaks = c(0, 0.2, 0.3, 0.4, 0.6),
+                     labels = c("0", "2/3Q", "Q", "4/3Q", "2Q"),
+                     expand = c(0, 0),
+                     limits = c(0, 0.6)) +
+  scale_y_continuous(breaks = c(0, 3, 4, 6),
+                     labels = c("0", expression(P[low]), expression(P[mkt]), expression(P[high])),
+                     limits = c(0, 12), expand = c(0, 0)) +
   labs(x = "Conservation (Q)", "Marginal Costs (P)") +
-  geom_text_repel(x = 0.3, y = 6, label = expression(Savings[1])) +
-  geom_text_repel(x = 0.3, y = 3, label = expression(Savings[2]))
+  geom_text(data = mkt_text, aes(x = x, y = y, label = label), parse = T)
 
-plot_grid(p4_area, p6_area, ncol = 1)
 
-pol2 <- tibble(q = c(0.3, 0.3, 0.4, 0.3, 0.2, 0.3, 0.3, 0.2),
-               p = c(3, 4, 4, 3, 4, 4, 6, 4),
-               n = c("A", "A", "A", "A",
-                     "B", "B", "B", "B"))
+
+
+paper_figure <- plot_grid(p4_area, p6_area,
+                          ncol = 2,
+                          labels = "AUTO")
+
+lazy_ggsave(plot = paper_figure,
+            filename = "dummy_plots/stialized_supply_curves",
+            width = 18,
+            height = 8)
+
   
 p7 <- p6 +
   geom_polygon(data = pol2 %>% filter(n == "B"), aes(x = q, y = p), fill = "steelblue", alpha = 0.5, color = "transparent") +

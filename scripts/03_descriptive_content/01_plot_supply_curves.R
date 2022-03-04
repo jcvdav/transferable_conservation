@@ -214,7 +214,12 @@ lazy_ggsave(plot = eez_supply_curve_PER_MEX,
             width = 10, height = 7)
 
 lazy_ggsave(plot = eez_all,
+            filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas_PER_MEX",
+            width = 10, height = 7)
+
+lazy_ggsave(plot = eez,
             filename = "supply_curves/eez_supply_curve_no_hsum_with_mpas",
             width = 10, height = 7)
+
 
 # END OF SCRIPT
