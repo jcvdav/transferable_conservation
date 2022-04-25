@@ -12,14 +12,15 @@ library(tidyverse)
 
 # Load data
 gains_from_trade_multiple_scenarios <-
-  read_csv(file = file.path(project_path, "output_data", "gains_from_trade_bubbles.csv"))
+  read_csv(file = file.path(project_path, "output_data", "gains_from_trade_bubbles.csv")) %>% 
+  mutate(bubble = fct_relevel(bubble, "Province (N = 60)", after = Inf))
 
 ## PROCESSING ##################################################################
 # Visualize absolute savings
 abs <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = difference / 1e9, color = bubble)) +
   geom_rect(xmin = 0, xmax = 0.1, ymin = 0, ymax = 25e9, color = "transparent", fill = "gray") +
   geom_line(size = 1) +
-  geom_vline(xintercept = 0.3, linetype = "dashed") +
+  geom_vline(xintercept = c(0.1, 0.3, 0.5), linetype = "dashed") +
   ggtheme_plot() +
   labs(x = "% Conservation Benefits",
        y = "Costs avoided (BAU - MKT; billions)",
