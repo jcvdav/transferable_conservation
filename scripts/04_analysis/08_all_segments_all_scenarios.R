@@ -228,8 +228,7 @@ gains_from_trade_multiple_scenarios <- rbind(
          bubble = case_when(bubble == "Global" ~ "Global (N = 1)",
                             bubble == "Hemisphere" ~ "Hemisphere (N = 4)",
                             bubble == "Realm" ~ "Realm (N = 12)",
-                            bubble == "Province" ~ "Province (N = 60)"),
-         bubble = fct_relevel(bubble, "Province (N = 60)", after = Inf))
+                            bubble == "Province" ~ "Province (N = 60)"))
 
 # Export
 
