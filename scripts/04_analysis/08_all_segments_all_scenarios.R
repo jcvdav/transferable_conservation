@@ -116,6 +116,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) 
     group_by_at(c("iso3", group)) %>% 
     summarize(bau_tb = sum(benefit, na.rm = T),
               bau_tc = sum(cost, na.rm = T),
+              bau_area = sum(area, na.rm = T),
               mc_stop = max(mc, na.rm = T),
               .groups = "drop_last") %>% 
     ungroup()
@@ -132,6 +133,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) 
     group_by_at(c("iso3", group, "trading_price")) %>% 
     summarize(mkt_tb = sum(benefit, na.rm = T),
               mkt_tc = sum(cost, na.rm = T),
+              mkt_area = sum(area, na.rm = T),
               .groups = "drop_last") %>% 
     ungroup()
   
