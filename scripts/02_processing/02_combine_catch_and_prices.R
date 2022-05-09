@@ -1,3 +1,11 @@
+######################################################
+# 02_combine_catch_and_prices
+######################################################
+# 
+# Builds up a taxonomy-based table used to match
+# price data to catch data.
+#
+######################################################
 
 # Load packages
 library(rfishbase)
@@ -152,7 +160,7 @@ validated_taxonomy <- validated_taxonomy %>%
 updated_price <- price %>% 
   right_join(validated_taxonomy, by = "scientific_name")
 
-# Now e create a fucntion that calculates median for any desired taxa
+# Now we create a fucntion that calculates median for any desired taxa
 
 summarize_group <- function(x, group) {
   varname <- paste0(group, c("_median"))
@@ -226,7 +234,7 @@ startR::lazy_ggsave(correlogram,
                     width = 12, 
                     height = 12)
 
-
+# Read taxa codes from the reg watson dataset and perform some cleaning
 taxa_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 3L) %>% 
   rename(species = TaxonName) %>% 
   janitor::clean_names() %>% 
@@ -255,6 +263,7 @@ taxa_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 3L) %
          species = ifelse(is.na(species) & is.na(genus) & is.na(family) & is.na(order) & is.na(class), tmp_spp, species)) %>% 
   select(-tmp_spp)
 
+# Combine datasets
 combined <- taxa_codes %>%
   expand_grid(year = c(2005:2015)) %>% 
   left_join(price_species, by = c("species", "year")) %>% 

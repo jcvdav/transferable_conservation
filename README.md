@@ -1,77 +1,183 @@
-# Transferable Conservation
+#  A global market for marine conservation
 
 
 ## Repository structure 
 
 ```
--- data
--- docs
+-- json_to_dot.py
+-- make_p_to_json.py
 -- raw_data
+   |__Intersect_EEZ_IHO_v4_2020
+      |__Intersect_EEZ_IHO_v4_2020.cpg
+      |__Intersect_EEZ_IHO_v4_2020.dbf
+      |__Intersect_EEZ_IHO_v4_2020.prj
+      |__Intersect_EEZ_IHO_v4_2020.qpj
+      |__Intersect_EEZ_IHO_v4_2020.shp
+      |__Intersect_EEZ_IHO_v4_2020.shp.xml
+      |__Intersect_EEZ_IHO_v4_2020.shx
+      |__LICENSE_EEZ_IHO_v4.txt
+   |__MEOW
+      |__Marine_Ecoregions_of_the_World_A_Bioregionalization_of_Coastal_and_Shelf_Areas.pdf
+      |__meow_ecos.dbf
+      |__meow_ecos.prj
+      |__meow_ecos.sbn
+      |__meow_ecos.sbx
+      |__meow_ecos.shp
+      |__meow_ecos.shp.xml
+      |__meow_ecos.shx
+   |__ne_10m_geography_marine_polys
+      |__ne_10m_geography_marine_polys.cpg
+      |__ne_10m_geography_marine_polys.dbf
+      |__ne_10m_geography_marine_polys.prj
+      |__ne_10m_geography_marine_polys.README.html
+      |__ne_10m_geography_marine_polys.shp
+      |__ne_10m_geography_marine_polys.shx
+      |__ne_10m_geography_marine_polys.VERSION.txt
+   |__ne_10m_ocean
+      |__ne_10m_ocean.cpg
+      |__ne_10m_ocean.dbf
+      |__ne_10m_ocean.prj
+      |__ne_10m_ocean.README.html
+      |__ne_10m_ocean.shp
+      |__ne_10m_ocean.shx
+      |__ne_10m_ocean.VERSION.txt
+   |__World_EEZ_v11_20191118
+      |__eez_boundaries_v11.cpg
+      |__eez_boundaries_v11.dbf
+      |__eez_boundaries_v11.prj
+      |__eez_boundaries_v11.shp
+      |__eez_boundaries_v11.shx
+      |__eez_v11.cpg
+      |__eez_v11.dbf
+      |__eez_v11.prj
+      |__eez_v11.qpj
+      |__eez_v11.shp
+      |__eez_v11.shx
+      |__LICENSE_EEZ_v11.txt
+   |__World_Seas_IHO_v3
+      |__LICENSE_IHO_v3.txt
+      |__World_Seas_IHO_v3.cpg
+      |__World_Seas_IHO_v3.dbf
+      |__World_Seas_IHO_v3.prj
+      |__World_Seas_IHO_v3.qpj
+      |__World_Seas_IHO_v3.shp
+      |__World_Seas_IHO_v3.shx
 -- README.md
 -- renv
 -- renv.lock
    |__activate.R
    |__library
+      |__R-3.6
+      |__R-4.0
+      |__R-4.1
+   |__local
    |__settings.dcf
    |__staging
+-- results
+   |__img
+      |__30_by_segment
+      |__abs_gain_from_trade_segmented_market_plot.pdf
+      |__abs_gain_from_trade_segmented_market_plot.png
+      |__benefit_and_cost_maps
+      |__change_in_area.pdf
+      |__change_in_area.png
+      |__correlogram_exvessel_price.pdf
+      |__correlogram_exvessel_price.png
+      |__dummy_plots
+      |__equilibrum_supply_curves_hem.pdf
+      |__equilibrum_supply_curves_hem.png
+      |__equilibrum_supply_curves_rlm.pdf
+      |__equilibrum_supply_curves_rlm.png
+      |__equilibrum_supply_curves.pdf
+      |__equilibrum_supply_curves.png
+      |__gain_from_trade_segmented_market_plot.pdf
+      |__gain_from_trade_segmented_market_plot.png
+      |__map_contrasting_scenarios_global.pdf
+      |__map_contrasting_scenarios_global.png
+      |__map_contrasting_scenarios_rlm.pdf
+      |__map_contrasting_scenarios_rlm.png
+      |__map_of_trade_hem.pdf
+      |__map_of_trade_hem.png
+      |__map_of_trade_rlm.pdf
+      |__map_of_trade_rlm.png
+      |__map_of_trade.pdf
+      |__map_of_trade.png
+      |__rel_gain_from_trade_segmented_market_plot.pdf
+      |__rel_gain_from_trade_segmented_market_plot.png
+      |__savings_30.pdf
+      |__savings_30.png
+      |__savings_map.pdf
+      |__savings_map.png
+      |__segment_gains.pdf
+      |__segment_gains.png
+      |__supply_curves
+      |__trading_units
+      |__two_states_map_hem.pdf
+      |__two_states_map_hem.png
+      |__two_states_map_pro.pdf
+      |__two_states_map_pro.png
+      |__two_states_map_rlm.pdf
+      |__two_states_map_rlm.png
+      |__two_states_map.pdf
+      |__two_states_map.png
+   |__tab
+      |__gains_from_trade_hem.tex
+      |__gains_from_trade_rlm.tex
+      |__gains_from_trade.tex
+      |__pro_gains_from_trade.tex
+      |__trading_prices_hem.tex
+      |__trading_prices_pro.tex
+      |__trading_prices_rlm.tex
+      |__trading-prices.tex
 -- scripts
-   |__1_functions.R
-   |__2_scenario_bau.R
+   |__00_run_all.R
+   |__00_setup
+      |__01_setup.R
+      |__02_functions.R
+   |__01_cleaning
+      |__00_run_all_cleaning.R
+      |__01_clean_EEZs.R
+      |__02_clean_MEOWs.R
+      |__03_clean_world_seas.R
+      |__04_create_base_raster.R
+      |__05_create_ocean_mask.R
+      |__06_create_hemisphere_raster.R
+      |__07_create_hemisphere_geopackage.R
+      |__08_clean_mpa_atlas.R
+   |__02_processing
+      |__00_run_all_processing.R
+      |__01_generate_pixel_benefits.R
+      |__02_combine_catch_and_prices.R
+      |__03_generate_pixel_costs.R
+      |__04_intersect_eez_and_meow.R
+      |__05_rasterize_eez_and_meow.R
+      |__06_rasterize_mpas.R
+      |__07_combine_all_layers.R
+      |__08_build_supply_curves_no_MPAs.R
+      |__09_build_supply_curves_with_MPAs.R
+   |__03_descriptive_content
+      |__00_run_all_descriptive.R
+      |__01_plot_supply_curves.R
+      |__02_plot_trading_units.R
+      |__03_plot_global_benefits_and_costs.R
+      |__04_mex_us_example_benefits_costs_bcr.R
+   |__04_analysis
+      |__00_run_all_analysis.R
+      |__03_get_eez_level_conservation.R
+      |__04_hemisphere_level_market.R
+      |__05_realm_level_market.R
+      |__06_province_level_market.R
+      |__07_costs_avoided_for_each_mkt_segment.R
+      |__08_all_segments_all_scenarios.R
+   |__05_figures
+      |__02_plot_gains_from_trade_all_segments_all_targets.R
+      |__02_savings_by_bubble.R
+      |__03_savings_map_by_bubble.R
+      |__04_change_in_area.R
+   |__99_others
+      |__01_draw_dummy_supply_curves.R
+      |__meeting_pct_test.R
 -- transferable_conservation.Rproj
 ```
 
 ---------
-# Goals
-## Get three or four levels:
-- Global
-- Ocean basins
-- Eco / Bio regions
-- Within an EEZ wiht TURFs
-
-## Calculate what the allocations are for each
-- Percent required
-- Absolute numbers required
-
-## Assign value to each parcel
-Will it be based on number of species present? Ecological distintiveness...
-
-# Explicit TO-DOs
-
-- Get shapefiles:
-   - EEZs
-   - Spaldings bioregons
-   - Ocean basins
-   - Habitat maps
-
-- Get obligations for each country
-
-# Data sources
-
-World EEZ V11: Flanders Marine Institute (2019). Maritime Boundaries Geodatabase: Maritime Boundaries and Exclusive Economic Zones (200NM), version 11. Available online at http://www.marineregions.org/. https://doi.org/10.14284/386
-
-IHO Sea Areas V3: Flanders Marine Institute (2018). IHO Sea Areas, version 3. Available online at http://www.marineregions.org/ https://doi.org/10.14284/323
-
-Intersect_EEZ_IHO_v4_2020: Flanders Marine Institute (2020). The intersect of the Exclusive Economic Zones and IHO sea areas, version 4. Available online at http://www.marineregions.org/. https://doi.org/10.14284/402
-
-MEOW: https://www.worldwildlife.org/publications/marine-ecoregions-of-the-world-a-bioregionalization-of-coastal-and-shelf-areas
-
-ne_10m_geography_marine_polys: https://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-ocean/
-
-Cumulative Human Impacts (2013): https://knb.ecoinformatics.org/view/doi:10.5063/F12B8WBS
-
---------- 
-
-
-# TO DO
-- Get mean CHI for each country / meow intersection
-- Create the following allocations:
-  - 30% of what you have
-  - 30% of total meow / number of countries
-  - 30% of total meow, weighing by GDP
-  - 30% of total meow, weighing by population size
-  - 30% of total meow, weighing by CHI
-
-
---------
-
-<a href="https://orcid.org/0000-0003-1245-589X" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">orcid.org/0000-0003-1245-589X</a>

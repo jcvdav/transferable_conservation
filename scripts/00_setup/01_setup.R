@@ -40,19 +40,19 @@ sf::sf_use_s2(FALSE)
 ## Plot-related things ##
 ##########################
 # Default geometry colors, fills, and shapes
-library(ggplot2)
-update_geom_defaults(geom = "col", list(color = "black",
+
+ggplot2::update_geom_defaults(geom = "col", list(color = "black",
                                         fill = "steelblue"))
 
-update_geom_defaults(geom = "point", list(color = "black",
+ggplot2::update_geom_defaults(geom = "point", list(color = "black",
                                           fill = "steelblue",
                                           shape = 21,
                                           size = 3))
 
-update_geom_defaults(geom = "line", list(color = "steelblue",
+ggplot2::update_geom_defaults(geom = "line", list(color = "steelblue",
                                          size = 0.2))
 
-update_geom_defaults(geom = "sf", list(color = "black",
+ggplot2::update_geom_defaults(geom = "sf", list(color = "black",
                                        fill = "gray",
                                        size = 0.1))
 

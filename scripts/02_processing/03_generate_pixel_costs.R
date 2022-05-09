@@ -38,7 +38,7 @@ dt <-
           fread,
           sep = ",",
           key = c("Cell", "ID")) %>%                                            # Map across files to read them in
-  .[, .(ID, Cell, Reported)]
+  .[Reported > 0, ,.(ID, Cell, Reported)]
 
 # Read in the codes
 cell_codes <-

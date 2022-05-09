@@ -11,7 +11,6 @@
 
 ## Set up ##########################################################################################################
 # Load packages
-library(lwgeom)
 library(sf)
 library(tidyverse)
 
@@ -23,14 +22,13 @@ meow <- st_read(dsn = file.path(project_path, "processed_data", "clean_meow.gpkg
 ## Process #########################################################################################################
 # Intersect two shapefiles and generate some summary statistics ----------------------------------------------------
 eez_meow <- eez %>% 
-  # st_crop(xmin = -180, ymin = -90, xmax = 180, ymax = 90) %>%
   st_intersection(meow) %>% 
   select(iso3, iso3n,                                                 # Keep only relevant columns
          province, pro_code,
-         realm, rlm_code)
+         realm, rlm_code) 
 
 ## Export -----------------------------------------------------------------------------------------------------------
-intersected_eez_and_meow_fn <- file.path(project_path, "processed_data", "intersected_eez_meow_hem.gpkg") # File name
+intersected_eez_and_meow_fn <- file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg") # File name
 file.remove(intersected_eez_and_meow_fn)                                     # Remove any existing files
 st_write(obj = eez_meow, dsn = intersected_eez_and_meow_fn)                  # Write geopackage to disk
 

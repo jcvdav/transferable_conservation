@@ -1,8 +1,12 @@
 ######################################################
-#title#
+# 01_generate_pixel_benefits
 ######################################################
 # 
-# Purpose
+# Loads AquqMaps species distributions, and filters it
+# to keep only species with 10 or more records used
+# when predicting it's range.
+# We then filter cells with probability < 0.5 and calculate
+# the habitat suitability index for each pixel.
 #
 ######################################################
 
@@ -66,7 +70,7 @@ suitability_df <-
 # Rasterize suitability
 suitability <-
   rasterFromXYZ(
-    xyz = suitability_df,                                                       # XWY source
+    xyz = suitability_df,                                                       # XY source
     crs = proj_longlat)                                                         # Coordiante reference system
 
 ## EXPORT ######################################################################
