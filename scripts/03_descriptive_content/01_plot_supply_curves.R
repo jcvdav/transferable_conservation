@@ -225,8 +225,8 @@ eez_all <- ggplot(
   geom_line(color = "transparent") +
   guides(color = "none") +
   ggtheme_plot() +
-  labs(x = "Conservation benefit",
-       y = "Marginal costs")
+  labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
+       y = bquote("Fisheries revenue ($/Q)"))
 
 eez_supply_curve_PER <- eez_all +
   geom_line(data = filter(eez_cb, iso3 == "PER"),
@@ -234,8 +234,8 @@ eez_supply_curve_PER <- eez_all +
             size = 1) +
   guides(color = "none") +
   ggtheme_plot() +
-  labs(x = "Conservation benefit",
-       y = "Marginal costs") +
+  labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
+       y = bquote("Fisheries revenue ($/Q)")) +
   geom_text(data = labs %>% filter(iso3 == "PER"), aes(label = iso3))
 
 eez_supply_curve_PER_MEX <- eez_all +

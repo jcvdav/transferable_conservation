@@ -211,6 +211,6 @@ p8 <- ggplot(data = sc_dat, aes(x = tb, y = mc)) +
   geom_step(direction = "vh", size = 1, color = "steelblue") +
   geom_text(data = sc_dat %>% filter(pixel > 0), aes(label = paste("Pixel", pixel)), nudge_x = -3, nudge_y = 0.5) +
   theme_half_open() +
-  labs(x = "Conservation (Q)", y = "Marginal Costs (C)")
+  labs(x = "Conservation (Q)", y = "Marginal Costs (C/Q)")
 
 lazy_ggsave(plot = p8, filename = "dummy_plots/supply_curves8", width = 9, height = 6)
