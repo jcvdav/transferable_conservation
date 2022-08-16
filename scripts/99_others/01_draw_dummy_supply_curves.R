@@ -96,9 +96,9 @@ p_full <- ggplot() +
   scale_color_manual(values = c("red", "steelblue"))
 
 p4 <- p_full +
-  geom_vline(xintercept = 0.3, color = "black", linetype = "dashed") +
-  geom_segment(x = 0, xend = 0.3, y = 6, yend = 6, linetype = "dashed", color = "steelblue") +
-  geom_segment(x = 0, xend = 0.3, y = 3, yend = 3, linetype = "dashed", color = "red")
+  geom_vline(xintercept = 0.3, linetype = "dashed", color = "black") +
+  geom_segment(aes(x = 0, xend = 0.3, y = 6, yend = 6), linetype = "dashed", color = "steelblue") +
+  geom_segment(aes(x = 0, xend = 0.3, y = 3, yend = 3), linetype = "dashed", color = "red")
 
 p4_area <- p4 +
   geom_polygon(data = tibble(x = c(0, 0.3, 0.3, 0),
@@ -124,15 +124,15 @@ p4_area <- p4 +
             aes(x = x, y = y, label = label),
             parse = T)
 
-p5 <- p4 +
-  geom_hline(yintercept = 4, linetype = "dashed", color = "black") +
-  geom_vline(xintercept = 0.3, color = "gray", linetype = "dashed")
+p5 <- p_full +
+  geom_vline(xintercept = 0.3, linetype = "dashed", color = "gray") +
+  geom_segment(aes(x = 0, xend = 0.4, y = 4, yend = 4), linetype = "dashed", color = "black")
 
 p6 <- p_full  +
-  geom_hline(yintercept = 4, linetype = "dashed", color = "black") +
-  geom_vline(xintercept = 0.3, color = "gray", linetype = "dashed") +
-  geom_segment(x = 0.2, xend = 0.2, y = 0, yend = 4, color = "steelblue", linetype = "dashed") +
-  geom_segment(x = 0.4, xend = 0.4, y = 0, yend = 4, color = "red", linetype = "dashed")
+  geom_vline(xintercept = 0.3, linetype = "dashed", color = "gray") +
+  geom_segment(aes(x = 0, xend = 0.4, y = 4, yend = 4), linetype = "dashed", color = "black") +
+  geom_segment(aes(x = 0.2, xend = 0.2, y = 0, yend = 4), color = "steelblue", linetype = "dashed") +
+  geom_segment(aes(x = 0.4, xend = 0.4, y = 0, yend = 4), color = "red", linetype = "dashed")
 
 p6_area <- p6 +
   geom_polygon(data = tibble(x = c(0, 0.2, 0.2, 0),
@@ -176,7 +176,6 @@ lazy_ggsave(plot = paper_figure,
             width = 18,
             height = 8)
 
-  
 p7 <- p6 +
   geom_polygon(data = pol2 %>% filter(n == "B"), aes(x = q, y = p), fill = "steelblue", alpha = 0.5, color = "transparent") +
   geom_polygon(data = pol2 %>% filter(n == "A"), aes(x = q, y = p), fill = "red", alpha = 0.5, color = "transparent")
