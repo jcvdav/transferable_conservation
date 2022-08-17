@@ -83,6 +83,26 @@ pro_h_sum <- readRDS(
   )
 )
 
+# Ecoregion
+eco_eez_cb <- readRDS(
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "ecoregion_eez_supply_curves_with_mpas.rds"
+  )
+)
+eco_h_sum <- readRDS(
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "ecoregion_supply_curves_with_mpas.rds"
+  )
+)
+
 #################
 # Gains from trade hemisphere function
 
@@ -218,11 +238,22 @@ gains_from_trade_multiple_scenarios_pro <-
                     write = T)) %>% 
   unnest(data)
 
+gains_from_trade_multiple_scenarios_eco <- 
+  tibble(r = rs) %>% 
+  mutate(data = map(r,
+                    get_segmented_market_gains,
+                    curves = eco_eez_cb,
+                    agg_curves = eco_h_sum,
+                    group = "ecoregion",
+                    write = T)) %>% 
+  unnest(data)
+
 gains_from_trade_multiple_scenarios <- rbind(
   gains_from_trade_multiple_scenarios_global,
   gains_from_trade_multiple_scenarios_hem,
   gains_from_trade_multiple_scenarios_rlm,
-  gains_from_trade_multiple_scenarios_pro) %>% 
+  gains_from_trade_multiple_scenarios_pro,
+  gains_from_trade_multiple_scenarios_eco) %>% 
   group_by(bubble, r) %>%
   summarise_all(sum, na.rm = T) %>% 
   ungroup() %>% 
@@ -230,7 +261,8 @@ gains_from_trade_multiple_scenarios <- rbind(
          bubble = case_when(bubble == "Global" ~ "Global (N = 1)",
                             bubble == "Hemisphere" ~ "Hemisphere (N = 4)",
                             bubble == "Realm" ~ "Realm (N = 12)",
-                            bubble == "Province" ~ "Province (N = 60)"))
+                            bubble == "Province" ~ "Province (N = 60)",
+                            bubble == "Ecoregion" ~ "Ecoregion (N = 219)"))
 
 # Export
 
