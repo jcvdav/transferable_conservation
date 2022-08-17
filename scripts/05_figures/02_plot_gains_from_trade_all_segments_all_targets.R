@@ -13,7 +13,7 @@ library(tidyverse)
 # Load data
 gains_from_trade_multiple_scenarios <-
   read_csv(file = file.path(project_path, "output_data", "gains_from_trade_bubbles.csv")) %>% 
-  mutate(bubble = fct_relevel(bubble, "Province (N = 60)", after = Inf))
+  mutate(bubble = fct_relevel(bubble, "Global (N = 1)", "Hemisphere (N = 4)", "Realm (N = 12)", "Province (N = 60)", "Ecoregion (N = 219)"))
 
 ## PROCESSING ##################################################################
 # Visualize absolute savings
@@ -46,9 +46,7 @@ rel <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = ratio, color =
                      expand = c(0, 0)) +
   scale_y_continuous(labels = scales::percent, expand = c(0, 0),
                      limits = c(0, 1.01)) +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.justification = c(0, 0),
-        legend.position = c(0.5, 0))
+  scale_color_brewer(palette = "Set1")
 
 # Combine relative and absolute
 gain_from_trade_segmented_market_plot <- 
