@@ -54,6 +54,9 @@ realm_supply_curves_w_mpas <- build_curve_with_mpas(master_data, by = "realm")
 province_eez_supply_curves_w_mpas <- build_curve_with_mpas(master_data, c("iso3", "province"))
 province_supply_curves_w_mpas <- build_curve_with_mpas(master_data, by = "province")
 
+ecoregion_eez_supply_curves_w_mpas <- build_curve_with_mpas(master_data, c("iso3", "ecoregion"))
+ecoregion_supply_curves_w_mpas <- build_curve_with_mpas(master_data, by = "ecoregion")
+
 
 
 ## DATA EXPORT #################################################################
@@ -155,3 +158,26 @@ saveRDS(
 )
 
 
+# Export ecoregion level data
+saveRDS(
+  ecoregion_eez_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "ecoregion_eez_supply_curves_with_mpas.rds"
+  )
+)
+
+# Export horizontally summed province level data
+saveRDS(
+  ecoregion_supply_curves_w_mpas,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "ecoregion_supply_curves_with_mpas.rds"
+  )
+)
