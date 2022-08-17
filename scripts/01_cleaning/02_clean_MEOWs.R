@@ -44,9 +44,11 @@ meow <- st_read(dsn = file.path(project_path,
                                 "raw_data", "MEOW"),
                 layer = "meow_ecos") %>% 
   clean_names() %>%                             # Clean column names
-  select(province, pro_code = prov_code,
+  select(ecoregion, eco_code,
+         province, pro_code = prov_code,
          realm, rlm_code) %>% 
-  group_by(province, pro_code,
+  group_by(ecoregion, eco_code,
+           province, pro_code,
            realm, rlm_code) %>% 
   summarize(a = 1) %>% 
   ungroup()
