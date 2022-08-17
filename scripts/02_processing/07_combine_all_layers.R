@@ -55,6 +55,10 @@ pro_code <-
   raster(file.path(project_path, "processed_data", "pro_raster.tif")) %>%
   crop(benefits_raster)
 
+eco_code <-
+  raster(file.path(project_path, "processed_data", "eco_raster.tif")) %>%
+  crop(benefits_raster)
+
 hem_code <-
   raster(file.path(project_path, "processed_data", "hemispheres.tif")) %>%
   crop(benefits_raster)
@@ -83,6 +87,7 @@ cb <-
     iso3n,
     rlm_code,
     pro_code,
+    eco_code,
     hem_code,
     benefits_raster,
     costs_raster,
@@ -97,6 +102,7 @@ cb <-
     hem_code = hemispheres,
     rlm_code = rlm_raster,
     pro_code = pro_raster,
+    eco_code = eco_raster,
     suitability = suitability,
     cost = revenue_raster,
     mpa = mpa_raster,
@@ -114,15 +120,15 @@ cb <-
 
 # Create a master dataset with all the metadata for each pixel
 master_data <- eez_meow %>%
-  select(iso3, province, realm, iso3n, contains("code")) %>%
-  left_join(cb, by = c("iso3n", "rlm_code", "pro_code")) %>%                    # Join to the data.frame from rasters
+  select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>%
+  left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%        # Join to the data.frame from rasters
   drop_na(iso3n, cost, benefit) %>%                                             # Drop areas beyond national jurisdiction and areas with no cost / benefit data
   filter(benefit > 0) %>%
   mutate(bcr = benefit / cost,                                                  # Calculate marginal benefit
          mc = cost / benefit) %>%                                               
   drop_na(lat, lon, benefit, cost) %>% 
   mutate(global = "Global") %>% 
-  select(global, hemisphere, realm, province, iso3, everything())
+  select(global, hemisphere, realm, province, ecoregion, iso3, everything())
 
 
 ## DATA EXPORT ############################################################################
