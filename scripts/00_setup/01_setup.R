@@ -2,7 +2,7 @@
 ## Paths to directories ##
 ##########################
 # Check for OS
-sys_path <- ifelse(Sys.info()["sysname"]=="Windows", "~/G:/","/Volumes/GoogleDrive")
+sys_path <- ifelse(Sys.info()["sysname"]=="Windows", "~/G:/","/Users/juancarlosvillasenorderbez/Library/CloudStorage/GoogleDrive-juancarlos@ucsb.edu")
 # Nat geo ocean conservation priorities path
 ng_data_path <- file.path(sys_path,"Shared drives/emlab/projects/current-projects/ocean-conservation-priorities/data")
 # Path to our emLab's data folder
