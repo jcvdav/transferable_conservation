@@ -24,6 +24,7 @@ meow <- st_read(dsn = file.path(project_path, "processed_data", "clean_meow.gpkg
 eez_meow <- eez %>% 
   st_intersection(meow) %>% 
   select(iso3, iso3n,                                                 # Keep only relevant columns
+         ecoregion, eco_code,
          province, pro_code,
          realm, rlm_code) 
 
