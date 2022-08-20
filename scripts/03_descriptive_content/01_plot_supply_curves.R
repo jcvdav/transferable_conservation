@@ -86,6 +86,26 @@ pro_h_sum <- readRDS(
                    "province_supply_curves_with_mpas.rds")
 )
 
+# Ecoregion
+eco_eez_cb <- readRDS(
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "ecoregion_eez_supply_curves_with_mpas.rds"
+  )
+)
+eco_h_sum <- readRDS(
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "with_mpas",
+    "ecoregion_supply_curves_with_mpas.rds"
+  )
+)
+
 
 # PROCESSING ############################################################################################
 
@@ -164,7 +184,7 @@ eez_pro <-
   labs(x = bquote("Conservation benefit (HS weighted; Thousand "~Km^2~")"),
        y = bquote("Fisheries revenue ($/Q)"))
 
-# realm summed
+# province summed
 pro <- ggplot(data = pro_h_sum,
               mapping = aes(x = tb, y = mc, color = province)) +
   geom_line() +
