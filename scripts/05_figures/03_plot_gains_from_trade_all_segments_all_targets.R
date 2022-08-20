@@ -65,7 +65,7 @@ lazy_ggsave(plot = abs,
 
 lazy_ggsave(plot = rel,
             file = "rel_gain_from_trade_segmented_market_plot",
-            width = 15,
+            width = 20,
             height = 10)
 
 lazy_ggsave(plot = gain_from_trade_segmented_market_plot,
