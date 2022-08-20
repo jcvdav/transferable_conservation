@@ -32,7 +32,7 @@ get_files <- function(segment) {
   return(data)
 }
 
-data <- c("global", "hemisphere", "realm", "province") %>% 
+data <- c("global", "hemisphere", "realm", "province", "ecoregion") %>% 
   map_dfr(get_files)
 
 
@@ -47,22 +47,25 @@ p <- data %>%
   mutate(tb = bau_tb - mkt_tb,
          tc = bau_tc - mkt_tc,
          a = bau_area - mkt_area,
-         a2 = a / bau_area * 100) %>%
+         a2 = a / bau_area) %>%
   select(r, segment, a, a2) %>% 
-  pivot_longer(cols = c(a, a2), names_to = "variable", values_to = "value") %>% 
-  mutate(variable = case_when(variable == "tc" ~ "BAU Cost - MKT Cost (M USD)",
-                              variable == "tc2" ~ "(BAU Cost - MKT Cost) / BAU Costs (%)",
-                              variable == "a" ~ "BAU Area - MKT Area (KM2^)",
-                              variable == "a2" ~ "(BAU Area - MKT Area) / BAU Area (%)"),
+  # pivot_longer(cols = c(a, a2), names_to = "variable", values_to = "value") %>% 
+  mutate(#variable = case_when(variable == "tc" ~ "BAU Cost - MKT Cost (M USD)",
+                              # variable == "tc2" ~ "(BAU Cost - MKT Cost) / BAU Costs (%)",
+                              # variable == "a" ~ "BAU Area - MKT Area (KM2^)",
+                              # variable == "a2" ~ "(BAU Area - MKT Area) / BAU Area (%)"),
          segment = str_to_sentence(segment),
-         segment = fct_relevel(segment, "Province", after = Inf)) %>% 
-  ggplot(aes(x = r, y = value, color = segment)) +
+         segment = fct_relevel(segment, "Province", "Ecoregion", after = Inf)) %>% 
+  ggplot(aes(x = r, y = a2, color = segment)) +
+  geom_rect(xmin = 0, xmax = 0.1, ymin = 0, ymax = Inf, color = "transparent", fill = "gray", alpha = 0.1) +
   geom_vline(xintercept = c(0.1, 0.3, 0.5), linetype = "dashed") +
   geom_line() +
   scale_color_brewer(palette = "Set1") +
-  scale_x_continuous(limits = c(0, 1),
+  scale_x_continuous(limits = c(0, 1.01),
+                     expand = c(0, 0),
                      labels = scales::percent) +
-  facet_wrap(~variable, scales = "free_y", ncol = 1) +
+  scale_y_continuous(limits = c(0, 0.06),
+                     labels = scales::percent) +
   theme_bw() +
   theme(legend.position = c(1, 1),
         legend.justification = c(1, 1),
@@ -74,4 +77,4 @@ p <- data %>%
 lazy_ggsave(plot = p,
             file = "change_in_area",
             width = 12,
-            height = 15)
+            height = 7.5)
