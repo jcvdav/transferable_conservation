@@ -8,6 +8,8 @@ library(startR)
 library(cowplot)
 library(tidyverse)
 
+export_files <- T
+
 # Load data
 eez_cb <-
   readRDS(
@@ -125,7 +127,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) 
     filter(pixel_fraction >= 0) %>% 
     slice_max(mc) %>% 
     ungroup() %>% 
-    select({{group}}, trading_price = mc, fraction_marginal_pixel = pixel_fraction)
+    select({{group}}, trading_price = mc)
   
   
   realized_bau_cb <- curves %>% 
@@ -205,7 +207,7 @@ gains_from_trade_multiple_scenarios_global <- tibble(r = rs) %>%
                     curves = eez_cb,
                     agg_curves = eez_h_sum_cb,
                     group = "global",
-                    write = T)) %>% 
+                    write = export_files)) %>% 
   unnest(data)
 
 gains_from_trade_multiple_scenarios_hem <- 
@@ -215,7 +217,7 @@ gains_from_trade_multiple_scenarios_hem <-
                     curves = hem_eez_cb,
                     agg_curves = hem_h_sum,
                     group = "hemisphere",
-                    write = T)) %>% 
+                    write = export_files)) %>% 
   unnest(data) 
 
 gains_from_trade_multiple_scenarios_rlm <- 
@@ -225,7 +227,7 @@ gains_from_trade_multiple_scenarios_rlm <-
                     curves = rlm_eez_cb,
                     agg_curves = rlm_h_sum,
                     group = "realm",
-                    write = T)) %>% 
+                    write = export_files)) %>% 
     unnest(data)
 
 gains_from_trade_multiple_scenarios_pro <- 
@@ -235,7 +237,7 @@ gains_from_trade_multiple_scenarios_pro <-
                     curves = pro_eez_cb,
                     agg_curves = pro_h_sum,
                     group = "province",
-                    write = T)) %>% 
+                    write = export_files)) %>% 
   unnest(data)
 
 gains_from_trade_multiple_scenarios_eco <- 
@@ -245,7 +247,7 @@ gains_from_trade_multiple_scenarios_eco <-
                     curves = eco_eez_cb,
                     agg_curves = eco_h_sum,
                     group = "ecoregion",
-                    write = T)) %>% 
+                    write = export_files)) %>% 
   unnest(data)
 
 gains_from_trade_multiple_scenarios <- rbind(
