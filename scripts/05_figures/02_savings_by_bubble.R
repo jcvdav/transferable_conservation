@@ -20,7 +20,7 @@ r_interest <- 0.3
 
 ## PROCESSING ##################################################################
 
-savings_plot <- outcome_data %>% 
+savings_plot <- outcome_data %>%
   filter(r == r_interest) %>%
   mutate(bubble = str_replace(string = bubble, pattern = "\\(", replacement = "\n\\(")) %>%
   mutate(bubble = fct_reorder(bubble, ratio, .desc = T)) %>% 
