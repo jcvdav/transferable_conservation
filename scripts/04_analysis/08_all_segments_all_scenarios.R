@@ -146,10 +146,10 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) 
     left_join(trading_prices, by = group) %>%
     filter(mc <= trading_price) %>%               # Keep all patches in each country with a cost < trading price
     group_by_at(group) %>% 
-    mutate(pixel_pct = ifelse(mc < max(mc), 1, fraction_marginal_pixel)) %>% 
+    mutate(pixel_fraction = ifelse(mc < max(mc), 1, 1 - ((tb - ((tb * r) / pct)) / benefit))) %>% 
     ungroup() %>% 
-    mutate(benefit = pixel_pct * benefit,
-           cost = pixel_pct * cost) %>% 
+    mutate(benefit = pixel_fraction * benefit,
+           cost = pixel_fraction * cost) %>% 
     group_by_at(c("iso3", group, "trading_price")) %>% 
     summarize(mkt_tb = sum(benefit, na.rm = T),
               mkt_tc = sum(cost, na.rm = T),
@@ -171,7 +171,7 @@ get_segmented_market_gains <- function(r, curves, agg_curves, group, write = F) 
            mkt_tc_b = bau_tc - mkt_tc - rect,
            mkt_tc_s = rect - mkt_tc + bau_tc,
            savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s),
-           transaction = case_when(!is.na(pct_protected) | savings == 0 ~ "Doesn't participate",
+           transaction = case_when(!is.na(pct_protected) | near(savings, 0) ~ "Doesn't participate",
                                    mkt_tc < bau_tc ~ "Buyers",
                                    mkt_tc > bau_tc ~ "Sellers"))
   
