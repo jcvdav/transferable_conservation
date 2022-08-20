@@ -38,8 +38,8 @@ global <- eez_meow %>%
   summarize(a = 1) %>% 
   ungroup() %>% 
   ggplot() +
-  geom_sf(fill = "steelblue", color = "black") +
-  geom_sf(data = coast, color = "black", size = 0.1) +
+  geom_sf(fill = "steelblue", color = "transparent") +
+  geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0))
@@ -61,8 +61,8 @@ hemisphere_data <- hemisphere %>%
 
 hemisphere_map <- 
   ggplot() +
-  geom_sf(data = hemisphere_data, aes(fill = hemisphere), color = "black", size = 0.1) +
-  geom_sf(data = coast, color = "black", size = 0.1) +
+  geom_sf(data = hemisphere_data, aes(fill = hemisphere), color = "transparent", size = 0.1) +
+  geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
   labs(fill = "Hemisphere") +
@@ -112,8 +112,8 @@ realm_data <- eez_meow %>%
 
 realm_map <- 
   ggplot() +
-  geom_sf(data = realm_data, aes(fill = realm), color = "black", size = 0.1) +
-  geom_sf(data = coast, color = "black", size = 0.1) +
+  geom_sf(data = realm_data, aes(fill = realm), color = "transparent", size = 0.1) +
+  geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
   labs(fill = "Realm") +
@@ -170,8 +170,8 @@ provinces_data <- eez_meow %>%
   mutate(province = fct_reorder(province, n_eez))
 
 province_map <- ggplot() +
-  geom_sf(data = provinces_data, aes(fill = province), color = "black", size = 0.1) +
-  geom_sf(data = coast, color = "black", size = 0.1) +
+  geom_sf(data = provinces_data, aes(fill = province), color = "transparent", size = 0.1) +
+  geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
   theme(legend.position = "none") +
@@ -206,9 +206,41 @@ lazy_ggsave(plot = province_map,
             width = 16,
             height = 8)
 
+
+ecoregion_data <- eez_meow %>% 
+  group_by(iso3, ecoregion) %>% 
+  summarize(a = 1) %>% 
+  ungroup() %>% 
+  group_by(ecoregion) %>% 
+  mutate(n_eez = n_distinct(iso3)) %>% 
+  ungroup() %>% 
+  mutate(ecoregion = fct_reorder(ecoregion, n_eez))
+
+ecoregion_map <- ggplot() +
+  geom_sf(data = ecoregion_data, aes(fill = ecoregion), color = "transparent", size = 0.1) +
+  geom_sf(data = coast, color = "transparent", size = 0.1) +
+  ggtheme_map() +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) 
+
+ecoregion_bars <- ecoregion_data %>% 
+  st_drop_geometry() %>% 
+  select(ecoregion, n_eez) %>% 
+  distinct() %>% 
+  ggplot(aes(x = ecoregion, y = n_eez, fill = ecoregion)) +
+  geom_col() +
+  coord_flip() +
+  labs(x = "ecoregion", y = "Number of nations") +
+  ggtheme_plot() +
+  theme(legend.position = "none") +
+  scale_fill_viridis_d() +
+  geom_hline(yintercept = 2, linetype = "dashed", color = "black")
+
 # Panel figure
 
-panel <- plot_grid(global, hemisphere_map, realm_map, province_map,
+panel <- plot_grid(hemisphere_map, realm_map, province_map, ecoregion_map,
                    ncol = 2,
                    labels = "AUTO")
 
