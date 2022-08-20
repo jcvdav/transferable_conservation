@@ -23,8 +23,31 @@ master_cb <- readRDS(
   file = file.path(project_path, "processed_data", "master_costs_and_benefits.rds")
 )
 
-mpas <- master_cb %>% 
-  filter(mpa == 1)
+suitability_raster <-
+  raster(file.path(project_path,
+                   "processed_data",
+                   "suitability.tif"))
+costs_raster <-
+  raster(
+    x = file.path(project_path, "processed_data", "revenue_raster.tif")
+  )
+
+mpa_raster_raw <-
+  raster(file.path(project_path, "processed_data", "mpa_raster.tif"))
+mpa_raster <- mpa_raster_raw
+mpa_raster[mpa_raster == 1] <- 0
+mpa_raster[is.na(mpa_raster)] <- 1
+
+iso3n <- raster(file.path(project_path, "processed_data", "eez_raster.tif"))
+
+area_raster <- raster::area(suitability_raster)
+benefits_raster <- suitability_raster * area_raster * (iso3n > 0) * (mpa_raster)
+costs_raster <- costs_raster * (iso3n > 0) * (mpa_raster)
+costs_raster[costs_raster == 0] <- 1
+
+mc <- costs_raster / benefits_raster
+
+
 
 coastline <- ne_countries(returnclass = "sf")
 
@@ -32,12 +55,15 @@ coastline <- ne_countries(returnclass = "sf")
 
 # Benefits
 
-benefit_map <- ggplot() +
-  geom_tile(data = master_cb, aes(x = lon, y = lat, fill = benefit)) +
-  geom_tile(data = mpas, aes(x = lon, y = lat, fill = 0)) +
+benefit_map <- 
+  benefits_raster %>% 
+  as.data.frame(xy = T) %>% 
+  drop_na(layer) %>% 
+  ggplot() +
+  geom_tile(aes(x = x, y = y, fill = layer)) +
   geom_sf(data = coastline, color = "black") +
   ggtheme_map() +
-  labs(fill = expression(CB[i])) +
+  labs(fill = expression(Q[i])) +
   scale_fill_viridis_c() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
@@ -45,26 +71,32 @@ benefit_map <- ggplot() +
 
 # Costs
 
-cost_map <- ggplot(trans = "log10") +
-  geom_tile(data = master_cb, aes(x = lon, y = lat, fill = cost)) +
-  geom_tile(data = mpas, aes(x = lon, y = lat, fill = 0)) +
+cost_map <- 
+  costs_raster %>% 
+  as.data.frame(xy = T) %>% 
+  drop_na(layer) %>% 
+  ggplot() +
+  geom_tile(aes(x = x, y = y, fill = layer)) +
   geom_sf(data = coastline, color = "black") +
   ggtheme_map() +
-  labs(fill = "Fisheries\nrevenue") +
+  labs(fill = "log10(Fisheries revenue)") +
   scale_fill_viridis_c(trans = "log10") +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
   theme(legend.position = "bottom")
 
 # BCR
-bcr_map <- master_cb %>% 
+bcr_map <- 
+  mc %>% 
+  as.data.frame(xy = T) %>% 
+  drop_na(layer) %>% 
   ggplot() +
-  geom_tile(aes(x = lon, y = lat, fill = mc)) +
+  geom_tile(aes(x = x, y = y, fill = layer)) +
   geom_tile(data = mpas, aes(x = lon, y = lat, fill = 0)) +
   geom_sf(data = coastline, fill = "gray", color = "black") +
   ggtheme_map() +
   scale_fill_viridis_c(trans = "log10") +
-  guides(fill = guide_colorbar(title = "log10(C/B)",
+  guides(fill = guide_colorbar(title = "log10(Fisheries revenue/Qi)",
                                frame.colour = "black",
                                ticks.colour = "black")) +
   theme(legend.position = "bottom")
