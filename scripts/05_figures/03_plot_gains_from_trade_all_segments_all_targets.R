@@ -46,7 +46,8 @@ rel <- ggplot(gains_from_trade_multiple_scenarios, aes(x = r, y = ratio, color =
                      expand = c(0, 0)) +
   scale_y_continuous(labels = scales::percent, expand = c(0, 0),
                      limits = c(0, 1.01)) +
-  scale_color_brewer(palette = "Set1")
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "None")
 
 # Combine relative and absolute
 gain_from_trade_segmented_market_plot <- 
@@ -65,10 +66,10 @@ lazy_ggsave(plot = abs,
 
 lazy_ggsave(plot = rel,
             file = "rel_gain_from_trade_segmented_market_plot",
-            width = 20,
-            height = 10)
+            width = 18,
+            height = 9)
 
 lazy_ggsave(plot = gain_from_trade_segmented_market_plot,
             file = "gain_from_trade_segmented_market_plot",
-            width = 25,
+            width = 18,
             height = 10)
