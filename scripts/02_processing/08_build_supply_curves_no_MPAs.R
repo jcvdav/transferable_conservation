@@ -56,6 +56,12 @@ province_eez_supply_curves <-
 province_supply_curves <-
   build_curve_without_mpas(province_eez_supply_curves, "province")
 
+# Province markets
+ecoregion_eez_supply_curves <-
+  build_curve_without_mpas(master_data, c("iso3", "ecoregion"))
+ecoregion_supply_curves <-
+  build_curve_without_mpas(ecoregion_eez_supply_curves, "ecoregion")
+
 
 
 
@@ -154,5 +160,29 @@ saveRDS(
     "supply_curves",
     "no_mpas",
     "province_supply_curves_no_mpas.rds"
+  )
+)
+
+# Export ecoregion level data
+saveRDS(
+  ecoregion_eez_supply_curves,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "no_mpas",
+    "ecoregion_eez_supply_curves_no_mpas.rds"
+  )
+)
+
+# Export horizontally summed province level data
+saveRDS(
+  ecoregion_supply_curves,
+  file = file.path(
+    project_path,
+    "processed_data",
+    "supply_curves",
+    "no_mpas",
+    "ecoregion_supply_curves_no_mpas.rds"
   )
 )
