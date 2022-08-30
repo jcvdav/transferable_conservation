@@ -16,24 +16,28 @@ outcome_data <-
   read.csv(file.path(project_path, "output_data", "gains_from_trade_bubbles.csv"))
 
 # Set target for plot
-r_interest <- 0.3
+r_interest <- c(0.3)
 
 ## PROCESSING ##################################################################
 
 savings_plot <- outcome_data %>%
-  filter(r == r_interest) %>%
-  mutate(bubble = str_replace(string = bubble, pattern = "\\(", replacement = "\n\\(")) %>%
-  mutate(bubble = fct_reorder(bubble, ratio, .desc = T)) %>% 
-  ggplot(aes(x = bubble, y = ratio)) +
-  geom_col() +
+  filter(r %in% r_interest) %>%
+  mutate(bubble = str_remove(string = bubble, pattern = "\\("),
+         bubble = fct_reorder(bubble, ratio, .desc = T),
+         r = paste0(round(r * 100), "%")) %>% 
+  ggplot(aes(x = bubble, y = ratio, fill = bubble)) +
+  geom_col(position = "dodge") +
   scale_y_continuous(labels = scales::percent) +
-  geom_text(aes(label = paste0(round(ratio * 100, 2), "%")), nudge_y = -0.1, size = 5) +
-  cowplot::theme_half_open() +
+  scale_fill_brewer(palette = "Set1") +
+  ggtheme_plot() +
   labs(x = "Bubble policy",
-       y = "% Cost savings (difference / BAU)")
+       y = "% Cost savings (difference / BAU)",
+       fill = "Bubble policy") +
+  theme(legend.position = c(1, 1),
+        legend.justification = c(1, 1))
 
 
 lazy_ggsave(plot = savings_plot,
             filename = "savings_30",
-            width = 16.5,
+            width = 18,
             height = 9)
