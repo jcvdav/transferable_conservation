@@ -12,6 +12,7 @@ library(here)
 library(startR)
 library(cowplot)
 library(ggpattern)
+library(ggrepel)
 library(tidyverse)
 
 data <- expand_grid(
@@ -36,8 +37,8 @@ bau_text <- tibble(x = c(0.25, 0.25, 0.5, 0.55),
                    y = c(4, 1.5, 11, 6),
                    label = c("TC[1]", "TC[2]", "MC[1]", "MC[2]"))
 
-mkt_text <- tibble(x = c(0.12, 0.25, 0.5, 0.55, 0.275, 0.325),
-               y = c(2, 1.5, 11, 6, 5, 3.5),
+mkt_text <- tibble(x = c(0.12, 0.25, 0.5, 0.55, 0.2, 0.4),
+               y = c(2, 1.5, 11, 6, 6, 5.5),
                label = c("TC[1]", "TC[2]", "MC[1]", "MC[2]", "S[1]", "S[2]"))
 
 
@@ -51,7 +52,7 @@ p1 <- data %>%
   scale_x_continuous(expand = c(0, 0),
                      breaks = (1:10)/10,
                      labels = scales::percent,
-                     limits = c(0, 0.6)) +
+                     limits = c(0, 1)) +
   scale_y_continuous(expand = c(0, 0),
                      # breaks = c(5, 10, 15),
                      # labels = c(5, 10, 15),
@@ -111,15 +112,15 @@ p4_area <- p4 +
                mapping = aes(x = x ,y = y),
                fill = "red",
                alpha = 0.5) +
-  scale_x_continuous(breaks = c(0, 0.3, 0.6),
-                     labels = c("0", "Q", "2Q"),
+  scale_x_continuous(breaks = c(0, 0.3, 1),
+                     labels = c("0", "300", "1000"),
                      expand = c(0, 0),
                      limits = c(0, 0.6)) +
   scale_y_continuous(breaks = c(0, 3, 6),
                      labels = c("0", expression(P[low]), expression(P[high])),
                      limits = c(0, 12),
                      expand = c(0, 0)) +
-  labs(x = "Conservation (Q)", "Marginal Costs (P)") +
+  labs(x = element_blank(), "Marginal Costs (P)") +
   geom_text(data = bau_text,
             aes(x = x, y = y, label = label),
             parse = T)
@@ -154,18 +155,18 @@ p6_area <- p6 +
                alpha = 0.5) +
   geom_polygon(data = pol2 %>% filter(n == "B"), aes(x = q, y = p), fill = "steelblue", color = "black") +
   geom_polygon(data = pol2 %>% filter(n == "A"), aes(x = q, y = p), fill = "red", color = "black", alpha = 0.5) +
-  scale_x_continuous(breaks = c(0, 0.2, 0.3, 0.4, 0.6),
-                     labels = c("0", "2/3Q", "Q", "4/3Q", "2Q"),
+  scale_x_continuous(breaks = c(0, 0.2, 0.3, 0.4, 1),
+                     labels = c("0", "200", "300", "400", "1000"),
                      expand = c(0, 0),
                      limits = c(0, 0.6)) +
   scale_y_continuous(breaks = c(0, 3, 4, 6),
                      labels = c("0", expression(P[low]), expression(P[mkt]), expression(P[high])),
-                     limits = c(0, 12), expand = c(0, 0)) +
+                     limits = c(0, 12),
+                     expand = c(0, 0)) +
   labs(x = "Conservation (Q)", "Marginal Costs (P)") +
-  geom_text(data = mkt_text, aes(x = x, y = y, label = label), parse = T)
-
-
-
+  geom_segment(aes(x = 0.2, xend = 0.25, y = 5.5, yend = 5), arrow = arrow(length = unit(0.1, "inches"))) +
+  geom_segment(aes(x = 0.375, xend = 0.35, y = 5.5, yend = 4), arrow = arrow(length = unit(0.1, "inches"))) +
+  geom_text(data = mkt_text, aes(x = x, y = y, label = label), parse = T) 
 
 paper_figure <- plot_grid(p4_area, p6_area,
                           ncol = 2,
