@@ -1,28 +1,20 @@
-###################################################
-# This script loads rasters for costs and benefits
+################################################################################
+# title
+################################################################################
+# 
+# Juan Carlos Villaseñor-Derbez
+# juancvd@stanford.edu
+# date
 #
-# It then adds metadata (country and ecoregion) to
-# each cell, and proceeds to create a master dataset
-# that contains the marginal benefits.
+# This script loads rasters for costs, benefits, and mateadata to 
+# create a master dataset that contains the marginal benefits.
 #
-# This master dataset is then sorted by descending
-# order in marginal benefits (highest first), and
-# calculates the horizontally summed suply curve for
-# conservation.
-#
-# The process is then repeated at different levels
-# of spatial hierarchy:
-# - eez
-# - eez and realm
-# - eez and province
-# - eez and ecoregion
-#
-# The data are then exported to the processed_data
-# folder under the project folder
-###################################################
+################################################################################
 
-## SETUP #############################################################################
-# Load packages
+## SET UP ######################################################################
+
+# Load packages ----------------------------------------------------------------
+library(here)
 library(raster)
 library(sf)
 library(tidyverse)
@@ -81,7 +73,6 @@ eez_meow <-
 
 ## PROCESSING ##################################################################
 
-
 cb <-
   stack(                                                                        # Start by creating a raster stack of all features
     iso3n,
@@ -135,8 +126,8 @@ master_data <- eez_meow %>%
 # Export master data
 saveRDS(
   master_data,
-  file = file.path(
-    project_path,
+  file = here(
+    "results",
     "processed_data",
     "master_costs_and_benefits.rds"
   )

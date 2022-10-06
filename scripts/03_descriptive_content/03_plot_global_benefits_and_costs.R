@@ -38,6 +38,9 @@ mpa_raster <- mpa_raster_raw
 mpa_raster[mpa_raster == 1] <- 0
 mpa_raster[is.na(mpa_raster)] <- 1
 
+mpas <- as.data.frame(mpa_raster_raw, xy = T) %>% 
+  drop_na()
+
 iso3n <- raster(file.path(project_path, "processed_data", "eez_raster.tif"))
 
 area_raster <- raster::area(suitability_raster)
@@ -67,7 +70,9 @@ benefit_map <-
   scale_fill_viridis_c() +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
 
 # Costs
 
@@ -83,7 +88,9 @@ cost_map <-
   scale_fill_viridis_c(trans = "log10") +
   guides(fill = guide_colorbar(frame.colour = "black",
                                ticks.colour = "black")) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
 
 # BCR
 bcr_map <- 
@@ -92,14 +99,16 @@ bcr_map <-
   drop_na(layer) %>% 
   ggplot() +
   geom_tile(aes(x = x, y = y, fill = layer)) +
-  geom_tile(data = mpas, aes(x = lon, y = lat, fill = 0)) +
+  geom_tile(data = mpas, aes(x = x, y = y, fill = 0)) +
   geom_sf(data = coastline, fill = "gray", color = "black") +
   ggtheme_map() +
   scale_fill_viridis_c(trans = "log10") +
   guides(fill = guide_colorbar(title = "log10(Fisheries revenue/Qi)",
                                frame.colour = "black",
                                ticks.colour = "black")) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
 
 pannel <- plot_grid(benefit_map, cost_map, bcr_map,
                     ncol = 3,

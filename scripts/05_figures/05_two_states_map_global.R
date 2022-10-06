@@ -1,68 +1,49 @@
+################################################################################
+# title
+################################################################################
+#
+# Juan Carlos Villaseñor-Derbez
+# juancvd@stanford.edu
+# Oct 8, 2022
+#
+# Maps the classification of pixels based on when they are protected
+#
+################################################################################
 
+## SET UP ######################################################################
+
+# Load packages ----------------------------------------------------------------
+library(here)
+library(startR)
 library(rnaturalearth)
 library(tidyverse)
 
-# Load data
-base <- readRDS(
-  file = file.path(
-    project_path,
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "global_eez_supply_curves_with_mpas.rds"
-  ))
+# Load data --------------------------------------------------------------------
+data_30 <- readRDS(here(
+  "results",
+  "output_data",
+  "bau_and_mkt_otucomes_global_30.rds"
+))
 
-eez_cb <-
-  readRDS(
-    file = file.path(
-      project_path,
-      "processed_data",
-      "supply_curves",
-      "with_mpas",
-      "global_eez_supply_curves_with_mpas.rds"
-    )) %>% 
-  mutate(pixel_fraction = pmin(1 - ((tb - ((tb * 0.3) / pct)) / benefit), 1)) %>% 
-  filter(pixel_fraction >= 0) %>% 
-  select(lat, lon) %>% 
-  mutate(bau = 1)
-
-eez_h_sum_cb <-
-  readRDS(file = file.path(
-    project_path,
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "global_supply_curve_with_mpas.rds"
-  )) %>% 
-  mutate(pixel_fraction = pmin(1 - ((tb - ((tb * 0.3) / pct)) / benefit), 1)) %>% 
-  filter(pixel_fraction >= 0) %>% 
-  select(lat, lon) %>% 
-  mutate(mkt = 1)
-
+# Load coastline ---------------------------------------------------------------
 coast <- ne_countries(returnclass = "sf")
 
-when <- full_join(eez_h_sum_cb, eez_cb, by = c("lat", "lon")) %>% 
-  replace_na(list("bau" = 0,
-                  "mkt" = 0)) %>% 
-  mutate(both = mkt + bau,
-         protected = case_when(mkt == 1 & bau == 1 ~ "Protected under both",
-                               mkt == 0 & bau == 1 ~ "Protected only under BAU",
-                               mkt == 1 & bau == 0 ~ "Protected only under MKT",
-                               T ~ "Not protected")) %>% 
-  ggplot() +
+## VISUALIZE ###################################################################
+when <-
+  ggplot(data = data_30) +
   geom_sf(data = coast, color = "black", fill = "transparent") +
   geom_tile(aes(x = lon, y = lat, fill = protected)) +
   scale_fill_brewer(palette = "Set2") +
   ggtheme_map() +
   theme(legend.position = "bottom",
-        legend.title = element_blank())
+        legend.title = element_blank()) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0))
 
-
-lazy_ggsave(plot = when,
-            filename = "30_by_segment/two_states_map",
-            width = 20,
-            height = 10)
-
-
-
-
+## EXPORT ######################################################################
+lazy_ggsave(
+  plot = when,
+  filename = "30_by_segment/two_states_map",
+  width = 20,
+  height = 10
+)
