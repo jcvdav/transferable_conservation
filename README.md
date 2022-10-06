@@ -1,4 +1,4 @@
-#  A global market for marine conservation
+# A Global Market for Marine Conservation
 
 
 ## Repository structure 
@@ -6,62 +6,6 @@
 ```
 -- json_to_dot.py
 -- make_p_to_json.py
--- raw_data
-   |__Intersect_EEZ_IHO_v4_2020
-      |__Intersect_EEZ_IHO_v4_2020.cpg
-      |__Intersect_EEZ_IHO_v4_2020.dbf
-      |__Intersect_EEZ_IHO_v4_2020.prj
-      |__Intersect_EEZ_IHO_v4_2020.qpj
-      |__Intersect_EEZ_IHO_v4_2020.shp
-      |__Intersect_EEZ_IHO_v4_2020.shp.xml
-      |__Intersect_EEZ_IHO_v4_2020.shx
-      |__LICENSE_EEZ_IHO_v4.txt
-   |__MEOW
-      |__Marine_Ecoregions_of_the_World_A_Bioregionalization_of_Coastal_and_Shelf_Areas.pdf
-      |__meow_ecos.dbf
-      |__meow_ecos.prj
-      |__meow_ecos.sbn
-      |__meow_ecos.sbx
-      |__meow_ecos.shp
-      |__meow_ecos.shp.xml
-      |__meow_ecos.shx
-   |__ne_10m_geography_marine_polys
-      |__ne_10m_geography_marine_polys.cpg
-      |__ne_10m_geography_marine_polys.dbf
-      |__ne_10m_geography_marine_polys.prj
-      |__ne_10m_geography_marine_polys.README.html
-      |__ne_10m_geography_marine_polys.shp
-      |__ne_10m_geography_marine_polys.shx
-      |__ne_10m_geography_marine_polys.VERSION.txt
-   |__ne_10m_ocean
-      |__ne_10m_ocean.cpg
-      |__ne_10m_ocean.dbf
-      |__ne_10m_ocean.prj
-      |__ne_10m_ocean.README.html
-      |__ne_10m_ocean.shp
-      |__ne_10m_ocean.shx
-      |__ne_10m_ocean.VERSION.txt
-   |__World_EEZ_v11_20191118
-      |__eez_boundaries_v11.cpg
-      |__eez_boundaries_v11.dbf
-      |__eez_boundaries_v11.prj
-      |__eez_boundaries_v11.shp
-      |__eez_boundaries_v11.shx
-      |__eez_v11.cpg
-      |__eez_v11.dbf
-      |__eez_v11.prj
-      |__eez_v11.qpj
-      |__eez_v11.shp
-      |__eez_v11.shx
-      |__LICENSE_EEZ_v11.txt
-   |__World_Seas_IHO_v3
-      |__LICENSE_IHO_v3.txt
-      |__World_Seas_IHO_v3.cpg
-      |__World_Seas_IHO_v3.dbf
-      |__World_Seas_IHO_v3.prj
-      |__World_Seas_IHO_v3.qpj
-      |__World_Seas_IHO_v3.shp
-      |__World_Seas_IHO_v3.shx
 -- README.md
 -- renv
 -- renv.lock
@@ -70,6 +14,7 @@
       |__R-3.6
       |__R-4.0
       |__R-4.1
+      |__R-4.2
    |__local
    |__settings.dcf
    |__staging
@@ -92,6 +37,10 @@
       |__equilibrum_supply_curves.png
       |__gain_from_trade_segmented_market_plot.pdf
       |__gain_from_trade_segmented_market_plot.png
+      |__gains_from_trade_panel.pdf
+      |__gains_from_trade_panel.png
+      |__hsi_hist.pdf
+      |__hsi_hist.png
       |__map_contrasting_scenarios_global.pdf
       |__map_contrasting_scenarios_global.png
       |__map_contrasting_scenarios_rlm.pdf
@@ -112,14 +61,13 @@
       |__segment_gains.png
       |__supply_curves
       |__trading_units
-      |__two_states_map_hem.pdf
-      |__two_states_map_hem.png
-      |__two_states_map_pro.pdf
-      |__two_states_map_pro.png
-      |__two_states_map_rlm.pdf
-      |__two_states_map_rlm.png
-      |__two_states_map.pdf
-      |__two_states_map.png
+   |__output_data
+      |__bau_and_mkt_otucomes_global_30.rds
+      |__gains_from_trade_bubbles.rds
+      |__trade_outcomes
+   |__processed_data
+      |__master_costs_and_benefits.rds
+      |__supply_curves
    |__tab
       |__gains_from_trade_hem.tex
       |__gains_from_trade_rlm.tex
@@ -144,6 +92,7 @@
       |__06_create_hemisphere_raster.R
       |__07_create_hemisphere_geopackage.R
       |__08_clean_mpa_atlas.R
+      |__09_download_thredds_aquamaps.R
    |__02_processing
       |__00_run_all_processing.R
       |__01_generate_pixel_benefits.R
@@ -157,23 +106,20 @@
       |__09_build_supply_curves_with_MPAs.R
    |__03_descriptive_content
       |__00_run_all_descriptive.R
-      |__01_plot_supply_curves.R
       |__02_plot_trading_units.R
       |__03_plot_global_benefits_and_costs.R
       |__04_mex_us_example_benefits_costs_bcr.R
+      |__05_plot_hsi_histogram.R
    |__04_analysis
-      |__00_run_all_analysis.R
-      |__03_get_eez_level_conservation.R
-      |__04_hemisphere_level_market.R
-      |__05_realm_level_market.R
-      |__06_province_level_market.R
-      |__07_costs_avoided_for_each_mkt_segment.R
-      |__08_all_segments_all_scenarios.R
+      |__01_bau_and_mkt_outcomes_global_30.R
+      |__02_all_segments_all_scenarios.R
    |__05_figures
-      |__02_plot_gains_from_trade_all_segments_all_targets.R
-      |__02_savings_by_bubble.R
-      |__03_savings_map_by_bubble.R
-      |__04_change_in_area.R
+      |__01_plot_supply_curves.R
+      |__02_savings_map_global_30.R
+      |__03_sources_of_efficiency_global_30.R
+      |__04_savings_by_bubble_multiple_targets.R
+      |__05_two_states_map_global.R
+      |__06_change_in_area.R
    |__99_others
       |__01_draw_dummy_supply_curves.R
       |__meeting_pct_test.R
