@@ -7,3 +7,4 @@ raw_data/
 .DS_Store
 data/*.tif
 .tif
+docs/
