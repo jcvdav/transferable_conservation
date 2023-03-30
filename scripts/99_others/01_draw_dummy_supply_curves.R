@@ -120,7 +120,7 @@ p4_area <- p4 +
                      labels = c("0", expression(P[low]), expression(P[high])),
                      limits = c(0, 12),
                      expand = c(0, 0)) +
-  labs(x = element_blank(), "Marginal Costs (P)") +
+  labs(x = "Conservation (Q)", "Marginal Costs (P)") +
   geom_text(data = bau_text,
             aes(x = x, y = y, label = label),
             parse = T)
