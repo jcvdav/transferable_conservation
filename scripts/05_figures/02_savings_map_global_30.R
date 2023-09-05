@@ -117,14 +117,17 @@ savings_map <- ggplot() +
     )
   )  +
   geom_sf(data = dont_participate, fill = "gray") +
-  ggtheme_map() +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) 
+  scale_y_continuous(expand = c(0, 0)) +
+  theme(legend.position = "bottom")
 
 ## EXPORT ######################################################################
 lazy_ggsave(
   plot = savings_map,
   filename = "30_by_segment/savings_map",
-  width = 18.7,
-  height = 9
+  width = 18,
+  height = 10
 )
+
+saveRDS(object = savings_map,
+        file = here("results", "ggplots", "savings_map.rds"))

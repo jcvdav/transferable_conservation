@@ -40,7 +40,6 @@ plot_measure <- function(data,
     }, fill = protected)) +
     geom_violin() +
     scale_fill_manual(values = c("#047C91", "#6D7D33", "#09847A")) +
-    ggtheme_plot() +
     labs(x = x_lab,
          y = y_lab) +
     theme(legend.position = "None")
@@ -74,9 +73,11 @@ cost <- plot_measure(
   variable = cost,
   x_lab = "",
   y_lab = expression(Costs ~ (log[10] ~ (M ~ USD))),
-  n = T
+  n = F
 ) +
-  scale_x_discrete(labels = NULL)
+  scale_x_discrete(labels = NULL) +
+  labs(title = "Costs under 30x30 and a global market") +
+  theme(axis.title.x = element_blank())
 
 # Plot area
 area <- plot_measure(
@@ -85,7 +86,8 @@ area <- plot_measure(
   x_lab = "",
   y_lab = expression(Area ~ (Km ^ 2))
 ) +
-  scale_x_discrete(labels = NULL)
+  scale_x_discrete(labels = NULL) +
+  labs(title = "Area protected under 30x30 and a global market")
 
 # Plot suitability
 suitability <- plot_measure(
@@ -93,7 +95,8 @@ suitability <- plot_measure(
   variable = suitability,
   x_lab = "Pixel status",
   y_lab = "Habitat Suitability\nIndex"
-)
+) +
+  labs(title = "Habitat quality under 30x30 and a global market")
 
 # Combine plots
 p <- plot_grid(
@@ -101,15 +104,16 @@ p <- plot_grid(
   area,
   suitability,
   align = "hv",
-  ncol = 1,
-  labels = "AUTO",
-  label_x = 0.9
+  ncol = 1
 )
 
 ## EXPORT FIGURES ##############################################################
 lazy_ggsave(
   plot = p,
   filename = "30_by_segment/sources_of_efficiency",
-  width = 15,
-  height = 12
+  width = 18,
+  height = 18
 )
+
+saveRDS(object = p,
+        file = here("results", "ggplots", "sources_of_efficiency.rds"))

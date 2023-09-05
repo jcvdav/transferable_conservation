@@ -57,3 +57,17 @@ ggplot2::update_geom_defaults(geom = "sf", list(color = "black",
                                        size = 0.1))
 
 
+ggplot2::theme_set(
+  ggplot2::theme_bw()
+)
+ggplot2::theme_update(
+  panel.grid.major = ggplot2::element_blank(),
+  line = ggplot2::element_line(color = "black",
+                               linewidth = 0.176389),
+  panel.grid.minor = ggplot2::element_blank(),
+  legend.background = ggplot2::element_blank(),
+  legend.key = ggplot2::element_blank(),
+  strip.background = ggplot2::element_blank(),
+  strip.text = ggplot2::element_text(hjust = 0),
+  text = ggplot2::element_text(size = 6),
+)
