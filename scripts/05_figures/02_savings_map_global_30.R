@@ -21,6 +21,8 @@ library(sf)
 library(ggnewscale)
 library(tidyverse)
 
+sf_use_s2(F)
+
 # Load coastline ---------------------------------------------------------------
 coast <- ne_countries(returnclass = "sf")
 
@@ -42,21 +44,12 @@ data <- read.csv(file) %>%
   mutate(ratio = savings / bau_tc)
 
 # Load EEZs for visualization --------------------------------------------------
-eez_meow <-
-  st_read(file.path(
-    project_path,
-    "processed_data",
-    "intersected_eez_and_meow.gpkg"
-  )) %>%
-  rmapshaper::ms_simplify(keep_shapes = T) %>%
-  sf::st_make_valid() %>%
-  group_by(iso3) %>%
-  summarize(a = 1) %>%
-  ungroup() %>%
-  select(-a)
+eez <-
+  st_read(file.path(project_path, "processed_data", "clean_world_eez_v11.gpkg")) %>%
+  rmapshaper::ms_simplify(keep_shapes = T)
 
 # Add results to the EEZs ------------------------------------------------------
-eez_with_results <- eez_meow %>%
+eez_with_results <- eez %>%
   left_join(data, by = c("iso3"))
 
 # Df of sellers ----------------------------------------------------------------
@@ -105,7 +98,7 @@ my_scale <-
 savings_map <- ggplot() +
   geom_sf(data = coast) +
   geom_sf(data = buyers, aes(fill = Buyers)) +
-  scale_fill_gradient(low = "white", high = "steelblue", labels = my_scale) +
+  scale_fill_gradient(low = "white", high = "#2166AB", labels = my_scale) +
   guides(
     fill = guide_legend(
       title = "Costs avoided\n by buyers (%BAU)",
@@ -115,7 +108,7 @@ savings_map <- ggplot() +
   ) +
   new_scale_fill() +
   geom_sf(data = sellers, aes(fill = Sellers)) +
-  scale_fill_gradient(low = "white", high = "red", labels = my_scale) +
+  scale_fill_gradient(low = "white", high = "#B1182B", labels = my_scale) +
   guides(
     fill = guide_legend(
       title = "Gains from trade\n by sellers (%BAU)",
@@ -126,8 +119,7 @@ savings_map <- ggplot() +
   geom_sf(data = dont_participate, fill = "gray") +
   ggtheme_map() +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) +
-  coord_sf(crs = "ESRI:54009")
+  scale_y_continuous(expand = c(0, 0)) 
 
 ## EXPORT ######################################################################
 lazy_ggsave(
