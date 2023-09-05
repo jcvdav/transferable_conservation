@@ -39,7 +39,7 @@ global <- eez_meow %>%
   summarize(a = 1) %>% 
   ungroup() %>% 
   ggplot() +
-  geom_sf(fill = "steelblue", color = "transparent") +
+  geom_sf(fill = "#173c66", color = "transparent") +
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_x_continuous(expand = c(0, 0)) +
