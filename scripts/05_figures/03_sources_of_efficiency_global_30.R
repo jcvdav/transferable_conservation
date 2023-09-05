@@ -100,6 +100,7 @@ p <- plot_grid(
   cost,
   area,
   suitability,
+  align = "hv",
   ncol = 1,
   labels = "AUTO",
   label_x = 0.9
