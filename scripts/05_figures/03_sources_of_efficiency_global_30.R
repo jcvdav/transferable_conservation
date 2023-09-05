@@ -39,7 +39,7 @@ plot_measure <- function(data,
       }
     }, fill = protected)) +
     geom_violin() +
-    scale_fill_brewer(palette = "Set2") +
+    scale_fill_manual(values = c("#047C91", "#6D7D33", "#09847A")) +
     ggtheme_plot() +
     labs(x = x_lab,
          y = y_lab) +
@@ -58,7 +58,7 @@ plot_measure <- function(data,
     p <- p +
       geom_text(data = N, aes(
         x = protected,
-        y = max(y),
+        y = max(y) * 1.1,
         label = n
       ))
   }
