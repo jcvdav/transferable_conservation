@@ -15,6 +15,7 @@ library(rnaturalearth)
 library(sf)
 library(tidyverse)
 
+sf::sf_use_s2(FALSE)
 
 # Load data
 
@@ -42,7 +43,8 @@ global <- eez_meow %>%
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0))
+  scale_y_continuous(expand = c(0, 0)) +
+  coord_sf(crs = "ESRI:54009")
 
 lazy_ggsave(plot = global, filename = "trading_units/global",
             width = 10, height = 5)
@@ -61,14 +63,15 @@ hemisphere_data <- hemisphere %>%
 
 hemisphere_map <- 
   ggplot() +
-  geom_sf(data = hemisphere_data, aes(fill = hemisphere), color = "transparent", size = 0.1) +
+  geom_sf(data = hemisphere_data, aes(fill = hemisphere), color = "black", size = 0.1) +
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
   labs(fill = "Hemisphere") +
   theme(legend.position = "none") +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0))
+  scale_y_continuous(expand = c(0, 0)) +
+  coord_sf(crs = "ESRI:54009")
 
 hemisphere_bars <- hemisphere_data %>% 
   st_drop_geometry() %>% 
@@ -112,14 +115,15 @@ realm_data <- eez_meow %>%
 
 realm_map <- 
   ggplot() +
-  geom_sf(data = realm_data, aes(fill = realm), color = "transparent", size = 0.1) +
+  geom_sf(data = realm_data, aes(fill = realm), color = "black", size = 0.1) +
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
   labs(fill = "Realm") +
   theme(legend.position = "none") +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0))
+  scale_y_continuous(expand = c(0, 0)) +
+  coord_sf(crs = "ESRI:54009")
 
 realm_bars <- realm_data %>% 
   st_drop_geometry() %>% 
@@ -170,13 +174,14 @@ provinces_data <- eez_meow %>%
   mutate(province = fct_reorder(province, n_eez))
 
 province_map <- ggplot() +
-  geom_sf(data = provinces_data, aes(fill = province), color = "transparent", size = 0.1) +
+  geom_sf(data = provinces_data, aes(fill = province), color = "black", size = 0.1) +
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
   theme(legend.position = "none") +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) 
+  scale_y_continuous(expand = c(0, 0))  +
+  coord_sf(crs = "ESRI:54009")
 
 province_bars <- provinces_data %>% 
   st_drop_geometry() %>% 
@@ -217,13 +222,14 @@ ecoregion_data <- eez_meow %>%
   mutate(ecoregion = fct_reorder(ecoregion, n_eez))
 
 ecoregion_map <- ggplot() +
-  geom_sf(data = ecoregion_data, aes(fill = ecoregion), color = "transparent", size = 0.1) +
+  geom_sf(data = ecoregion_data, aes(fill = ecoregion), color = "black", size = 0.1) +
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
   scale_fill_viridis_d() +
   theme(legend.position = "none") +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) 
+  scale_y_continuous(expand = c(0, 0))  +
+  coord_sf(crs = "ESRI:54009")
 
 ecoregion_bars <- ecoregion_data %>% 
   st_drop_geometry() %>% 

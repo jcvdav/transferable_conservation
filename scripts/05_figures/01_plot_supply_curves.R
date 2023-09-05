@@ -141,7 +141,9 @@ global <- ggplot(data = eez_h_sum,
   labs(
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Marginal cost ($/Q)")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 # Country-level supply curves
 eez <- ggplot(data = eez_cb,
@@ -152,7 +154,9 @@ eez <- ggplot(data = eez_cb,
   labs(
     x = bquote("Conservation benefit (HSI-weighted Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Marginal cost ($/HSI-weighted " ~ Km ^ 2 ~ ")")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 eez_supply_curve <-
   plot_grid(eez, global, ncol = 2, labels = "AUTO")
@@ -170,7 +174,9 @@ eez_hem <-
   labs(
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Fisheries revenue ($/Q)")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 # Hem summed
 hem <- ggplot(data = hem_h_sum,
@@ -181,7 +187,9 @@ hem <- ggplot(data = hem_h_sum,
   labs(
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Fisheries revenue ($/Q)")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 eez_hem_supply_curve <-
   plot_grid(eez_hem, hem, ncol = 1, labels = "AUTO")
@@ -197,7 +205,9 @@ eez_rlm <-
   labs(
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Fisheries revenue ($/Q)")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 # realm summed
 rlm <- ggplot(data = rlm_h_sum,
@@ -208,7 +218,9 @@ rlm <- ggplot(data = rlm_h_sum,
   labs(
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Fisheries revenue ($/Q)")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 eez_rlm_supply_curve <-
   plot_grid(eez_rlm, rlm, ncol = 1, labels = "AUTO")
@@ -223,7 +235,9 @@ eez_pro <-
   labs(
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Fisheries revenue ($/Q)")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 # province summed
 pro <- ggplot(data = pro_h_sum,
@@ -235,7 +249,9 @@ pro <- ggplot(data = pro_h_sum,
   labs(
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Fisheries revenue ($/Q)")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 eez_pro_supply_curve <-
   plot_grid(eez_pro, rlm, ncol = 1, labels = "AUTO")
@@ -306,7 +322,9 @@ eez_all <- ggplot(data = eez_cb,
   labs(
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Fisheries revenue ($/Q)")
-  )
+  ) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 eez_supply_curve_PER <- eez_all +
   geom_line(
@@ -320,11 +338,15 @@ eez_supply_curve_PER <- eez_all +
     x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Fisheries revenue ($/Q)")
   ) +
-  geom_text(data = labs %>% filter(iso3 == "PER"), aes(label = iso3))
+  geom_text(data = labs %>% filter(iso3 == "PER"), aes(label = iso3)) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 eez_supply_curve_PER_MEX <- eez_all +
   geom_line(data = filter(eez_cb, iso3 %in% c("MEX", "PER")), size = 1) +
-  geom_text(data = labs, aes(label = iso3))
+  geom_text(data = labs, aes(label = iso3)) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.01, 0))
 
 eez_all <- eez_all +
   geom_line() +
