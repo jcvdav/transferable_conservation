@@ -56,7 +56,7 @@ savings_plot <- outcome_data %>%
   labs(x = "Bubble policy",
        y = "% Cost savings (difference / BAU)",
        fill = "Bubble policy",
-       title = "Gains from trade under different spatial constraints on trade") +
+       title = "B) Gains from trade under different spatial constraints on trade") +
   theme(legend.position = "None")
 
 # Line chart of relative gains from trade by bubble policy and all targets -----
@@ -76,7 +76,7 @@ rel <- ggplot(outcome_data, aes(x = r, y = ratio, color = bubble)) +
   labs(x = "% Conservation Benefits",
        y = "Costs avoided (difference / BAU)",
        color = "Bubble policy",
-       title = "Gains from trade for other conservation targets") +
+       title = "C) Gains from trade for other conservation targets") +
   scale_x_continuous(
     labels = scales::percent_format(accuracy = 1),
     breaks = seq(0.1, 1, by = 0.1),
@@ -98,6 +98,12 @@ figure <- plot_grid(savings_plot,
                     align = "hv",
                     ncol = 1)
 
+
+h_figure <- plot_grid(savings_plot,
+                    rel,
+                    align = "hv",
+                    ncol = 2)
+
 ## EXPORT FIGURES ##############################################################
 lazy_ggsave(
   plot = figure,
@@ -106,5 +112,5 @@ lazy_ggsave(
   height = 18
 )
 
-saveRDS(object = figure,
+saveRDS(object = h_figure,
         file = here("results", "ggplots", "gains_from_trade_panel.rds"))

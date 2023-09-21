@@ -59,13 +59,16 @@ p <- ggplot(data = counts,
     aes(fill = bubble),
     height = 0,
     width = 2,
-    alpha = 0.75,
+    alpha = 0.8,
     size = 2
   ) +
+  geom_hline(yintercept = 2, linetype = "dashed") +
   labs(x = "Number of bubbles",
        y = "Number of nations per bubble",
        fill = "Bubble policy") +
-  scale_fill_brewer(palette = "Set1") +
+  scale_fill_manual(values = c("#C13832", "#D28E00", "#9ECEEB", "#D4BF95", "#91B9A4")) +
+  scale_y_continuous(expand = expansion(0.01, 0)) +
+  scale_x_continuous(expand = expansion(0.01, 0)) +
   startR::ggtheme_plot() +
   theme(legend.justification = c(1, 1),
         legend.position = c(1, 1))

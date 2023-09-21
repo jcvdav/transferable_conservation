@@ -64,6 +64,7 @@ benefit_map <-
   drop_na(layer) %>% 
   ggplot() +
   geom_tile(aes(x = x, y = y, fill = layer)) +
+  # geom_tile(data = mpas, aes(x = x, y = y), fill = "red") +
   geom_sf(data = coastline, color = "black") +
   ggtheme_map() +
   labs(fill = expression(Q[i])) +
@@ -75,7 +76,6 @@ benefit_map <-
   scale_y_continuous(expand = c(0, 0))
 
 # Costs
-
 cost_map <- 
   costs_raster %>% 
   as.data.frame(xy = T) %>% 
@@ -100,7 +100,7 @@ bcr_map <-
   ggplot() +
   geom_tile(aes(x = x, y = y, fill = layer)) +
   geom_tile(data = mpas, aes(x = x, y = y, fill = 0)) +
-  geom_sf(data = coastline, fill = "gray", color = "black") +
+  geom_sf(data = coastline, color = "black") +
   ggtheme_map() +
   scale_fill_viridis_c(trans = "log10") +
   guides(fill = guide_colorbar(title = "log10(Fisheries revenue/Qi)",
@@ -118,17 +118,17 @@ pannel <- plot_grid(benefit_map, cost_map, bcr_map,
 lazy_ggsave(benefit_map,
             "benefit_and_cost_maps/benefit_map",
             width = 15,
-            height = 7)
+            height = 10)
 
 lazy_ggsave(cost_map,
             "benefit_and_cost_maps/cost_map",
             width = 15,
-            height = 7)
+            height = 10)
 
 lazy_ggsave(bcr_map,
             "benefit_and_cost_maps/bcr_map",
             width = 15,
-            height = 7)
+            height = 10)
 
 lazy_ggsave(pannel,
             "benefit_and_cost_maps/input_data_maps_panel",

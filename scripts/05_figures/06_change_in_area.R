@@ -59,14 +59,14 @@ p <- data %>%
   ggplot(aes(x = r, y = a2, color = segment)) +
   geom_rect(xmin = 0, xmax = 0.1, ymin = 0, ymax = Inf, color = "transparent", fill = "gray", alpha = 0.1) +
   geom_vline(xintercept = c(0.1, 0.3, 0.5), linetype = "dashed") +
-  geom_line() +
-  scale_color_brewer(palette = "Set1") +
+  geom_line(linewidth = 1) +
+  scale_color_manual(values = c("#C13832", "#D28E00", "#9ECEEB", "#D4BF95", "#91B9A4")) +
   scale_x_continuous(limits = c(0, 1.01),
                      expand = c(0, 0),
                      labels = scales::percent) +
   scale_y_continuous(limits = c(0, 0.06),
+                     expand = c(0, 0),
                      labels = scales::percent) +
-  theme_bw() +
   theme(legend.position = c(1, 1),
         legend.justification = c(1, 1),
         legend.background = element_blank()) +

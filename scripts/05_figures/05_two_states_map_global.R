@@ -33,12 +33,12 @@ when <-
   ggplot(data = data_30) +
   geom_sf(data = coast, color = "black", fill = "transparent") +
   geom_tile(aes(x = lon, y = lat, fill = protected)) +
-  scale_fill_brewer(palette = "Set2") +
+  scale_fill_manual(values = c("#047C91", "#6D7D33", "#09847A")) +
   ggtheme_map() +
   theme(legend.position = "bottom",
         legend.title = element_blank()) +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0))
+  scale_y_continuous(expand = c(0, 0)) 
 
 ## EXPORT ######################################################################
 lazy_ggsave(
