@@ -55,11 +55,13 @@ plot_measure <- function(data,
                 }))
     
     p <- p +
-      geom_text(data = N, aes(
-        x = protected,
-        y = max(y) * 1.1,
-        label = n
-      ))
+      geom_text(data = N,
+                aes(
+                  x = protected,
+                  y = max(y) * 1.05,
+                  label = n
+                ),
+                size = 2)
   }
   
   return(p)
@@ -73,7 +75,7 @@ cost <- plot_measure(
   variable = cost,
   x_lab = "",
   y_lab = expression(Costs ~ (log[10] ~ (M ~ USD))),
-  n = F
+  n = T
 ) +
   scale_x_discrete(labels = NULL) +
   labs(title = "Costs under 30x30 and a global market") +
@@ -96,7 +98,7 @@ suitability <- plot_measure(
   x_lab = "Pixel status",
   y_lab = "Habitat Suitability\nIndex"
 ) +
-  labs(title = "Habitat quality under 30x30 and a global market")
+  labs(title = "Habitat suitability under 30x30 and a global market")
 
 # Combine plots
 p <- plot_grid(
@@ -111,8 +113,8 @@ p <- plot_grid(
 lazy_ggsave(
   plot = p,
   filename = "30_by_segment/sources_of_efficiency",
-  width = 18,
-  height = 18
+  width = 9,
+  height = 12
 )
 
 saveRDS(object = p,

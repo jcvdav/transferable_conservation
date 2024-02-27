@@ -139,7 +139,7 @@ global <- ggplot(data = eez_h_sum,
   geom_line(size = 1) +
   ggtheme_plot() +
   labs(
-    x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
+    x = bquote("Conservation benefit (HSI-weighted; Thousand " ~ Km ^ 2 ~ ")"),
     y = bquote("Marginal cost ($/Q)")
   ) +
   scale_x_continuous(expand = expansion(0.01, 0)) +

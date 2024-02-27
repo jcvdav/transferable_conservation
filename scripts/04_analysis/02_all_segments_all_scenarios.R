@@ -16,13 +16,13 @@ library(here)
 library(cowplot)
 library(tidyverse)
 
-export_files <- T
+export_files <- F#T
 
 # Load data --------------------------------------------------------------------
 eez_cb <-
   readRDS(
-    file = file.path(
-      project_path,
+    file = here(
+      "results",
       "processed_data",
       "supply_curves",
       "with_mpas",
@@ -32,8 +32,8 @@ eez_cb <-
 
 eez_h_sum_cb <-
   readRDS(
-    file = file.path(
-      project_path,
+    file = here(
+      "results",
       "processed_data",
       "supply_curves",
       "with_mpas",
@@ -43,8 +43,8 @@ eez_h_sum_cb <-
 
 hem_eez_cb <-
   readRDS(
-    file = file.path(
-      project_path,
+    file = here(
+      "results",
       "processed_data",
       "supply_curves",
       "with_mpas",
@@ -53,8 +53,8 @@ hem_eez_cb <-
   )
 hem_h_sum <-
   readRDS(
-    file = file.path(
-      project_path,
+    file = here(
+      "results",
       "processed_data",
       "supply_curves",
       "with_mpas",

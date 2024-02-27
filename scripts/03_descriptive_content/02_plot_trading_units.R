@@ -39,8 +39,8 @@ global <- eez_meow %>%
   summarize(a = 1) %>% 
   ungroup() %>% 
   ggplot() +
-  geom_sf(fill = "#173c66", color = "transparent") +
-  geom_sf(data = coast, color = "transparent", size = 0.1) +
+  geom_sf(fill = color_values[1], color = "black", size = 0.1) +
+  geom_sf(data = coast, color = "transparent") +
   ggtheme_map() +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0)) +
@@ -64,9 +64,9 @@ hemisphere_data <- hemisphere %>%
 hemisphere_map <- 
   ggplot() +
   geom_sf(data = hemisphere_data, aes(fill = hemisphere), color = "black", size = 0.1) +
-  geom_sf(data = coast, color = "transparent", size = 0.1) +
+  geom_sf(data = coast, color = "transparent") +
   ggtheme_map() +
-  scale_fill_viridis_d() +
+  scale_fill_viridis_d(option = "A") +
   labs(fill = "Hemisphere") +
   theme(legend.position = "none") +
   scale_x_continuous(expand = c(0, 0)) +
@@ -80,7 +80,7 @@ hemisphere_bars <- hemisphere_data %>%
   ggplot(aes(x = hemisphere, y = n_eez, fill = hemisphere)) +
   geom_col() +
   coord_flip() +
-  scale_fill_viridis_d() +
+  scale_fill_viridis_d(option = "A") +
   labs(x = "Hemisphere", y = "Number of nations") +
   ggtheme_plot() +
   theme(legend.position = "none") +
@@ -118,7 +118,7 @@ realm_map <-
   geom_sf(data = realm_data, aes(fill = realm), color = "black", size = 0.1) +
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
-  scale_fill_viridis_d() +
+  scale_fill_viridis_d(option = "B") +
   labs(fill = "Realm") +
   theme(legend.position = "none") +
   scale_x_continuous(expand = c(0, 0)) +
@@ -135,7 +135,7 @@ realm_bars <- realm_data %>%
   labs(x = "Realm", y = "Number of nations") +
   ggtheme_plot() +
   theme(legend.position = "none") +
-  scale_fill_viridis_d() +
+  scale_fill_viridis_d(option = "B") +
   geom_hline(yintercept = 2, linetype = "dashed", color = "black")
 
 realm_segments <- plot_grid(realm_map, realm_bars,
@@ -177,7 +177,7 @@ province_map <- ggplot() +
   geom_sf(data = provinces_data, aes(fill = province), color = "black", size = 0.1) +
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
-  scale_fill_viridis_d() +
+  scale_fill_viridis_d(option = "C") +
   theme(legend.position = "none") +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0))  +
@@ -193,7 +193,7 @@ province_bars <- provinces_data %>%
   labs(x = "Province", y = "Number of nations") +
   ggtheme_plot() +
   theme(legend.position = "none") +
-  scale_fill_viridis_d() +
+  scale_fill_viridis_d(option = "C") +
   geom_hline(yintercept = 2, linetype = "dashed", color = "black")
 
 province_segments <- plot_grid(province_map, province_bars,
@@ -225,10 +225,10 @@ ecoregion_map <- ggplot() +
   geom_sf(data = ecoregion_data, aes(fill = ecoregion), color = "black", size = 0.1) +
   geom_sf(data = coast, color = "transparent", size = 0.1) +
   ggtheme_map() +
-  scale_fill_viridis_d() +
+  scale_fill_viridis_d(option = "E") +
   theme(legend.position = "none") +
   scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0))  +
+  scale_y_continuous(expand = c(0, 0)) +
   coord_sf(crs = "ESRI:54009")
 
 ecoregion_bars <- ecoregion_data %>% 
@@ -241,8 +241,10 @@ ecoregion_bars <- ecoregion_data %>%
   labs(x = "ecoregion", y = "Number of nations") +
   ggtheme_plot() +
   theme(legend.position = "none") +
-  scale_fill_viridis_d() +
+  scale_fill_viridis_d(option = "D") +
   geom_hline(yintercept = 2, linetype = "dashed", color = "black")
+
+
 
 # Panel figure
 
