@@ -26,7 +26,7 @@ eez_cb <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "global_eez_supply_curves_with_mpas.rds"
+      "global_eez_supply_curves_with_mpas_abt.rds"
     )
   )
 
@@ -37,7 +37,7 @@ eez_h_sum_cb <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "global_supply_curve_with_mpas.rds"
+      "global_supply_curve_with_mpas_abt.rds"
     )
   )
 
@@ -48,7 +48,7 @@ hem_eez_cb <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "hemisphere_eez_supply_curves_with_mpas.rds"
+      "hemisphere_eez_supply_curves_with_mpas_abt.rds"
     )
   )
 hem_h_sum <-
@@ -58,7 +58,7 @@ hem_h_sum <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "hemisphere_supply_curves_with_mpas.rds"
+      "hemisphere_supply_curves_with_mpas_abt.rds"
     )
   )
 
@@ -69,7 +69,7 @@ rlm_eez_cb <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "realm_eez_supply_curves_with_mpas.rds"
+      "realm_eez_supply_curves_with_mpas_abt.rds"
     )
   )
 rlm_h_sum <-
@@ -79,19 +79,19 @@ rlm_h_sum <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "realm_supply_curves_with_mpas.rds"
+      "realm_supply_curves_with_mpas_abt.rds"
     )
   )
 
 
-# Realm
+# Province
 pro_eez_cb <- readRDS(
   file = here(
     "results",
     "processed_data",
     "supply_curves",
     "with_mpas",
-    "province_eez_supply_curves_with_mpas.rds"
+    "province_eez_supply_curves_with_mpas_abt.rds"
   )
 )
 pro_h_sum <- readRDS(
@@ -100,7 +100,7 @@ pro_h_sum <- readRDS(
     "processed_data",
     "supply_curves",
     "with_mpas",
-    "province_supply_curves_with_mpas.rds"
+    "province_supply_curves_with_mpas_abt.rds"
   )
 )
 
@@ -111,7 +111,7 @@ eco_eez_cb <- readRDS(
     "processed_data",
     "supply_curves",
     "with_mpas",
-    "ecoregion_eez_supply_curves_with_mpas.rds"
+    "ecoregion_eez_supply_curves_with_mpas_abt.rds"
   )
 )
 eco_h_sum <- readRDS(
@@ -120,7 +120,7 @@ eco_h_sum <- readRDS(
     "processed_data",
     "supply_curves",
     "with_mpas",
-    "ecoregion_supply_curves_with_mpas.rds"
+    "ecoregion_supply_curves_with_mpas_abt.rds"
   )
 )
 
@@ -352,5 +352,5 @@ gains_from_trade_multiple_scenarios <- rbind(
 
 saveRDS(
   object = gains_from_trade_multiple_scenarios,
-  file = here("results", "output_data", "gains_from_trade_bubbles.rds")
+  file = here("results", "output_data", "gains_from_trade_bubbles_abt.rds")
 )
