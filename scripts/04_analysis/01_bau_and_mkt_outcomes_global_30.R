@@ -26,7 +26,7 @@ bau <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "global_eez_supply_curves_with_mpas_abt.rds"
+      "global_eez_supply_curves_with_mpas.rds"
     )
   ) %>%
   mutate(pixel_fraction = pmin(1 - ((tb - ((tb * 0.3) / pct
@@ -43,7 +43,7 @@ mkt <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "global_supply_curve_with_mpas_abt.rds"
+      "global_supply_curve_with_mpas.rds"
     )
   ) %>%
   mutate(pixel_fraction = pmin(1 - ((tb - ((tb * 0.3) / pct

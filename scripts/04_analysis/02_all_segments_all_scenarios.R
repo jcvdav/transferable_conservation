@@ -128,50 +128,43 @@ eco_h_sum <- readRDS(
 # Define a function that estiamtes gains from trade ----------------------------
 get_segmented_market_gains <-
   function(r, curves, agg_curves, group, write = F) {
-    # browser()
+    browser()
     # Get conserving nations
     conserving_nations <- curves %>%
-      select(iso3, {
-        {
-          group
-        }
-      }) %>%
+      select(iso3, {{group}}) %>%
       distinct()
     
     already_reached <- curves %>%
       filter(pct_protected >= r) %>%
-      select(iso3, {
-        {
-          group
-        }
-      }, pct_protected) %>%
+      select(iso3, {{group}}, pct_protected) %>%
       distinct()
     
     trading_prices <- agg_curves %>%
       group_by_at(group) %>%
-      mutate(pixel_fraction = pmin(1 - ((tb - ((tb * r) / pct
-      )) / benefit), 1)) %>%
+      mutate(pixel_fraction = pmin(1 - ((tb - ((tb * r) / pct)) / benefit), 1)) %>%
       filter(pixel_fraction >= 0) %>%
       slice_max(mc) %>%
       ungroup() %>%
-      select({
-        {
-          group
-        }
-      }, trading_price = mc)
+      select({{group}},
+             trading_price = mc,
+             pixel_fraction)
     
-    
+    # Now we calculate the realized outcomes
+    # Note that these estimates of the total benefits do not include the total benefit of what
+    # has already been protected by MPAs that are already in place. This is because the benefit of those MPAs
+    # is a constant for BAU and MKT scenaros. W accounted for it in assigning country obligations, but these are no longer
+    # required.
     realized_bau_cb <- curves %>%
-      mutate(pixel_fraction = pmin(1 - ((tb - ((tb * r) / pct
-      )) / benefit), 1)) %>%
+      mutate(pixel_fraction = pmin(1 - ((tb - ((tb * r) / pct)) / benefit), 1)) %>% # Calculate the fraction of the pixel that needs to be protected
       filter(pixel_fraction >= 0) %>%
-      mutate(benefit = benefit * pixel_fraction,
-             cost = cost * pixel_fraction) %>%
+      mutate(adj_benefit = benefit * pixel_fraction,
+             adj_cost = cost * pixel_fraction,
+             adj_area = area * pixel_fraction) %>%
       group_by_at(c("iso3", group)) %>%
       summarize(
-        bau_tb = sum(benefit, na.rm = T),
-        bau_tc = sum(cost, na.rm = T),
-        bau_area = sum(area, na.rm = T),
+        bau_tb = sum(adj_benefit, na.rm = T),
+        bau_tc = sum(adj_cost, na.rm = T),
+        bau_area = sum(adj_area, na.rm = T),
         mc_stop = max(mc, na.rm = T),
         .groups = "drop_last"
       ) %>%
@@ -180,18 +173,20 @@ get_segmented_market_gains <-
     # For a market
     realized_mkt_cb <- curves %>%
       left_join(trading_prices, by = group) %>%
-      filter(mc <= trading_price) %>%               # Keep all patches in each country with a cost < trading price
+      filter(mc <= trading_price) %>%                                           # Keep all patches in each country with a marginal cost <= trading price
       group_by_at(group) %>%
-      mutate(pixel_fraction = ifelse(mc < max(mc), 1, 1 - ((tb - ((tb * r) / pct
-      )) / benefit))) %>%
+      mutate(pixel_fraction = ifelse(mc < max(mc),                              # If the mc of a patch is below market clearing price then (see line below)
+                                     1,                                         # the entire patch is protected, otherwise (see line below)
+                                     pixel_fraction)) %>%                       # a fraciton of it is protected
       ungroup() %>%
-      mutate(benefit = pixel_fraction * benefit,
-             cost = pixel_fraction * cost) %>%
+      mutate(adj_benefit = benefit * pixel_fraction,
+             adj_cost = cost * pixel_fraction,
+             adj_area = area * pixel_fraction) %>%
       group_by_at(c("iso3", group, "trading_price")) %>%
       summarize(
-        mkt_tb = sum(benefit, na.rm = T),
-        mkt_tc = sum(cost, na.rm = T),
-        mkt_area = sum(area, na.rm = T),
+        mkt_tb = sum(adj_benefit, na.rm = T),
+        mkt_tc = sum(adj_cost, na.rm = T),
+        mkt_area = sum(adj_area, na.rm = T),
         .groups = "drop_last"
       ) %>%
       ungroup()
@@ -205,7 +200,9 @@ get_segmented_market_gains <-
         mkt_tb = 0,
         mkt_tc = 0,
         bau_tb = 0,
-        bau_tc = 0
+        bau_tc = 0,
+        mkt_area = 0,
+        bau_area = 0
       )) %>%
       select(-contains("app"),-trading_price) %>%
       left_join(trading_prices, by = group) %>%
@@ -239,7 +236,7 @@ get_segmented_market_gains <-
     
     
     gains_from_trade <- combined_outcomes %>%
-      select(bau_tb, mkt_tb, bau_tc, difference = savings) %>%
+      select(bau_area, mkt_area, bau_tb, mkt_tb, bau_tc, difference = savings) %>%
       summarize_all(sum, na.rm = T) %>%
       mutate(ratio = difference / bau_tc,
              bubble = group)
@@ -251,6 +248,7 @@ get_segmented_market_gains <-
 
 # Define range of targets ------------------------------------------------------
 rs <- seq(0.1, 1, by = 0.01)
+rs <- (10:100)/100
 
 # Simulate all global ----------------------------------------------------------
 gains_from_trade_multiple_scenarios_global <- tibble(r = rs) %>%

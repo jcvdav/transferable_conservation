@@ -39,7 +39,7 @@ master_data <- readRDS(
 
 # Define a function that builds the supply curves ------------------------------
 build_curve_with_mpas <- function(data, by = NULL) {
-  # browser()
+  browser()
   achievements <- data %>%
     group_by_at(vars(all_of(by))) %>%
     summarize(

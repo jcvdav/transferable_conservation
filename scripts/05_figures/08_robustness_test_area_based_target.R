@@ -13,6 +13,10 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
+pacman::p_load(
+  here,
+  tidyverse
+)
 
 # Load data --------------------------------------------------------------------
 hsi <- readRDS(file = here("results", "output_data", "gains_from_trade_bubbles.rds")) %>% 
@@ -29,8 +33,6 @@ data <- bind_rows(hsi, abt)
 ## VISUALIZE ###################################################################
 
 # X ----------------------------------------------------------------------------
-
-
 ggplot(data = data,
        aes(x = bubble, y = ratio, fill = bubble, alpha = type)) + 
   geom_col(position = "dodge")
@@ -39,7 +41,9 @@ data %>%
   mutate(ratio = ratio * 100) %>%
   select(bubble, type, ratio) %>%
   pivot_wider(values_from = "ratio", names_from = "type") %>%
-  knitr::kable(digits = 3)
+  kableExtra::kbl(digits = 3,
+                  col.names = c("Bubble policy (N segments)", " Gains from trade (conservation benefit is HSI-weighted Km2)", "Gains from trade (conservation benefit is Km2)")) %>% 
+  kableExtra::kable_styling()
 
 ## EXPORT ######################################################################
 

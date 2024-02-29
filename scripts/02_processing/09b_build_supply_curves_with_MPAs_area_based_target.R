@@ -31,13 +31,11 @@ library(tidyverse)
 
 # Load data --------------------------------------------------------------------
 master_data <- readRDS(
-  file = here(
-  "results",
-  "processed_data",
-  "master_costs_and_benefits.rds"
-)) %>% 
+  file = here("results",
+              "processed_data",
+              "master_costs_and_benefits.rds")) %>% 
   mutate(benefit = area,
-         bcr = benefit / cost,                                                  # Calculate marginal benefit
+         bcr = benefit / cost,
          mc = cost / benefit)
 
 # Define a function that builds the supply curves ------------------------------
