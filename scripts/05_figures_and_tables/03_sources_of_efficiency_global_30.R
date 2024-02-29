@@ -13,10 +13,11 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
-library(startR)
-library(here)
-library(cowplot)
-library(tidyverse)
+pacman::p_load(startR, 
+               here, 
+               cowplot, 
+               tidyverse)
+
 
 # Load data --------------------------------------------------------------------
 data_30 <- readRDS(here(

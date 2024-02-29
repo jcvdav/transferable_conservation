@@ -26,8 +26,13 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
-library(here)
-library(tidyverse)
+pacman::p_load(
+  here,
+  tidyverse
+)
+
+# Export dir -------------------------------------------------------------------
+export_dir <- here("results", "processed_data", "supply_curves", "with_mpas")
 
 # Load data --------------------------------------------------------------------
 master_data <- readRDS(
@@ -39,7 +44,7 @@ master_data <- readRDS(
 
 # Define a function that builds the supply curves ------------------------------
 build_curve_with_mpas <- function(data, by = NULL) {
-  browser()
+  # browser()
   achievements <- data %>%
     group_by_at(vars(all_of(by))) %>%
     summarize(
@@ -49,12 +54,8 @@ build_curve_with_mpas <- function(data, by = NULL) {
     ungroup()
   
   curves <- data %>%
-    filter(is.na(mpa)) %>%
-    select({
-      {
-        by
-      }
-    }, lon, lat, suitability, cost, area, mpa, benefit, bcr, mc) %>%
+    filter(!mpa == 1) %>% # Remove pixels that are MPAs
+    select({{by}}, lon, lat, suitability, cost, area, mpa, benefit, bcr, mc) %>%
     left_join(achievements, by = by) %>%
     group_by_at(vars(all_of(by))) %>%
     arrange(desc(bcr)) %>%
@@ -100,124 +101,39 @@ ecoregion_supply_curves_w_mpas <-
 
 
 ## DATA EXPORT #################################################################
-# Export country-level data
-saveRDS(
-  eez_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "global_eez_supply_curves_with_mpas.rds"
-  )
-)
-
+# Export country-level data ----------------------------------------------------
+saveRDS(object = eez_supply_curves_w_mpas,
+        file = here(export_dir, "global_eez_supply_curves_with_mpas.rds"))
 # Export horizontally summed
-saveRDS(
-  global_supply_curve_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "global_supply_curve_with_mpas.rds"
-  )
-)
+saveRDS(object = global_supply_curve_w_mpas,
+        file = here(export_dir, "global_supply_curve_with_mpas.rds"))
 
-# Export hemisphere-level data
-saveRDS(
-  hemisphere_eez_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "hemisphere_eez_supply_curves_with_mpas.rds"
-  )
-)
-
+# Export hemisphere-level data -------------------------------------------------
+saveRDS(object = hemisphere_eez_supply_curves_w_mpas,
+        file = here(export_dir, "hemisphere_eez_supply_curves_with_mpas.rds"))
 # Export horizontally summed hemisphere data
-saveRDS(
-  hemisphere_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "hemisphere_supply_curves_with_mpas.rds"
-  )
-)
+saveRDS(object = hemisphere_supply_curves_w_mpas,
+        file = here(export_dir, "hemisphere_supply_curves_with_mpas.rds"))
 
-# Export realm level data
-saveRDS(
-  realm_eez_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "realm_eez_supply_curves_with_mpas.rds"
-  )
-)
-
+# Export realm level data ------------------------------------------------------
+saveRDS(object = realm_eez_supply_curves_w_mpas,
+        file = here(export_dir, "realm_eez_supply_curves_with_mpas.rds"))
 # Export horizontally summed realms
-saveRDS(
-  realm_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "realm_supply_curves_with_mpas.rds"
-  )
-)
+saveRDS(object = realm_supply_curves_w_mpas,
+        file = here(export_dir, "realm_supply_curves_with_mpas.rds"))
 
-
-# Export province level data
-saveRDS(
-  province_eez_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "province_eez_supply_curves_with_mpas.rds"
-  )
-)
-
+# Export province level data ---------------------------------------------------
+saveRDS(object = province_eez_supply_curves_w_mpas,
+        file = here(export_dir, "province_eez_supply_curves_with_mpas.rds"))
 # Export horizontally summed province level data
-saveRDS(
-  province_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "province_supply_curves_with_mpas.rds"
-  )
-)
+saveRDS(object = province_supply_curves_w_mpas,
+        file = here(export_dir, "province_supply_curves_with_mpas.rds"))
 
-
-# Export ecoregion level data
-saveRDS(
-  ecoregion_eez_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "ecoregion_eez_supply_curves_with_mpas.rds"
-  )
-)
-
+# Export ecoregion level data --------------------------------------------------
+saveRDS(object = ecoregion_eez_supply_curves_w_mpas,
+        file = here(export_dir, "ecoregion_eez_supply_curves_with_mpas.rds"))
 # Export horizontally summed province level data
-saveRDS(
-  ecoregion_supply_curves_w_mpas,
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "ecoregion_supply_curves_with_mpas.rds"
-  )
-)
+saveRDS(object = ecoregion_supply_curves_w_mpas,
+        file = here(export_dir, "ecoregion_supply_curves_with_mpas.rds"))
+
+## END OF SCRIPT ###############################################################

@@ -26,11 +26,8 @@ bau <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "global_eez_supply_curves_with_mpas.rds"
-    )
-  ) %>%
-  mutate(pixel_fraction = pmin(1 - ((tb - ((tb * 0.3) / pct
-  )) / benefit), 1)) %>%
+      "global_eez_supply_curves_with_mpas.rds")) %>%
+  mutate(pixel_fraction = pmin(1 - ((tb - ((tb * 0.3) / pct)) / benefit), 1)) %>%
   filter(pixel_fraction >= 0) %>%
   select(lat, lon) %>%
   mutate(bau = 1)
@@ -43,11 +40,8 @@ mkt <-
       "processed_data",
       "supply_curves",
       "with_mpas",
-      "global_supply_curve_with_mpas.rds"
-    )
-  ) %>%
-  mutate(pixel_fraction = pmin(1 - ((tb - ((tb * 0.3) / pct
-  )) / benefit), 1)) %>%
+      "global_supply_curve_with_mpas.rds")) %>%
+  mutate(pixel_fraction = pmin(1 - ((tb - ((tb * 0.3) / pct)) / benefit), 1)) %>%
   filter(pixel_fraction >= 0) %>%
   select(lat, lon) %>%
   mutate(mkt = 1)
@@ -59,9 +53,7 @@ base <- readRDS(
     "processed_data",
     "supply_curves",
     "with_mpas",
-    "global_eez_supply_curves_with_mpas_abt.rds"
-  )
-) %>%
+    "global_eez_supply_curves_with_mpas.rds")) %>%
   select(lat, lon, suitability, area, cost, benefit) %>%
   left_join(bau, by = c("lat", "lon")) %>%                                      # Mark pixel as protected under BAU
   left_join(mkt, by = c("lat", "lon")) %>%                                      # Mark pixel as protected under MKT

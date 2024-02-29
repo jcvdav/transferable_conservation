@@ -12,148 +12,73 @@
 
 ## SET UP ######################################################################
 # Load packages ----------------------------------------------------------------
-library(here)
-library(cowplot)
-library(tidyverse)
+pacman::p_load(
+  here,
+  tidyverse
+)
 
-export_files <- F#T
+# Source directory -------------------------------------------------------------
+source_dir <- here("results", "processed_data", "supply_curves", "with_mpas")
+
+
+export_files <- T
 
 # Load data --------------------------------------------------------------------
-eez_cb <-
-  readRDS(
-    file = here(
-      "results",
-      "processed_data",
-      "supply_curves",
-      "with_mpas",
-      "global_eez_supply_curves_with_mpas.rds"
-    )
-  )
+eez_cb <- readRDS(file = here(source_dir, "global_eez_supply_curves_with_mpas.rds"))
+eez_h_sum_cb  <- readRDS(file = here(source_dir, "global_supply_curve_with_mpas.rds"))
 
-eez_h_sum_cb <-
-  readRDS(
-    file = here(
-      "results",
-      "processed_data",
-      "supply_curves",
-      "with_mpas",
-      "global_supply_curve_with_mpas.rds"
-    )
-  )
+hem_eez_cb <- readRDS(file = here(source_dir, "hemisphere_eez_supply_curves_with_mpas.rds"))
+hem_h_sum <- readRDS(file = here(source_dir, "hemisphere_supply_curves_with_mpas.rds"))
 
-hem_eez_cb <-
-  readRDS(
-    file = here(
-      "results",
-      "processed_data",
-      "supply_curves",
-      "with_mpas",
-      "hemisphere_eez_supply_curves_with_mpas.rds"
-    )
-  )
-hem_h_sum <-
-  readRDS(
-    file = here(
-      "results",
-      "processed_data",
-      "supply_curves",
-      "with_mpas",
-      "hemisphere_supply_curves_with_mpas.rds"
-    )
-  )
+rlm_eez_cb <- readRDS(file = here(source_dir, "realm_eez_supply_curves_with_mpas.rds"))
+rlm_h_sum <- readRDS(file = here(source_dir, "realm_supply_curves_with_mpas.rds"))
 
-rlm_eez_cb <-
-  readRDS(
-    file = here(
-      "results",
-      "processed_data",
-      "supply_curves",
-      "with_mpas",
-      "realm_eez_supply_curves_with_mpas.rds"
-    )
-  )
-rlm_h_sum <-
-  readRDS(
-    file = here(
-      "results",
-      "processed_data",
-      "supply_curves",
-      "with_mpas",
-      "realm_supply_curves_with_mpas.rds"
-    )
-  )
+pro_eez_cb <- readRDS(file = here(source_dir, "province_eez_supply_curves_with_mpas.rds"))
+pro_h_sum <- readRDS(file = here(source_dir, "province_supply_curves_with_mpas.rds"))
 
-
-# Realm
-pro_eez_cb <- readRDS(
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "province_eez_supply_curves_with_mpas.rds"
-  )
-)
-pro_h_sum <- readRDS(
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "province_supply_curves_with_mpas.rds"
-  )
-)
-
-# Ecoregion
-eco_eez_cb <- readRDS(
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "ecoregion_eez_supply_curves_with_mpas.rds"
-  )
-)
-eco_h_sum <- readRDS(
-  file = here(
-    "results",
-    "processed_data",
-    "supply_curves",
-    "with_mpas",
-    "ecoregion_supply_curves_with_mpas.rds"
-  )
-)
+eco_eez_cb <- readRDS(file = here(source_dir, "ecoregion_eez_supply_curves_with_mpas.rds"))
+eco_h_sum <- readRDS(file = here(source_dir, "ecoregion_supply_curves_with_mpas.rds"))
 
 
 # Define a function that estiamtes gains from trade ----------------------------
 get_segmented_market_gains <-
   function(r, curves, agg_curves, group, write = F) {
-    browser()
+    # browser()
+    
+    ## SET UP ##################################################################
     # Get conserving nations
     conserving_nations <- curves %>%
       select(iso3, {{group}}) %>%
       distinct()
     
+    # Identify who has already met a given target, and by how much
     already_reached <- curves %>%
       filter(pct_protected >= r) %>%
       select(iso3, {{group}}, pct_protected) %>%
       distinct()
     
+    # Identify the trading price and fraction of the marginal pixel if needed
     trading_prices <- agg_curves %>%
       group_by_at(group) %>%
       mutate(pixel_fraction = pmin(1 - ((tb - ((tb * r) / pct)) / benefit), 1)) %>%
       filter(pixel_fraction >= 0) %>%
+      filter(pixel_fraction < 1 | pct == 1) %>% 
       slice_max(mc) %>%
       ungroup() %>%
       select({{group}},
              trading_price = mc,
              pixel_fraction)
     
-    # Now we calculate the realized outcomes
+    ## GET MARKET OUTCOMES #####################################################
+    
+    # Now we calculate the realized outcomes 
     # Note that these estimates of the total benefits do not include the total benefit of what
     # has already been protected by MPAs that are already in place. This is because the benefit of those MPAs
-    # is a constant for BAU and MKT scenaros. W accounted for it in assigning country obligations, but these are no longer
-    # required.
+    # is the same for BAU and MKT scenarios. Thus, these are the costs of additional conservation needed
+    # to ensure that each nation protects 30% (or more, for some that have already surpassed) under BAU
+    # or that 30% of the world is protected.
+
+    # BAU realizations
     realized_bau_cb <- curves %>%
       mutate(pixel_fraction = pmin(1 - ((tb - ((tb * r) / pct)) / benefit), 1)) %>% # Calculate the fraction of the pixel that needs to be protected
       filter(pixel_fraction >= 0) %>%
@@ -170,7 +95,7 @@ get_segmented_market_gains <-
       ) %>%
       ungroup()
     
-    # For a market
+    # Market realizations
     realized_mkt_cb <- curves %>%
       left_join(trading_prices, by = group) %>%
       filter(mc <= trading_price) %>%                                           # Keep all patches in each country with a marginal cost <= trading price
@@ -196,28 +121,24 @@ get_segmented_market_gains <-
       left_join(realized_mkt_cb, by = c("iso3", group)) %>%
       left_join(realized_bau_cb, by = c("iso3", group)) %>%
       left_join(already_reached, by = c("iso3", group)) %>%
-      replace_na(replace = list(
-        mkt_tb = 0,
-        mkt_tc = 0,
-        bau_tb = 0,
-        bau_tc = 0,
-        mkt_area = 0,
-        bau_area = 0
-      )) %>%
+      # Replace na's to account for countries that have already met the target and whose values are not accounted for yet
+      replace_na(replace = list(mkt_tb = 0,
+                                mkt_tc = 0,
+                                bau_tb = 0,
+                                bau_tc = 0,
+                                mkt_area = 0,
+                                bau_area = 0)) %>%
       select(-contains("app"),-trading_price) %>%
       left_join(trading_prices, by = group) %>%
-      mutate(
-        rect = abs(bau_tb - mkt_tb) * trading_price,
-        mkt_tc_b = bau_tc - mkt_tc - rect,
-        mkt_tc_s = rect - mkt_tc + bau_tc,
-        savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s),
-        transaction = case_when(
-          !is.na(pct_protected) | near(savings, 0) ~ "Doesn't participate",
-          mkt_tc < bau_tc ~ "Buyers",
-          mkt_tc > bau_tc ~ "Sellers"
-        )
-      )
+      mutate(rect = abs(bau_tb - mkt_tb) * trading_price,
+             mkt_tc_b = bau_tc - mkt_tc - rect,
+             mkt_tc_s = rect - mkt_tc + bau_tc,
+             savings = ifelse(mkt_tb < bau_tb, mkt_tc_b, mkt_tc_s),
+             transaction = case_when(!is.na(pct_protected) | near(savings, 0) ~ "Doesn't participate",
+                                     mkt_tc < bau_tc ~ "Buyers",
+                                     mkt_tc > bau_tc ~ "Sellers"))
     
+    # Write individual files to disk?
     if (write) {
       r <- formatC(format = "f",
                    x = r,
@@ -234,7 +155,7 @@ get_segmented_market_gains <-
       )
     }
     
-    
+    # Build summarized table of outcomes to return
     gains_from_trade <- combined_outcomes %>%
       select(bau_area, mkt_area, bau_tb, mkt_tb, bau_tc, difference = savings) %>%
       summarize_all(sum, na.rm = T) %>%
@@ -247,7 +168,6 @@ get_segmented_market_gains <-
 ## PROCESSING ##################################################################
 
 # Define range of targets ------------------------------------------------------
-rs <- seq(0.1, 1, by = 0.01)
 rs <- (10:100)/100
 
 # Simulate all global ----------------------------------------------------------
@@ -325,13 +245,11 @@ gains_from_trade_multiple_scenarios_eco <-
   unnest(data)
 
 # Combine results --------------------------------------------------------------
-gains_from_trade_multiple_scenarios <- rbind(
-  gains_from_trade_multiple_scenarios_global,
-  gains_from_trade_multiple_scenarios_hem,
-  gains_from_trade_multiple_scenarios_rlm,
-  gains_from_trade_multiple_scenarios_pro,
-  gains_from_trade_multiple_scenarios_eco
-) %>%
+gains_from_trade_multiple_scenarios <- rbind(gains_from_trade_multiple_scenarios_global,
+                                             gains_from_trade_multiple_scenarios_hem,
+                                             gains_from_trade_multiple_scenarios_rlm,
+                                             gains_from_trade_multiple_scenarios_pro,
+                                             gains_from_trade_multiple_scenarios_eco) %>%
   group_by(bubble, r) %>%
   summarise_all(sum, na.rm = T) %>%
   ungroup() %>%

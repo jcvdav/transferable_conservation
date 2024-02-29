@@ -113,6 +113,7 @@ cb <-
 master_data <- eez_meow %>%
   select(iso3, ecoregion, province, realm, iso3n, contains("code")) %>%
   left_join(cb, by = c("iso3n", "rlm_code", "pro_code", "eco_code")) %>%        # Join to the data.frame from rasters
+  replace_na(replace = list(mpa = 0)) %>%                                       # Make mpa a dummy variable with MPA = 1 and no MPA = 0
   drop_na(iso3n, cost, benefit) %>%                                             # Drop areas beyond national jurisdiction and areas with no cost / benefit data
   filter(benefit > 0) %>%
   mutate(bcr = benefit / cost,                                                  # Calculate marginal benefit

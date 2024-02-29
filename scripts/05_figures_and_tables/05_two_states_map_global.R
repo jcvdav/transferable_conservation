@@ -13,10 +13,12 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
-library(here)
-library(startR)
-library(rnaturalearth)
-library(tidyverse)
+pacman::p_load(
+  here,
+  startR,
+  rnaturalearth,
+  tidyverse
+)
 
 # Load data --------------------------------------------------------------------
 data_30 <- readRDS(here(

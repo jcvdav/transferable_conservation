@@ -7,13 +7,13 @@
 ######################################################
 
 ## SET UP ######################################################################
-# Load packages
-library(startR)
-library(tidyverse)
+# Load packages ----------------------------------------------------------------
+pacman::p_load(
+  startR,
+  tidyverse
+)
 
-# Load data
-
-
+# Load data --------------------------------------------------------------------
 get_files <- function(segment) {
   filenames <-
     list.files(

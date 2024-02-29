@@ -15,6 +15,7 @@
 # Load packages ----------------------------------------------------------------
 
 pacman::p_load(
+  startR,
   rnaturalearth,
   raster,
   sf,
@@ -113,3 +114,7 @@ HSI_full
 ## EXPORT ######################################################################
 
 # X ----------------------------------------------------------------------------
+lazy_ggsave(plot = HSI_full,
+            filename = "HSI_and richness_without_filters_ocurr_cells",
+            width = 25,
+            height = 18)
