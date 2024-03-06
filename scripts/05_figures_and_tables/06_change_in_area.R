@@ -81,7 +81,7 @@ p2 <- ggplot(data = data,
                      labels = scales::percent) +
   theme(legend.position = "None") +
   labs(x = "Proteciton target (% of total)",
-       y = expression("Absolute difference (HSI-weighed thousands of km"^2~")"),
+       y = expression("Absolute difference (thousands of km"^2~")"),
        title = "Difference (BAU - MKT)")
 
 p <- cowplot::plot_grid(p1,
