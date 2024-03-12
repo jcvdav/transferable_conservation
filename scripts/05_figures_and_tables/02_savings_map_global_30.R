@@ -17,6 +17,7 @@ library(here)
 library(startR)
 library(rnaturalearth)
 library(rmapshaper)
+library(smoothr)
 library(sf)
 library(ggnewscale)
 library(tidyverse)
@@ -43,10 +44,24 @@ file <- list.files(
 data <- read.csv(file) %>%
   mutate(ratio = savings / bau_tc)
 
+pol <- tribble(~x, ~y,
+               -180, -90,
+               -180, 90,
+               180, 90,
+               180, -90,
+               -180, -90) %>%
+  as.matrix() %>%
+  list() %>%
+  st_polygon() %>%
+  st_sfc(crs = "EPSG:4326") %>% 
+  densify(n = 100L)
+
 # Load EEZs for visualization --------------------------------------------------
 eez <-
   st_read(file.path(project_path, "processed_data", "clean_world_eez_v11.gpkg")) %>%
-  rmapshaper::ms_simplify(keep_shapes = T)
+  rmapshaper::ms_simplify(keep_shapes = T) %>%
+  st_intersection(pol)
+  
 
 # Add results to the EEZs ------------------------------------------------------
 eez_with_results <- eez %>%
@@ -119,7 +134,10 @@ savings_map <- ggplot() +
   geom_sf(data = dont_participate, fill = "gray") +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0)) +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom",
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) +
+  coord_sf(crs = "ESRI:54009")
 
 ## EXPORT ######################################################################
 lazy_ggsave(

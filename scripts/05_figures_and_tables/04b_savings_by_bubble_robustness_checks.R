@@ -113,6 +113,19 @@ rel_plot <- function(baseline, robustness) {
     theme(legend.position = "bottom", legend.box = "vertical")
 }
 
+build_table <- function(baseline, robustness) {
+  
+  bind_rows(baseline, robustness) %>% 
+    mutate(bubble = fct_relevel(bubble, "Global (N = 1)",
+                                "Hemisphere (N = 4)",
+                                "Realm (N = 12)",
+                                "Province (N = 60)",
+                                "Ecoregion (N = 219)")) %>%
+    filter(r == 0.3) %>% 
+    select(bubble, ratio, type) %>%
+    pivot_wider(names_from = type, values_from = "ratio")
+}
+
 # Build figures ----------------------------------------------------------------
 
 # No MPA 
@@ -122,6 +135,8 @@ savings_30_plot_no_mpa <- savings_30_plot(outcome_data, outcome_data_no_mpa)
 # MC = 0 
 rel_plot_mc0 <- rel_plot(outcome_data, outcome_data_mc0)
 savings_30_plot_mc0 <- savings_30_plot(outcome_data, outcome_data_mc0)
+build_table(outcome_data, outcome_data_mc0) %>% 
+  View()
 
 # Area-based targets
 rel_plot_abt <- rel_plot(outcome_data, outcome_data_abt)
