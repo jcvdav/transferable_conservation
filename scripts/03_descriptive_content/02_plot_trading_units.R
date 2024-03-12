@@ -39,7 +39,7 @@ global <- eez_meow %>%
   summarize(a = 1) %>% 
   ungroup() %>% 
   ggplot() +
-  geom_sf(fill = color_values[1], color = "black", size = 0.1) +
+  geom_sf(fill = "steelblue", color = "black", size = 0.1) +
   geom_sf(data = coast, color = "transparent") +
   ggtheme_map() +
   scale_x_continuous(expand = c(0, 0)) +
@@ -249,13 +249,13 @@ ecoregion_bars <- ecoregion_data %>%
 # Panel figure
 
 panel <- plot_grid(hemisphere_map, realm_map, province_map, ecoregion_map,
-                   ncol = 2,
+                   ncol = 1,
                    labels = "AUTO")
 
 lazy_ggsave(plot = panel,
             filename = "trading_units/trading_units_panel",
-            width = 16,
-            height = 8)
+            width = 10,
+            height = 20)
 
 
 # END OF SCRIPT #
