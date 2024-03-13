@@ -95,7 +95,7 @@ S_diff <- ggplot(S_df, aes(x = x, y = y, fill = diff / richness_with_all_occur_c
   geom_sf(data = coast, inherit.aes = F, color = "black", fill = "black") +
   scale_fill_gradient2() +
   theme_void() +
-  ggtitle("Difference in Speices richnes (Filtered - All data) / All data") +
+  ggtitle("Difference in Species richness (Filtered - All data) / All data") +
   labs(fill = "Difference (%)") +
   theme(panel.background = element_rect(fill = "gray")) +
   scale_x_continuous(expand = c(0, 0)) +
