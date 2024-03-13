@@ -114,7 +114,7 @@ p <- ggplot(data = data,
             mapping = aes(x = source, y = mc)) + 
   geom_hline(yintercept = 148, linetype = "dashed") +
   # The message "Removed 1 rows containing missing values (`geom_segment()`)." 
-  # appears because the global case doesn't have a market-clearing price.
+  # appears because the global case doesn't have errorbars for market-clearing price (there's just one price).
   stat_summary(geom = "pointrange",
                fun.data = mean_se, 
                fill = "steelblue", shape = 21) +

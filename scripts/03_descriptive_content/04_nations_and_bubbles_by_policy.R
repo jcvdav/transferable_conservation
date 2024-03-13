@@ -67,7 +67,7 @@ p <- ggplot(data = counts,
        y = "Number of nations per bubble",
        fill = "Bubble policy") +
   scale_fill_manual(values = c("#C13832", "#D28E00", "#9ECEEB", "#D4BF95", "#91B9A4")) +
-  scale_y_continuous(expand = expansion(0.01, 0)) +
+  scale_y_continuous(expand = expansion(0.05, 0)) +
   scale_x_continuous(expand = expansion(0.01, 0)) +
   startR::ggtheme_plot() +
   theme(legend.justification = c(1, 1),
@@ -77,6 +77,6 @@ p <- ggplot(data = counts,
 lazy_ggsave(
   plot = p,
   filename = "nations_by_bubble",
-  width = 12,
+  width = 10,
   height = 6
 )

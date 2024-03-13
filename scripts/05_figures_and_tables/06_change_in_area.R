@@ -17,8 +17,8 @@ pacman::p_load(
 get_files <- function(segment) {
   filenames <-
     list.files(
-      path = file.path(
-        project_path, "output_data", "trade_outcomes", segment),
+      path = here(
+        "results", "output_data", "trade_outcomes", segment),
       pattern = "csv",
       full.names = T)
   
@@ -57,8 +57,7 @@ p1 <- ggplot(data = data,
   scale_x_continuous(limits = c(0, 1.01),
                      expand = c(0, 0),
                      labels = scales::percent) +
-  scale_y_continuous(limits = c(0, 0.06),
-                     expand = c(0, 0),
+  scale_y_continuous(expand = c(0, 0),
                      labels = scales::percent) +
   theme(legend.position = c(0.99, 0.99),
         legend.justification = c(1, 1),

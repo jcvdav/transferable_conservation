@@ -14,58 +14,57 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
-library(here)
-library(raster)
-library(sf)
-library(tidyverse)
+pacman::p_load(
+  here,
+  raster,
+  sf,
+  tidyverse
+)
 
 # Load data
 # Benefits raster
 benefits_raster <-
-  raster(file.path(project_path,
-                   "processed_data",
-                   "suitability.tif"))
+  raster(here("clean_data",
+              "suitability.tif"))
 
 # Costs raster
 costs_raster <-
-  raster(file.path(project_path,
-                   "processed_data",
-                   "revenue_raster.tif")) %>%
+  raster(here("clean_data",
+              "revenue_raster.tif")) %>%
   crop(benefits_raster) %>%
   extend(benefits_raster)
 
 # Load spatial metadata rasters
 iso3n <-
-  raster(file.path(project_path, "processed_data", "eez_raster.tif")) %>%
+  raster(here("clean_data", "eez_raster.tif")) %>%
   crop(benefits_raster)
 
 rlm_code <-
-  raster(file.path(project_path, "processed_data", "rlm_raster.tif")) %>%
+  raster(here("clean_data", "rlm_raster.tif")) %>%
   crop(benefits_raster)
 
 pro_code <-
-  raster(file.path(project_path, "processed_data", "pro_raster.tif")) %>%
+  raster(here("clean_data","pro_raster.tif")) %>%
   crop(benefits_raster)
 
 eco_code <-
-  raster(file.path(project_path, "processed_data", "eco_raster.tif")) %>%
+  raster(here("clean_data", "eco_raster.tif")) %>%
   crop(benefits_raster)
 
 hem_code <-
-  raster(file.path(project_path, "processed_data", "hemispheres.tif")) %>%
+  raster(here("clean_data", "hemispheres.tif")) %>%
   crop(benefits_raster)
 
 mpa_raster <-
-  raster(file.path(project_path, "processed_data", "mpa_raster.tif")) %>%
+  raster(here("clean_data", "mpa_raster.tif")) %>%
   crop(benefits_raster)
 
 area_raster <- raster::area(benefits_raster)
 
 # Load the EEZ vector data
 eez_meow <-
-  st_read(file.path(
-    project_path,
-    "processed_data",
+  st_read(here(
+    "clean_data",
     "intersected_eez_and_meow.gpkg"
   )) %>%
   st_drop_geometry() %>%

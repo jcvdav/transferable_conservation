@@ -47,6 +47,7 @@ data %>%
          TB = ifelse(TB == max(TB), paste(TB, "*"), TB)) %>% 
   ungroup() %>% 
   pivot_wider(values_from = c(ratio, TB), names_from = "type") %>%
+  arrange(bubble) %>% 
   kableExtra::kbl(caption = "Comparison of gains from trade and conservation benefit
 for a 30-by-30 target using extent weighted by the habitat suitability index (labeled HSI)
 and using area-based targets (labeled ABT). The first column shows the bubble policy,

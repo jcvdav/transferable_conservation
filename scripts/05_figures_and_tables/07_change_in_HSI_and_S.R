@@ -24,21 +24,21 @@ pacman::p_load(
 
 # Load data --------------------------------------------------------------------
 iso3n <-
-  raster(file.path(project_path, "processed_data", "eez_raster.tif")) %>% 
+  raster(here("clean_data", "eez_raster.tif")) %>% 
   as.data.frame(xy = T)
 
 coast <- rnaturalearth::ne_countries(returnclass = "sf")
 
 # Load HSI rasters
-hsi <- raster(file.path(project_path, "processed_data", "suitability.tif")) %>% 
+hsi <- raster(here("clean_data", "suitability.tif")) %>% 
   as.data.frame(xy = T)
-hsi_all <- raster(file.path(project_path, "processed_data", "suitability_with_all_occur_cells.tif")) %>% 
+hsi_all <- raster(here("clean_data", "suitability_with_all_occur_cells.tif")) %>% 
   as.data.frame(xy = T)
 
 # Rischenss rasters
-richness <- raster(file.path(project_path, "processed_data", "richness.tif")) %>% 
+richness <- raster(here("clean_data", "richness.tif")) %>% 
   as.data.frame(xy = T)
-richness_all <- raster(file.path(project_path, "processed_data", "richness_with_all_occur_cells.tif")) %>% 
+richness_all <- raster(here("clean_data", "richness_with_all_occur_cells.tif")) %>% 
   as.data.frame(xy = T)
 
 ## PROCESSING ##################################################################

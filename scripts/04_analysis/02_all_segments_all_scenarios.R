@@ -21,7 +21,7 @@ pacman::p_load(
 source_dir <- here("results", "processed_data", "supply_curves", "with_mpas")
 
 
-export_files <- F
+export_files <- T
 
 # Load data --------------------------------------------------------------------
 eez_cb <- readRDS(file = here(source_dir, "global_eez_supply_curves_with_mpas.rds"))

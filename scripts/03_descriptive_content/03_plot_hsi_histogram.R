@@ -5,11 +5,10 @@
 # Draw a histogram of the Habitat Suitability Index
 #
 ######################################################
-library(sta)
 library(here)
 library(tidyverse)
 
-master_cb <- readRDS(file = file.path(project_path, "processed_data", "master_costs_and_benefits.rds"))
+master_cb <- readRDS(file = here("results", "processed_data", "master_costs_and_benefits.rds"))
 
 
 hsi_hist <- ggplot(data = master_cb,

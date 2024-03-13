@@ -13,14 +13,16 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
-library(here)
-library(startR)
-library(rnaturalearth)
-library(rmapshaper)
-library(smoothr)
-library(sf)
-library(ggnewscale)
-library(tidyverse)
+pacman::p_load(
+  here,
+  startR,
+  rnaturalearth,
+  rmapshaper,
+  smoothr,
+  sf,
+  ggnewscale,
+  tidyverse
+)
 
 sf_use_s2(F)
 
@@ -58,7 +60,7 @@ pol <- tribble(~x, ~y,
 
 # Load EEZs for visualization --------------------------------------------------
 eez <-
-  st_read(file.path(project_path, "processed_data", "clean_world_eez_v11.gpkg")) %>%
+  st_read(here("clean_data", "clean_world_eez_v11.gpkg")) %>%
   rmapshaper::ms_simplify(keep_shapes = T) %>%
   st_intersection(pol)
   

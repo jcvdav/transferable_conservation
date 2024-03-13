@@ -12,11 +12,14 @@
 
 ## SET UP ######################################################################
 # Load packages
-library(raster)
-library(data.table)
-library(janitor)
-library(sf)
-library(tidyverse)
+pacman::p_load(
+  here,
+  raster,
+  data.table,
+  janitor,
+  sf,
+  tidyverse
+)
 
 # Load data
 
@@ -24,7 +27,7 @@ library(tidyverse)
 # Tidy it up to match the same format as our list of species of interest
 aquamaps_list <-
   read_csv(
-    file.path(data_path, "aquamaps-v10-2019", "speciesoccursum.csv"),
+    here("raw_data", "aquamaps-v10-2019", "speciesoccursum.csv"),
     col_types = cols(
       SpeciesID = col_character(),
       SpecCode = col_double(),
@@ -54,8 +57,8 @@ spec_codes <- aquamaps_list %>%
 # Load all aquamaps data
 df <-
   fread(
-    file = file.path(
-      data_path, "aquamaps-v10-2019", "hcaf_species_native.csv"
+    file = here(
+      "raw_data", "aquamaps-v10-2019", "hcaf_species_native.csv"
     )
   ) %>%
   clean_names() %>%                                                             # Clean column names
@@ -85,16 +88,12 @@ richness <-
 ## EXPORT ######################################################################
 writeRaster(
   x = suitability,
-  filename = file.path(
-    project_path, "processed_data", "suitability_with_all_occur_cells.tif"
-  ),
+  filename = here("clean_data", "suitability_with_all_occur_cells.tif"),
   overwrite = TRUE
 )
 
 writeRaster(
   x = richness,
-  filename = file.path(
-    project_path, "processed_data", "richness_with_all_occur_cells.tif"
-  ),
+  filename = here("clean_data", "richness_with_all_occur_cells.tif"),
   overwrite = TRUE
 )

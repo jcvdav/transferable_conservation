@@ -4,7 +4,7 @@
 #
 # This is a cleaning script for the EEZ shapefile.
 # The purpose is to read the V11 file in, and keep
-# only relevant columns, as well as only relevan polygons.
+# only relevant columns, as well as only relevant polygons.
 # 
 # Data will be exported as a geopackage in the data folder.
 # 
@@ -20,21 +20,25 @@
 
 ## Set up ################################################################################################################################################################
 # Load packages
-library(janitor)
-library(countrycode)
-library(rmapshaper)
-library(sf)
-library(tidyverse)
+pacman::p_load(
+  here,
+  janitor,
+  countrycode,
+  rmapshaper,
+  sf,
+  tidyverse
+)
+
+sf_use_s2(F)
 
 ## Process ###############################################################################################################################################################
 # Read in the shapefiles -------------------------------------------------------------------------------------------------------------------------------------------------
-eez <- st_read(dsn = file.path(data_path,
-                               "marine-regions-eez-v11",
-                          "World_EEZ_v11_20191118"),
+eez <- st_read(dsn = here("raw_data", "World_EEZ_v11_20191118"),
                layer = "eez_v11",
                stringsAsFactors = F) %>%              # Make sure strings are not read in as factors
   clean_names() %>%                                   # Use janitor to clean the names
-  filter(str_detect(geoname, "Exclusive")) %>%        # Keep only polygons that make reference to EEZs (no joint regimes). This assings EEZs to Western Sahara and Ukraine
+  filter(str_detect(pol_type, "200NM|200 NM")) %>%    # Keep only polygons that make reference to EEZs (no overlapping claims or  joint regimes)
+  filter(str_detect(geoname, "Exclusive")) %>%
   st_make_valid() %>%                                 # Make all polygons valid
   mutate(iso3 = ifelse(is.na(iso_ter1),               # Replace missing territory ids with sovereign ids
                         iso_sov1,
@@ -49,9 +53,8 @@ eez <- st_read(dsn = file.path(data_path,
   select(iso3, iso3n)
 
 ## Export ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-eez_fn <- file.path(project_path,
-                    "processed_data",
-                    "clean_world_eez_v11.gpkg")       # Create a filename
+eez_fn <- here("clean_data",
+               "clean_world_eez_v11.gpkg")            # Create a filename
 file.remove(eez_fn)                                   # Remove any preexisting data to avoid binding
 st_write(obj = eez, dsn = eez_fn)                     # Save file to disk
 

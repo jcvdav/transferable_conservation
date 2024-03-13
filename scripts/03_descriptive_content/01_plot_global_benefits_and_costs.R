@@ -9,6 +9,7 @@
 
 # SET UP ################################################################################################
 # Load packages
+library(here)
 library(startR)
 library(raster)
 library(rnaturalearth)
@@ -19,21 +20,14 @@ library(tidyverse)
 # Load data
 
 ## master data
-master_cb <- readRDS(
-  file = file.path(project_path, "processed_data", "master_costs_and_benefits.rds")
-)
+master_cb <- readRDS(file = here("results",
+                                 "processed_data",
+                                 "master_costs_and_benefits.rds"))
 
-suitability_raster <-
-  raster(file.path(project_path,
-                   "processed_data",
-                   "suitability.tif"))
-costs_raster <-
-  raster(
-    x = file.path(project_path, "processed_data", "revenue_raster.tif")
-  )
+suitability_raster <- raster(here("clean_data", "suitability.tif"))
+costs_raster <- raster(here("clean_data", "revenue_raster.tif"))
 
-mpa_raster_raw <-
-  raster(file.path(project_path, "processed_data", "mpa_raster.tif"))
+mpa_raster_raw <- raster(here("clean_data","mpa_raster.tif"))
 mpa_raster <- mpa_raster_raw
 mpa_raster[mpa_raster == 1] <- 0
 mpa_raster[is.na(mpa_raster)] <- 1
@@ -41,7 +35,7 @@ mpa_raster[is.na(mpa_raster)] <- 1
 mpas <- as.data.frame(mpa_raster_raw, xy = T) %>% 
   drop_na()
 
-iso3n <- raster(file.path(project_path, "processed_data", "eez_raster.tif"))
+iso3n <- raster(here("clean_data","eez_raster.tif"))
 
 area_raster <- raster::area(suitability_raster)
 benefits_raster <- suitability_raster * area_raster * (iso3n > 0) * (mpa_raster)

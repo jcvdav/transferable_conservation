@@ -1,6 +1,11 @@
-######################################################
-#title#
-######################################################
+################################################################################
+# title
+################################################################################
+#
+# Juan Carlos Villaseñor-Derbez
+# juancvd@stanford.edu
+# date
+#
 #
 # Keep category Ia, Ib, and II. These are the only ones
 # that have a focus on ecosystem processes:
@@ -19,13 +24,23 @@
 # 
 # Category VI protected areas contain natural areas where biodiversity conservation is linked with sustainable use of natural resources, which is incompatible with category Ia. 
 #
-######################################################
+#
+################################################################################
 
+## SET UP ######################################################################
 
-library(sf)
-library(janitor)
-library(tidyverse)
+# Load packages ----------------------------------------------------------------
+pacmann::p_load(
+  janitor,
+  sf,
+  tidyverse
+)
 
+sf_use_s2(F)
+
+## PROCESSING ##################################################################
+
+# X ----------------------------------------------------------------------------
 mpas <-
   st_read(
     file.path(data_path, "mpa-atlas/mpatlas_20201223_clean"),
@@ -36,5 +51,11 @@ mpas <-
          implemente == 1) %>%
   select(mpa_id, wdpa_id, iso3 = sovereign)
 
+## EXPORT ######################################################################
+
+# X ----------------------------------------------------------------------------
 st_write(mpas,
-         file.path(project_path, "processed_data", "clean_mpa_atlas.gpkg"))
+         here("clean_data", "clean_mpa_atlas.gpkg"))
+
+
+

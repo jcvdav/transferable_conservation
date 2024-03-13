@@ -13,15 +13,19 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
-library(here)
-library(startR)
-library(rnaturalearth)
-library(rmapshaper)
-library(smoothr)
-library(sf)
-library(ggnewscale)
-library(tidyverse)
+pacman::p_load(
+  here,
+  startR,
+  rnaturalearth,
+  rmapshaper,
+  smoothr,
+  sf,
+  ggnewscale,
+  ggrepel,
+  tidyverse
+)
 
+# Make sure this is turned off
 sf_use_s2(F)
 
 # Load coastline ---------------------------------------------------------------
@@ -42,10 +46,10 @@ file <- list.files(
 )
 
 data <- read.csv(file) %>%
-  mutate(ratio = savings / bau_tc,
-         pct_global = mkt_tb / sum(mkt_tb, na.rm = T),
-         tb_change = mkt_tb / bau_tb)
+  mutate(pct_global = mkt_tb / sum(mkt_tb, na.rm = T),                          # Calculate percent of total conservation produced by each nation
+         tb_change = mkt_tb / bau_tb)                                           # The relative amount of conservation producd under a market vs under BAU
 
+# Build a world polygon just to splice the shapefiles to change projections when visualizing
 pol <- tribble(~x, ~y,
                -180, -90,
                -180, 90,
@@ -60,62 +64,23 @@ pol <- tribble(~x, ~y,
 
 # Load EEZs for visualization --------------------------------------------------
 eez <-
-  st_read(file.path(project_path, "processed_data", "clean_world_eez_v11.gpkg")) %>%
+  st_read(here("clean_data", "clean_world_eez_v11.gpkg")) %>%
   rmapshaper::ms_simplify(keep_shapes = T) %>%
-  st_intersection(pol)
+  st_intersection(pol) # Intersect it with the world polygon to make sure there are no polygons crossing the 180° Meridian
 
 
 # Add results to the EEZs ------------------------------------------------------
 eez_with_results <- eez %>%
   left_join(data, by = c("iso3"))
 
-# Df of sellers ----------------------------------------------------------------
-sellers <- eez_with_results %>%
-  filter(transaction == "Sellers") %>%
-  mutate(Sellers = tb_change)
-
-# DF of buyers -----------------------------------------------------------------
-buyers <- eez_with_results %>%
-  filter(transaction == "Buyers") %>%
-  mutate(Buyers = tb_change)
-
-#DF of those who neither buy nor sell ------------------------------------------
-dont_participate <- eez_with_results %>%
-  filter(transaction == "Doesn't participate")
-
-# Define color scale guide -----------------------------------------------------
-my_scale <-
-  function(x,
-           accuracy = NULL,
-           scale = 100,
-           prefix = "",
-           suffix = "%",
-           big.mark = " ",
-           decimal.mark = ".",
-           trim = TRUE,
-           ...) {
-    prefix <- character()
-    
-    scales::number(
-      x = x,
-      accuracy = accuracy,
-      scale = scale,
-      prefix = prefix,
-      suffix = suffix,
-      big.mark = big.mark,
-      decimal.mark = decimal.mark,
-      trim = trim,
-      ...
-    )
-  }
-
 ## VISUALIZE ###################################################################
 
-# 1 % Protection under a market
+# Figure 1, conservation attained within each nation as % of global
 pct_global <- ggplot() +
   geom_sf(data = coast) +
   geom_sf(data = eez_with_results, aes(fill = pct_global)) +
-  scale_fill_viridis_c(option = "B", labels = my_scale) +
+  scale_fill_viridis_c(option = "B",
+                       labels = scales::percent) +
   guides(
     fill = guide_colorbar(
       title = "% Of global conservation",
@@ -130,16 +95,15 @@ pct_global <- ggplot() +
         axis.text = element_blank(),
         axis.ticks = element_blank()) +
   coord_sf(crs = "ESRI:54009")
-  coord_sf(crs = "ESRI:54009")
 
-
+# Figure 2, Conservation under market relative to BAU
 shifted_map <- ggplot() +
   geom_sf(data = coast) +
   geom_sf(data = eez_with_results, aes(fill = tb_change)) +
   scale_fill_gradient2(low = "#B1182B",
                        high = "#2166AB",
                        midpoint = 1,
-                       labels = my_scale) +
+                       labels = scales::percent) +
   guides(
     fill = guide_colorbar(
       title = "% Conserved (relative to BAU)",
@@ -156,48 +120,33 @@ shifted_map <- ggplot() +
   coord_sf(crs = "ESRI:54009")
 
 
-
-data %>%
+# Figure 3 - Cumulative conservation
+dist_plot <- data %>%
   arrange(desc(pct_global)) %>%
   mutate(rank = 1:nrow(.),
-         cum_pct = cumsum(pct_global)) %>%
+         cum_pct = cumsum(pct_global)) %>% 
   ggplot(aes(x = rank, y = cum_pct)) + 
   geom_segment(x = -Inf, xend = 10,
                y = 0.5, yend = 0.5,
+               linetype = "dashed",
                inherit.aes = F) +
   geom_segment(x = 10, xend = 10,
                y = 0, yend = 0.5,
+               linetype = "dashed",
                inherit.aes = F) +
   geom_vline(xintercept = 114) +
   geom_point() +
-  geom_text(aes(x = rank - 1, y = cum_pct + 0.05, label = ifelse(rank <= 10, iso3, ""))) +
-  labs(x = "Number of countries",
-       y = "% of 30x30 target achieved") +
+  geom_text_repel(aes(x = rank, y = cum_pct,
+                      label = ifelse(cum_pct <= 0.5, iso3, "")),
+                  size = 3,
+                  min.segment.length = 0, nudge_x = -10) +
+  annotate(geom = "text", x = 50, y = 1.1, label = "113 Nations conserve under MKT") +
+  annotate(geom = "text", x = 155, y = 1.1, label = "71 Nations don't conserve under MKT") +
+  annotate(geom = "text", x = 50, y = 0.3, label = "Top 11 conserving nations\nproduce >50% of conservation") +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Cumulative number of nations",
+       y = "% of global conservation (30X30)") +
   theme(text = element_text(size = 12))
-
-
-shifted_map <- ggplot() +
-  geom_sf(data = coast) +
-  geom_sf(data = buyers, aes(fill = Buyers)) +
-  scale_fill_gradient(low = "white", high = "#2166AB", labels = my_scale) +
-  
-  new_scale_fill() +
-  geom_sf(data = sellers, aes(fill = Sellers)) +
-  scale_fill_gradient(low = "white", high = "#B1182B", ) +
-  guides(
-    fill = guide_legend(
-      title = "Gains from trade\n by sellers (%BAU)",
-      frame.colour = "black",
-      ticks.colour = "black"
-    )
-  )  +
-  geom_sf(data = dont_participate, fill = "gray") +
-  scale_x_continuous(expand = c(0, 0)) +
-  scale_y_continuous(expand = c(0, 0)) +
-  theme(legend.position = "bottom",
-        axis.text = element_blank(),
-        axis.ticks = element_blank()) +
-  coord_sf(crs = "ESRI:54009")
 
 ## EXPORT ######################################################################
 lazy_ggsave(
@@ -213,3 +162,12 @@ lazy_ggsave(
   width = 18,
   height = 10
 )
+
+lazy_ggsave(
+  plot = dist_plot,
+  filename = "30_by_segment/pct_of_global_conservation",
+  width = 20,
+  height = 10
+)
+
+

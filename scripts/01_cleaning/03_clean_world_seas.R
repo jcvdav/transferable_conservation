@@ -25,21 +25,26 @@
 
 ## Set up ##########################################################################
 # Load packages
-library(janitor)
-library(sf)
-library(tidyverse)
+pacman::p_load(
+  here,
+  janitor,
+  sf,
+  tidyverse
+)
+
+sf_use_s2(F)
 
 ## Process #########################################################################
 # Load shapefile -------------------------------------------------------------------
-world_seas <- st_read(dsn = file.path(data_path,
-                                "world-seas-v3", "World_Seas_IHO_v3"),
+world_seas <- st_read(dsn = here("raw_data",
+                                "World_Seas_IHO_v3"),
                 layer = "World_Seas_IHO_v3") %>% 
   clean_names() %>%                            # Clean column names
   select(name, mrgid) %>%                      # Select relevant columns
   st_collection_extract()                      # Make sure we don't have geometry collections
 
 ## Export ###########################################################################
-world_seas_fn <- file.path(project_path, "processed_data", "clean_world_seas.gpkg")      # Define filename
+world_seas_fn <- here("clean_data", "clean_world_seas.gpkg")      # Define filename
 file.remove(world_seas_fn)                            # Remove them if file exists
 st_write(obj = world_seas, dsn = world_seas_fn)             # Save file to disk
 

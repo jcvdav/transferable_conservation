@@ -76,8 +76,10 @@ taxonomy_order_class <- taxonomy %>%
 
 # Read-in price data and perform high-level data cleaning
 price <- read.csv(
-  file.path(
-    clean_seafod_path,
+  here(
+    "raw_data",
+    "reconstructed-global-prices",
+    "price-db-results",
     "exvessel_price_database_1976_2017.csv"
   ),
   stringsAsFactors = F) %>% 
@@ -235,7 +237,10 @@ startR::lazy_ggsave(correlogram,
                     height = 12)
 
 # Read taxa codes from the reg watson dataset and perform some cleaning
-taxa_codes <- readxl::read_excel(file.path(rw_path, "Codes.xlsx"), sheet = 3L) %>% 
+taxa_codes <- readxl::read_excel(here("raw_data",
+                                      "reg-watson-global-marine-capture",
+                                      "global_fisheries_landing_v4",
+                                      "Codes.xlsx"), sheet = 3L) %>% 
   rename(species = TaxonName) %>% 
   janitor::clean_names() %>% 
   mutate(tmp_spp = species,
@@ -286,4 +291,4 @@ combined <- taxa_codes %>%
 
 
 # Save results to disk
-saveRDS(combined, file.path(project_path, "processed_data", "taxa_codes_and_prices.rds"))
+saveRDS(combined, here("clean_data", "taxa_codes_and_prices.rds"))

@@ -8,26 +8,29 @@
 
 ## SET UP ######################################################################
 # Load packages
-library(startR)
-library(cowplot)
-library(rmapshaper)
-library(rnaturalearth)
-library(sf)
-library(tidyverse)
+pacman::p_load(
+  here,
+  startR,
+  cowplot,
+  rmapshaper,
+  rnaturalearth,
+  sf,
+  tidyverse
+)
 
 sf::sf_use_s2(FALSE)
 
 # Load data
 
-eez_meow <- st_read(file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg")) %>% 
-  ms_simplify(keep_shapes = T)
+eez_meow <- st_read(here("clean_data", "intersected_eez_and_meow.gpkg")) %>% 
+  ms_simplify(keep_shapes = T) %>% 
+  st_make_valid()
 
 # Load a coastline
 coast <- ne_countries(returnclass = "sf")
 
 # Load hemisphere shapefile and intersect with EEZ
-hemisphere <- st_read(file.path(project_path, "processed_data", "hemispheres.gpkg")) %>% 
-  st_make_valid() %>% 
+hemisphere <- st_read(here("clean_data", "hemispheres.gpkg")) %>% 
   st_intersection(eez_meow)
 
 
@@ -46,7 +49,8 @@ global <- eez_meow %>%
   scale_y_continuous(expand = c(0, 0)) +
   coord_sf(crs = "ESRI:54009")
 
-lazy_ggsave(plot = global, filename = "trading_units/global",
+lazy_ggsave(plot = global,
+            filename = "trading_units/global",
             width = 10, height = 5)
 
 
@@ -243,6 +247,16 @@ ecoregion_bars <- ecoregion_data %>%
   theme(legend.position = "none") +
   scale_fill_viridis_d(option = "D") +
   geom_hline(yintercept = 2, linetype = "dashed", color = "black")
+
+lazy_ggsave(plot = ecoregion_bars,
+            filename = "trading_units/ecoregion",
+            width = 10,
+            height = 32)
+
+lazy_ggsave(plot = ecoregion_map,
+            filename = "trading_units/ecoregion_map",
+            width = 16,
+            height = 8)
 
 
 

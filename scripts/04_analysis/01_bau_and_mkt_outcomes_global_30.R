@@ -74,7 +74,6 @@ base <- readRDS(
   filter(!protected == "Not protected")
 
 # Export #######################################################################
-
 saveRDS(
   object = base,
   file = here(
