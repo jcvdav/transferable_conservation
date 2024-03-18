@@ -86,8 +86,8 @@ cost_map <-
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0))
 
-# BCR
-bcr_map <- 
+# MC
+mc_map <- 
   mc %>% 
   as.data.frame(xy = T) %>% 
   drop_na(layer) %>% 
@@ -104,7 +104,7 @@ bcr_map <-
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0))
 
-pannel <- plot_grid(benefit_map, cost_map, bcr_map,
+pannel <- plot_grid(benefit_map, cost_map, mc_map,
                     ncol = 3,
                     labels = "AUTO")
 
@@ -119,8 +119,8 @@ lazy_ggsave(cost_map,
             width = 15,
             height = 10)
 
-lazy_ggsave(bcr_map,
-            "benefit_and_cost_maps/bcr_map",
+lazy_ggsave(mc_map,
+            "benefit_and_cost_maps/mc_map",
             width = 15,
             height = 10)
 

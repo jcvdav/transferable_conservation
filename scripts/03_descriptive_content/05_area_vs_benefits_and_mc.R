@@ -41,6 +41,19 @@ p <- ggplot(master_cb, aes(x = area, y = benefit, color = mc)) +
   theme(legend.position = c(0, 1),
         legend.justification = c(0,1))
 
+ggplot(master_cb,
+       aes(x = benefit, y = log(cost), color = mc)) +
+  geom_point(shape = ".") +
+  scale_color_viridis_c(trans = "log10") +
+  ggtheme_plot() +
+  labs(x = "Conservation benefit if protected (HSI-weighted-Km2)",
+       y = "Costo of conserving pixel (log-transformed)",
+       color = "Marginal Costs") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(0,1))
+
 ## EXPORT ######################################################################
 
 # X ----------------------------------------------------------------------------

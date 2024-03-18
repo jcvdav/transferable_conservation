@@ -113,8 +113,8 @@ my_scale <-
 
 ## VISUALIZE ###################################################################
 savings_map <- ggplot() +
-  geom_sf(data = coast) +
-  geom_sf(data = buyers, aes(fill = Buyers)) +
+  geom_sf(data = coast, linewidth = 0.1, color = "black", fill = "gray50") +
+  geom_sf(data = buyers, aes(fill = Buyers), linewidth = 0.1, color = "black") +
   scale_fill_gradient(low = "white", high = "#2166AB", labels = my_scale) +
   guides(
     fill = guide_legend(
@@ -124,7 +124,7 @@ savings_map <- ggplot() +
     )
   ) +
   new_scale_fill() +
-  geom_sf(data = sellers, aes(fill = Sellers)) +
+  geom_sf(data = sellers, aes(fill = Sellers), linewidth = 0.1, color = "black") +
   scale_fill_gradient(low = "white", high = "#B1182B", labels = my_scale) +
   guides(
     fill = guide_legend(
@@ -145,8 +145,8 @@ savings_map <- ggplot() +
 lazy_ggsave(
   plot = savings_map,
   filename = "30_by_segment/savings_map",
-  width = 18,
-  height = 10
+  width = 15,
+  height = 8
 )
 
 saveRDS(object = savings_map,

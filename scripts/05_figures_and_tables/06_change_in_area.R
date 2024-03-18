@@ -39,15 +39,13 @@ data <- c("global", "hemisphere", "realm", "province", "ecoregion") %>%
   summarize_if(is.numeric, sum, na.rm = T) %>% 
   ungroup() %>% 
   mutate(a = bau_area - mkt_area, # Calculate difference
-         a2 = a / bau_area, # Calculate relative difference
+         a2 = a / mkt_area, # Calculate relative difference
          ) %>%
   mutate(segment = str_to_sentence(segment),
     segment = fct_relevel(segment, "Province", "Ecoregion", after = Inf)) 
 
 
 ## PROCESSING ##################################################################
-
-
 p1 <- ggplot(data = data,
             mapping = aes(x = r, y = a2, color = segment)) +
   geom_rect(xmin = 0, xmax = 0.1, ymin = 0, ymax = Inf, color = "transparent", fill = "gray", alpha = 0.1) +
@@ -57,15 +55,16 @@ p1 <- ggplot(data = data,
   scale_x_continuous(limits = c(0, 1.01),
                      expand = c(0, 0),
                      labels = scales::percent) +
-  scale_y_continuous(expand = c(0, 0),
+  scale_y_continuous(limits = c(-0.02, 0.04),
+                     expand = c(0, 0),
                      labels = scales::percent) +
   theme(legend.position = c(0.99, 0.99),
         legend.justification = c(1, 1),
         legend.background = element_rect(color = "black", fill = "white", linewidth = 0.1)) +
   guides(color = guide_legend(keyheight = 0.5)) +
   labs(x = "Proteciton target (% of total)",
-       y = "Difference (% of BAU)",
-       title = "Relative difference [(BAU - MKT) / BAU]",
+       y = "Difference (% of MKT)",
+       title = "Relative difference [(BAU - MKT) / MKT]",
        color = "Bubble policy")
 
 
@@ -78,6 +77,7 @@ p2 <- ggplot(data = data,
   scale_x_continuous(limits = c(0, 1.01),
                      expand = c(0, 0),
                      labels = scales::percent) +
+  scale_y_continuous(limits = c(-200, 500)) +
   theme(legend.position = "None") +
   labs(x = "Proteciton target (% of total)",
        y = expression("Absolute difference (thousands of km"^2~")"),

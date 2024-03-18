@@ -102,6 +102,7 @@ rel_plot <- function(baseline, robustness) {
          y = "% Costs avoided (difference / BAU)",
          color = "Bubble policy",
          linetype = "Source") +
+    guides(color = "none") +
     scale_x_continuous(labels = scales::percent_format(accuracy = 1),
                        breaks = seq(0.1, 1, by = 0.1),
                        limits = c(0, 1.01),
@@ -110,7 +111,8 @@ rel_plot <- function(baseline, robustness) {
                        expand = c(0, 0),
                        limits = c(0, 1.01)) +
     scale_color_manual(values = c("#C13832", "#D28E00", "#9ECEEB", "#D4BF95", "#91B9A4")) +
-    theme(legend.position = "bottom", legend.box = "vertical")
+    theme(legend.position = "bottom",
+          legend.box = "vertical")
 }
 
 build_table <- function(baseline, robustness) {
@@ -131,16 +133,17 @@ build_table <- function(baseline, robustness) {
 # No MPA 
 rel_plot_no_mpa <- rel_plot(outcome_data, outcome_data_no_mpa)
 savings_30_plot_no_mpa <- savings_30_plot(outcome_data, outcome_data_no_mpa)
+build_table(outcome_data, outcome_data_no_mpa)
 
 # MC = 0 
 rel_plot_mc0 <- rel_plot(outcome_data, outcome_data_mc0)
 savings_30_plot_mc0 <- savings_30_plot(outcome_data, outcome_data_mc0)
-build_table(outcome_data, outcome_data_mc0) %>% 
-  View()
+build_table(outcome_data, outcome_data_mc0)
 
 # Area-based targets
 rel_plot_abt <- rel_plot(outcome_data, outcome_data_abt)
 savings_30_plot_abt <- savings_30_plot(outcome_data, outcome_data_abt)
+build_table(outcome_data, outcome_data_abt)
 
 # Combine figures --------------------------------------------------------------
 
@@ -167,20 +170,20 @@ abt_figure <- plot_grid(rel_plot_abt,
 lazy_ggsave(
   plot = no_mpa_figure,
   filename = "gains_from_trade_panel_no_mpas",
-  width = 13,
-  height = 15
+  width = 9,
+  height = 10
 )
 
 lazy_ggsave(
   plot = mc0_figure,
   filename = "gains_from_trade_panel_mc0",
-  width = 13,
-  height = 15
+  width = 9,
+  height = 10
 )
 
 lazy_ggsave(
   plot = abt_figure,
   filename = "gains_from_trade_panel_abt",
-  width = 13,
-  height = 15
+  width = 9,
+  height = 10
 )

@@ -152,8 +152,8 @@ eez <- ggplot(data = eez_cb,
   guides(color = "none") +
   ggtheme_plot() +
   labs(
-    x = bquote("Conservation benefit (HSI-weighted Thousand " ~ Km ^ 2 ~ ")"),
-    y = bquote("Marginal cost ($/HSI-weighted " ~ Km ^ 2 ~ ")")
+    x = bquote("Conservation benefit (HSI-weighted; Thousand " ~ Km ^ 2 ~ ")"),
+    y = bquote("Marginal cost ($/Q)")
   ) +
   scale_x_continuous(expand = expansion(0.01, 0)) +
   scale_y_continuous(expand = expansion(0.01, 0))
@@ -172,8 +172,8 @@ eez_hem <-
   facet_wrap(~ hemisphere, scales = "free") +
   ggtheme_plot() +
   labs(
-    x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
-    y = bquote("Fisheries revenue ($/Q)")
+    x = bquote("Conservation benefit (HSI-weighted; Thousand " ~ Km ^ 2 ~ ")"),
+    y = bquote("Marginal cost ($/Q)")
   ) +
   scale_x_continuous(expand = expansion(0.01, 0)) +
   scale_y_continuous(expand = expansion(0.01, 0))
@@ -185,8 +185,8 @@ hem <- ggplot(data = hem_h_sum,
   scale_color_viridis_d() +
   ggtheme_plot() +
   labs(
-    x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
-    y = bquote("Fisheries revenue ($/Q)")
+    x = bquote("Conservation benefit (HSI-weighted; Thousand " ~ Km ^ 2 ~ ")"),
+    y = bquote("Marginal cost ($/Q)")
   ) +
   scale_x_continuous(expand = expansion(0.01, 0)) +
   scale_y_continuous(expand = expansion(0.01, 0))
@@ -203,8 +203,8 @@ eez_rlm <-
   facet_wrap(~ realm, scales = "free") +
   ggtheme_plot() +
   labs(
-    x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
-    y = bquote("Fisheries revenue ($/Q)")
+    x = bquote("Conservation benefit (HSI-weighted; Thousand " ~ Km ^ 2 ~ ")"),
+    y = bquote("Marginal cost ($/Q)")
   ) +
   scale_x_continuous(expand = expansion(0.01, 0)) +
   scale_y_continuous(expand = expansion(0.01, 0))
@@ -216,8 +216,8 @@ rlm <- ggplot(data = rlm_h_sum,
   scale_color_viridis_d() +
   ggtheme_plot() +
   labs(
-    x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
-    y = bquote("Fisheries revenue ($/Q)")
+    x = bquote("Conservation benefit (HSI-weighted; Thousand " ~ Km ^ 2 ~ ")"),
+    y = bquote("Marginal cost ($/Q)")
   ) +
   scale_x_continuous(expand = expansion(0.01, 0)) +
   scale_y_continuous(expand = expansion(0.01, 0))
@@ -233,8 +233,8 @@ eez_pro <-
   facet_wrap(~ province, scales = "free", ncol = 6) +
   ggtheme_plot(font_size = 8) +
   labs(
-    x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
-    y = bquote("Fisheries revenue ($/Q)")
+    x = bquote("Conservation benefit (HSI-weighted; Thousand " ~ Km ^ 2 ~ ")"),
+    y = bquote("Marginal cost ($/Q)")
   ) +
   scale_x_continuous(expand = expansion(0.01, 0)) +
   scale_y_continuous(expand = expansion(0.01, 0))
@@ -247,8 +247,8 @@ pro <- ggplot(data = pro_h_sum,
   ggtheme_plot() +
   theme(legend.position = "None") +
   labs(
-    x = bquote("Conservation benefit (HS weighted; Thousand " ~ Km ^ 2 ~ ")"),
-    y = bquote("Fisheries revenue ($/Q)")
+    x = bquote("Conservation benefit (HSI-weighted; Thousand " ~ Km ^ 2 ~ ")"),
+    y = bquote("Marginal cost ($/Q)")
   ) +
   scale_x_continuous(expand = expansion(0.01, 0)) +
   scale_y_continuous(expand = expansion(0.01, 0))

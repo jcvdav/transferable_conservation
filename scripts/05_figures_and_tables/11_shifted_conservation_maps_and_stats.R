@@ -152,15 +152,15 @@ dist_plot <- data %>%
 lazy_ggsave(
   plot = shifted_map,
   filename = "30_by_segment/shifted_conservation_map",
-  width = 18,
-  height = 10
+  width = 12,
+  height = 8
 )
 
 lazy_ggsave(
   plot = pct_global,
   filename = "30_by_segment/pct_of_global_conservation_map",
-  width = 18,
-  height = 10
+  width = 12,
+  height = 8
 )
 
 lazy_ggsave(
