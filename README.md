@@ -1,7 +1,7 @@
 # Repository for: A market for 30x30 in the ocean
 ## By: Juan Carlos Villaseñor-Derbez, Christopher Costello & Andrew Plantinga
 
-
+> Please note this repository contains multiple branches. This branch is the only one that is relevant to the paper.
 
 ## Repository structure 
 
