@@ -30,7 +30,7 @@
 ## SET UP ######################################################################
 
 # Load packages ----------------------------------------------------------------
-pacmann::p_load(
+pacman::p_load(
   janitor,
   sf,
   tidyverse
@@ -43,7 +43,7 @@ sf_use_s2(F)
 # X ----------------------------------------------------------------------------
 mpas <-
   st_read(
-    file.path(data_path, "mpa-atlas/mpatlas_20201223_clean"),
+    here("raw_data", "mpatlas_20201223_clean"),
     "mpatlas_20201223_clean"
   ) %>%
   clean_names() %>%

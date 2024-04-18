@@ -1,30 +1,10 @@
-##########################
-## Paths to directories ##
-##########################
-# Check for OS
-sys_path <- ifelse(Sys.info()["sysname"]=="Windows", "~/G:/","/Users/juancarlosvillasenorderbez/Library/CloudStorage/GoogleDrive-juancarlos@ucsb.edu")
-# Nat geo ocean conservation priorities path
-ng_data_path <- file.path(sys_path,"Shared drives/emlab/projects/current-projects/ocean-conservation-priorities/data")
-# Path to our emLab's data folder
-data_path <- file.path(sys_path,"Shared drives/emlab/data")
-# Path to this projects directory
-project_path <- file.path(sys_path,"Shared drives/emlab/projects/current-projects/transferable-conservation")
-# Create common pointer to RegWatson data
-rw_path <- file.path(data_path, "reg-watson-global-marine-capture", "global_fisheries_landing_v4")
-# Pointer to cleanseafood path
-clean_seafod_path <- file.path(sys_path, "Shared drives/emlab/projects/current-projects/clean-seafood/project-materials/track-3-olivier/raw-data/reconstructed-global-prices/price-db-results")
-
-
-# Source project functions
-source(here::here("scripts", "00_setup","02_functions.R"))
-
 # Turn off dplyr's anoying messages
 options(dplyr.summarise.inform = FALSE)
 
 
-###########################
-## Useful general values ##
-###########################
+######################################################
+## Useful general values to have in the environment ##
+######################################################
 # proj4strings
 proj_moll <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs "             # Mollweide - EPSG code ESRI:54009
 proj_longlat <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "                         # Unprojected coordinates - EPSG code 4326
@@ -33,7 +13,7 @@ proj_longlat <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "             
 epsg_moll <- "ESRI:54009"
 epsg_longlat <- 4326
 
-# Turn off the use of espherical geometries
+# Turn off the use of spherical geometries
 sf::sf_use_s2(FALSE)
 
 ##########################

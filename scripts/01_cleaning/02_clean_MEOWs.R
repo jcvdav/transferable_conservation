@@ -45,8 +45,7 @@ sf_use_s2(F)
 
 ## Process #########################################################################
 # Load shapefile -------------------------------------------------------------------
-meow <- st_read(dsn = here(project_path,
-                           "raw_data", "MEOW"),
+meow <- st_read(dsn = here("raw_data", "MEOW"),
                 layer = "meow_ecos") %>% 
   clean_names() %>%                             # Clean column names
   select(ecoregion, eco_code,
