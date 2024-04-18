@@ -42,29 +42,28 @@ data %>%
   mutate(ratio = ratio * 100) %>%
   mutate(TB = coalesce(mkt_tb_hsi, mkt_tb)) %>% 
   select(bubble, type,
-         # TB,
+         TB,
          ratio) %>%
-  # group_by(bubble) %>% 
-  # mutate(TB = round(TB, digits = 0),
-         # TB = ifelse(TB == max(TB), paste(TB, "*"), TB)) %>%
-  # ungroup() %>% 
-  pivot_wider(values_from = c(ratio,
-                              # TB
-                              ), names_from = "type") %>%
+  pivot_wider(values_from = c(ratio,  TB), 
+              names_from = "type") %>%
   arrange(bubble) %>% 
+  mutate(TB_pct = ((TB_ABT - TB_HSI) / TB_HSI) * 100) %>% 
+  select(bubble, contains("ratio"), TB_pct) %>% 
   kableExtra::kbl(caption = "Comparison of gains from trade 
   for a 30-by-30 target using extent weighted by the habitat suitability index (labeled HSI)
   and using area-based targets (labeled ABT). The first column shows the bubble policy,
-  the second and third columns show the gains from trade under each measure.",
+  the second and third columns show the gains from trade under each measure. The fourth
+  column shows the change in total conservation benefits, relative to benefits
+  under a market using  HSI-weighted area as a trading unit.",
                   label = "gains_from_trade_30_abt",
                   format = "latex",
                   booktabs = T,
                   linesep = "",
-                  digits = c(0, 3, 3, 0, 0),
-                  col.names = c("Bubble policy", "HSI", "ABT")) %>% 
+                  digits = c(0, 3, 3, 3),
+                  col.names = c("Bubble policy", "HSI", "ABT", "Change in TB (%)")) %>% 
   kableExtra::kable_styling() %>% 
-  kableExtra::add_header_above(header = c(" ", "Gains from trade" = 2))
+  kableExtra::add_header_above(header = c(" ", "Gains from trade" = 2, " " = 1))
 
-## EXPORT ######################################################################
+# EXPORT ######################################################################
 
 # X ----------------------------------------------------------------------------
