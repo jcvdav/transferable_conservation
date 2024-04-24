@@ -12,11 +12,14 @@
 
 ## SET UP ######################################################################
 # Load packages
-library(raster)
-library(data.table)
-library(janitor)
-library(sf)
-library(tidyverse)
+pacman::p_load(
+  here,
+  raster,
+  data.table,
+  janitor,
+  sf,
+  tidyverse
+)
 
 # Load data
 
@@ -24,7 +27,7 @@ library(tidyverse)
 # Tidy it up to match the same format as our list of species of interest
 aquamaps_list <-
   read_csv(
-    file.path(data_path, "aquamaps-v10-2019", "speciesoccursum.csv"),
+    here("raw_data", "aquamaps-v10-2019", "speciesoccursum.csv"),
     col_types = cols(
       SpeciesID = col_character(),
       SpecCode = col_double(),
@@ -53,19 +56,23 @@ spec_codes <- aquamaps_list %>%
 # length(spec_codes) # Number of species contained in our analysis
 
 # Load all aquamaps data
-suitability_df <-
+df <-
   fread(
-    file = file.path(
-      data_path, "aquamaps-v10-2019", "hcaf_species_native.csv"
+    file = here(
+      "raw_data", "aquamaps-v10-2019", "hcaf_species_native.csv"
       )
     ) %>%
   clean_names() %>%                                                             # Clean column names
   .[species_id %in% spec_codes] %>%                                             # Keep only species with 10 or more records
   .[probability >= 0.5] %>%                                                     # Keep only probability of existing
-  as_tibble() %>%                                                               # Convert to a tibble
+  as_tibble()                                                                   # Convert to a tibble
+
+suitability_df <- df %>%                                                        
   group_by(center_long, center_lat) %>%                                         # Group by pixel
   summarize(probability = mean(probability, na.rm = T))                         # Calculate the mean probability of each pixel
 
+richness_df <- df %>%                                                        
+  count(center_long, center_lat)                                                # Calculate richness
 
 # Rasterize suitability
 suitability <-
@@ -73,11 +80,21 @@ suitability <-
     xyz = suitability_df,                                                       # XY source
     crs = proj_longlat)                                                         # Coordiante reference system
 
+# Rasterize suitability
+richness <-
+  rasterFromXYZ(
+    xyz = richness_df,                                                          # XY source
+    crs = proj_longlat)                                                         # Coordiante reference system
+
 ## EXPORT ######################################################################
 writeRaster(
   x = suitability,
-  filename = file.path(
-    project_path, "processed_data", "suitability.tif"
-    ),
+  filename = here("clean_data", "suitability.tif"),
+  overwrite = TRUE
+)
+
+writeRaster(
+  x = richness,
+  filename = here("clean_data", "richness.tif"),
   overwrite = TRUE
 )

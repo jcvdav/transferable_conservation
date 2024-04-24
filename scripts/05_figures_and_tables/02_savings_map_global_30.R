@@ -1,0 +1,153 @@
+################################################################################
+# title
+################################################################################
+#
+# Juan Carlos Villaseñor-Derbez
+# juancvd@stanford.edu
+# date
+#
+# Description
+#
+################################################################################
+
+## SET UP ######################################################################
+
+# Load packages ----------------------------------------------------------------
+pacman::p_load(
+  here,
+  startR,
+  rnaturalearth,
+  rmapshaper,
+  smoothr,
+  sf,
+  ggnewscale,
+  tidyverse
+)
+
+sf_use_s2(F)
+
+# Load coastline ---------------------------------------------------------------
+coast <- ne_countries(returnclass = "sf")
+
+# Define target to visualize ---------------------------------------------------
+r_target <- "0.30"
+
+# Read data --------------------------------------------------------------------
+file <- list.files(
+  path = here(
+    "results",
+    "output_data",
+    "trade_outcomes",
+    "global"),
+  pattern = r_target,
+  full.names = T
+)
+
+data <- read.csv(file) %>%
+  mutate(ratio = savings / bau_tc)
+
+pol <- tribble(~x, ~y,
+               -180, -90,
+               -180, 90,
+               180, 90,
+               180, -90,
+               -180, -90) %>%
+  as.matrix() %>%
+  list() %>%
+  st_polygon() %>%
+  st_sfc(crs = "EPSG:4326") %>% 
+  densify(n = 100L)
+
+# Load EEZs for visualization --------------------------------------------------
+eez <-
+  st_read(here("clean_data", "clean_world_eez_v11.gpkg")) %>%
+  rmapshaper::ms_simplify(keep_shapes = T) %>%
+  st_intersection(pol)
+  
+
+# Add results to the EEZs ------------------------------------------------------
+eez_with_results <- eez %>%
+  left_join(data, by = c("iso3"))
+
+# Df of sellers ----------------------------------------------------------------
+sellers <- eez_with_results %>%
+  filter(transaction == "Sellers") %>%
+  mutate(Sellers = pmin(ratio, 1))
+
+# DF of buyers -----------------------------------------------------------------
+buyers <- eez_with_results %>%
+  filter(transaction == "Buyers") %>%
+  mutate(Buyers = ratio)
+
+#DF of those who neither buy nor sell ------------------------------------------
+dont_participate <- eez_with_results %>%
+  filter(transaction == "Doesn't participate")
+
+# Define color scale guide -----------------------------------------------------
+my_scale <-
+  function(x,
+           accuracy = NULL,
+           scale = 100,
+           prefix = "",
+           suffix = "%",
+           big.mark = " ",
+           decimal.mark = ".",
+           trim = TRUE,
+           ...) {
+    prefix <- character()
+    prefix[!x == 1] <- ""
+    prefix[x == 1] <- ">="
+    
+    scales::number(
+      x = x,
+      accuracy = accuracy,
+      scale = scale,
+      prefix = prefix,
+      suffix = suffix,
+      big.mark = big.mark,
+      decimal.mark = decimal.mark,
+      trim = trim,
+      ...
+    )
+  }
+
+## VISUALIZE ###################################################################
+savings_map <- ggplot() +
+  geom_sf(data = coast, linewidth = 0.1, color = "black", fill = "gray50") +
+  geom_sf(data = buyers, aes(fill = Buyers), linewidth = 0.1, color = "black") +
+  scale_fill_gradient(low = "white", high = "#2166AB", labels = my_scale) +
+  guides(
+    fill = guide_legend(
+      title = "Costs avoided\n by buyers (%BAU)",
+      frame.colour = "black",
+      ticks.colour = "black"
+    )
+  ) +
+  new_scale_fill() +
+  geom_sf(data = sellers, aes(fill = Sellers), linewidth = 0.1, color = "black") +
+  scale_fill_gradient(low = "white", high = "#B1182B", labels = my_scale) +
+  guides(
+    fill = guide_legend(
+      title = "Gains from trade\n by sellers (%BAU)",
+      frame.colour = "black",
+      ticks.colour = "black"
+    )
+  )  +
+  geom_sf(data = dont_participate, fill = "gray") +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  theme(legend.position = "bottom",
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) +
+  coord_sf(crs = "ESRI:54009")
+
+## EXPORT ######################################################################
+lazy_ggsave(
+  plot = savings_map,
+  filename = "30_by_segment/savings_map",
+  width = 15,
+  height = 8
+)
+
+saveRDS(object = savings_map,
+        file = here("results", "ggplots", "savings_map.rds"))

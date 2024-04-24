@@ -34,25 +34,31 @@
 
 ## Set up ##########################################################################
 # Load packages
-library(janitor)
-library(sf)
-library(tidyverse)
+pacman::p_load(
+  here,
+  janitor,
+  sf,
+  tidyeverse
+)
+
+sf_use_s2(F)
 
 ## Process #########################################################################
 # Load shapefile -------------------------------------------------------------------
-meow <- st_read(dsn = file.path(project_path,
-                                "raw_data", "MEOW"),
+meow <- st_read(dsn = here("raw_data", "MEOW"),
                 layer = "meow_ecos") %>% 
   clean_names() %>%                             # Clean column names
-  select(province, pro_code = prov_code,
+  select(ecoregion, eco_code,
+         province, pro_code = prov_code,
          realm, rlm_code) %>% 
-  group_by(province, pro_code,
+  group_by(ecoregion, eco_code,
+           province, pro_code,
            realm, rlm_code) %>% 
   summarize(a = 1) %>% 
   ungroup()
 
 ## Export ###########################################################################
-meow_fn <- file.path(project_path, "processed_data", "clean_meow.gpkg")      # Define filename
+meow_fn <- here("clean_data", "clean_meow.gpkg")                                # Define filename
 file.remove(meow_fn)                            # Remove them if file exists
 st_write(obj = meow, dsn = meow_fn)             # Save file to disk
 

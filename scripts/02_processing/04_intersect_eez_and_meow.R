@@ -11,24 +11,27 @@
 
 ## Set up ##########################################################################################################
 # Load packages
-library(sf)
-library(tidyverse)
+pacman::p_load(
+  sf,
+  tidyverse
+)
 
-
+sf_use_s2(F)
 # Load shapefiles
-eez <- st_read(file.path(project_path, "processed_data", "clean_world_eez_v11.gpkg"))      # Load clean EEZ
-meow <- st_read(dsn = file.path(project_path, "processed_data", "clean_meow.gpkg"))        # Load clean MEOW
+eez <- st_read(here("clean_data", "clean_world_eez_v11.gpkg"))      # Load clean EEZ
+meow <- st_read(dsn = here("clean_data", "clean_meow.gpkg"))        # Load clean MEOW
 
 ## Process #########################################################################################################
 # Intersect two shapefiles and generate some summary statistics ----------------------------------------------------
 eez_meow <- eez %>% 
   st_intersection(meow) %>% 
   select(iso3, iso3n,                                                 # Keep only relevant columns
+         ecoregion, eco_code,
          province, pro_code,
          realm, rlm_code) 
 
 ## Export -----------------------------------------------------------------------------------------------------------
-intersected_eez_and_meow_fn <- file.path(project_path, "processed_data", "intersected_eez_and_meow.gpkg") # File name
+intersected_eez_and_meow_fn <- here("clean_data", "intersected_eez_and_meow.gpkg") # File name
 file.remove(intersected_eez_and_meow_fn)                                     # Remove any existing files
 st_write(obj = eez_meow, dsn = intersected_eez_and_meow_fn)                  # Write geopackage to disk
 

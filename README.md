@@ -1,183 +1,24 @@
-#  A global market for marine conservation
+# Repository for: A market for 30x30 in the ocean
+## By: Juan Carlos Villaseñor-Derbez, Christopher Costello & Andrew Plantinga
 
+> Please note this repository contains multiple branches. This branch is the only one that is relevant to the paper.
 
 ## Repository structure 
 
-```
--- json_to_dot.py
--- make_p_to_json.py
--- raw_data
-   |__Intersect_EEZ_IHO_v4_2020
-      |__Intersect_EEZ_IHO_v4_2020.cpg
-      |__Intersect_EEZ_IHO_v4_2020.dbf
-      |__Intersect_EEZ_IHO_v4_2020.prj
-      |__Intersect_EEZ_IHO_v4_2020.qpj
-      |__Intersect_EEZ_IHO_v4_2020.shp
-      |__Intersect_EEZ_IHO_v4_2020.shp.xml
-      |__Intersect_EEZ_IHO_v4_2020.shx
-      |__LICENSE_EEZ_IHO_v4.txt
-   |__MEOW
-      |__Marine_Ecoregions_of_the_World_A_Bioregionalization_of_Coastal_and_Shelf_Areas.pdf
-      |__meow_ecos.dbf
-      |__meow_ecos.prj
-      |__meow_ecos.sbn
-      |__meow_ecos.sbx
-      |__meow_ecos.shp
-      |__meow_ecos.shp.xml
-      |__meow_ecos.shx
-   |__ne_10m_geography_marine_polys
-      |__ne_10m_geography_marine_polys.cpg
-      |__ne_10m_geography_marine_polys.dbf
-      |__ne_10m_geography_marine_polys.prj
-      |__ne_10m_geography_marine_polys.README.html
-      |__ne_10m_geography_marine_polys.shp
-      |__ne_10m_geography_marine_polys.shx
-      |__ne_10m_geography_marine_polys.VERSION.txt
-   |__ne_10m_ocean
-      |__ne_10m_ocean.cpg
-      |__ne_10m_ocean.dbf
-      |__ne_10m_ocean.prj
-      |__ne_10m_ocean.README.html
-      |__ne_10m_ocean.shp
-      |__ne_10m_ocean.shx
-      |__ne_10m_ocean.VERSION.txt
-   |__World_EEZ_v11_20191118
-      |__eez_boundaries_v11.cpg
-      |__eez_boundaries_v11.dbf
-      |__eez_boundaries_v11.prj
-      |__eez_boundaries_v11.shp
-      |__eez_boundaries_v11.shx
-      |__eez_v11.cpg
-      |__eez_v11.dbf
-      |__eez_v11.prj
-      |__eez_v11.qpj
-      |__eez_v11.shp
-      |__eez_v11.shx
-      |__LICENSE_EEZ_v11.txt
-   |__World_Seas_IHO_v3
-      |__LICENSE_IHO_v3.txt
-      |__World_Seas_IHO_v3.cpg
-      |__World_Seas_IHO_v3.dbf
-      |__World_Seas_IHO_v3.prj
-      |__World_Seas_IHO_v3.qpj
-      |__World_Seas_IHO_v3.shp
-      |__World_Seas_IHO_v3.shx
--- README.md
--- renv
--- renv.lock
-   |__activate.R
-   |__library
-      |__R-3.6
-      |__R-4.0
-      |__R-4.1
-   |__local
-   |__settings.dcf
-   |__staging
--- results
-   |__img
-      |__30_by_segment
-      |__abs_gain_from_trade_segmented_market_plot.pdf
-      |__abs_gain_from_trade_segmented_market_plot.png
-      |__benefit_and_cost_maps
-      |__change_in_area.pdf
-      |__change_in_area.png
-      |__correlogram_exvessel_price.pdf
-      |__correlogram_exvessel_price.png
-      |__dummy_plots
-      |__equilibrum_supply_curves_hem.pdf
-      |__equilibrum_supply_curves_hem.png
-      |__equilibrum_supply_curves_rlm.pdf
-      |__equilibrum_supply_curves_rlm.png
-      |__equilibrum_supply_curves.pdf
-      |__equilibrum_supply_curves.png
-      |__gain_from_trade_segmented_market_plot.pdf
-      |__gain_from_trade_segmented_market_plot.png
-      |__map_contrasting_scenarios_global.pdf
-      |__map_contrasting_scenarios_global.png
-      |__map_contrasting_scenarios_rlm.pdf
-      |__map_contrasting_scenarios_rlm.png
-      |__map_of_trade_hem.pdf
-      |__map_of_trade_hem.png
-      |__map_of_trade_rlm.pdf
-      |__map_of_trade_rlm.png
-      |__map_of_trade.pdf
-      |__map_of_trade.png
-      |__rel_gain_from_trade_segmented_market_plot.pdf
-      |__rel_gain_from_trade_segmented_market_plot.png
-      |__savings_30.pdf
-      |__savings_30.png
-      |__savings_map.pdf
-      |__savings_map.png
-      |__segment_gains.pdf
-      |__segment_gains.png
-      |__supply_curves
-      |__trading_units
-      |__two_states_map_hem.pdf
-      |__two_states_map_hem.png
-      |__two_states_map_pro.pdf
-      |__two_states_map_pro.png
-      |__two_states_map_rlm.pdf
-      |__two_states_map_rlm.png
-      |__two_states_map.pdf
-      |__two_states_map.png
-   |__tab
-      |__gains_from_trade_hem.tex
-      |__gains_from_trade_rlm.tex
-      |__gains_from_trade.tex
-      |__pro_gains_from_trade.tex
-      |__trading_prices_hem.tex
-      |__trading_prices_pro.tex
-      |__trading_prices_rlm.tex
-      |__trading-prices.tex
--- scripts
-   |__00_run_all.R
-   |__00_setup
-      |__01_setup.R
-      |__02_functions.R
-   |__01_cleaning
-      |__00_run_all_cleaning.R
-      |__01_clean_EEZs.R
-      |__02_clean_MEOWs.R
-      |__03_clean_world_seas.R
-      |__04_create_base_raster.R
-      |__05_create_ocean_mask.R
-      |__06_create_hemisphere_raster.R
-      |__07_create_hemisphere_geopackage.R
-      |__08_clean_mpa_atlas.R
-   |__02_processing
-      |__00_run_all_processing.R
-      |__01_generate_pixel_benefits.R
-      |__02_combine_catch_and_prices.R
-      |__03_generate_pixel_costs.R
-      |__04_intersect_eez_and_meow.R
-      |__05_rasterize_eez_and_meow.R
-      |__06_rasterize_mpas.R
-      |__07_combine_all_layers.R
-      |__08_build_supply_curves_no_MPAs.R
-      |__09_build_supply_curves_with_MPAs.R
-   |__03_descriptive_content
-      |__00_run_all_descriptive.R
-      |__01_plot_supply_curves.R
-      |__02_plot_trading_units.R
-      |__03_plot_global_benefits_and_costs.R
-      |__04_mex_us_example_benefits_costs_bcr.R
-   |__04_analysis
-      |__00_run_all_analysis.R
-      |__03_get_eez_level_conservation.R
-      |__04_hemisphere_level_market.R
-      |__05_realm_level_market.R
-      |__06_province_level_market.R
-      |__07_costs_avoided_for_each_mkt_segment.R
-      |__08_all_segments_all_scenarios.R
-   |__05_figures
-      |__02_plot_gains_from_trade_all_segments_all_targets.R
-      |__02_savings_by_bubble.R
-      |__03_savings_map_by_bubble.R
-      |__04_change_in_area.R
-   |__99_others
-      |__01_draw_dummy_supply_curves.R
-      |__meeting_pct_test.R
--- transferable_conservation.Rproj
-```
+The repository is set-up with `renv`. You should be able to have an identical copy of the R packages used here.
+
+There is a script with some default options and values. It's not crucial, and it should be loaded directly by the `.Rprofile` file upon start-up (assuming you are running RStudio). Feel free to source it yourself.
+
+### Data
+
+- Some raw data are available (in `raw_data`) when it was below GitHub's 100 MB size limit. Otherwise, it's probably best that you download it directly from the data provider's page. We're also happy to provide these data directly, simple e-mail me at `juancarlos@ucsb.edu`. Please indicate if you have a preferred delivery method.
+
+- Input data are provided in the `clean_data` folder.
+
+- Our output data (supply curves, trade equilibrium etc) are all found under `results` (either `output_data` or `processed_dats`).
+
+### Scripts
+
+- The scripts relevant to the analysis are found under `scripts/03_descriptive_content`, `scripts/04_analysis`, and `scripts/05_figures_and_tables`. Cleaning and processing scripts are also provided for reference.
 
 ---------
