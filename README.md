@@ -9,7 +9,7 @@ The repository is set-up with `renv`. You should be able to have an identical co
 
 There is a script that loads some default options and values into the environment. It's not crucial, and it should be loaded directly by the `.Rprofile` file upon start-up (assuming you are running RStudio). Feel free to source it yourself.
 
-Alternatively, the project also has a [`Makefile`](https://github.com/jcvdav/transferable_conservation/blob/master/Makefile) that outlines the relation between input files, scripts, and output files needed to reproduce our results. To reproduce them, simply type `make` in your command line of preference. See below for a DAG representation of the makefile.
+Alternatively, the project also has a [`Makefile`](https://github.com/jcvdav/transferable_conservation/blob/master/Makefile) that outlines the relation between input files, scripts, and output files needed to reproduce our results. To reproduce them, simply type `make -B` in your command line of preference. See below for a DAG representation of the makefile.
 
 ![](makefile-dag.png)
 
