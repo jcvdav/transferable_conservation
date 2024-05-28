@@ -27,21 +27,13 @@
     },
     "MASS": {
       "Package": "MASS",
-      "Version": "7.3-57",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "71476c1d88d1ebdf31580e5a257d5d31",
-      "Requirements": []
+      "Version": "7.3-60.2",
+      "Source": "Repository"
     },
     "Matrix": {
       "Package": "Matrix",
-      "Version": "1.4-1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "699c47c606293bdfbc9fd78a93c9c8fe",
-      "Requirements": [
-        "lattice"
-      ]
+      "Version": "1.7-0",
+      "Source": "Repository"
     },
     "R6": {
       "Package": "R6",
@@ -263,13 +255,8 @@
     },
     "class": {
       "Package": "class",
-      "Version": "7.3-20",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "da09d82223e669d270e47ed24ac8686e",
-      "Requirements": [
-        "MASS"
-      ]
+      "Version": "7.3-22",
+      "Source": "Repository"
     },
     "classInt": {
       "Package": "classInt",
@@ -1186,13 +1173,8 @@
     },
     "nlme": {
       "Package": "nlme",
-      "Version": "3.1-157",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "dbca60742be0c9eddc5205e5c7ca1f44",
-      "Requirements": [
-        "lattice"
-      ]
+      "Version": "3.1-164",
+      "Source": "Repository"
     },
     "openssl": {
       "Package": "openssl",
