@@ -118,7 +118,7 @@ savings_map <- ggplot() +
   scale_fill_gradient(low = "white", high = "#2166AB", labels = my_scale) +
   guides(
     fill = guide_legend(
-      title = "Costs avoided\n by buyers (%BAU)",
+      title = "Costs avoided by buyers (%BAU)",
       frame.colour = "black",
       ticks.colour = "black"
     )
@@ -128,7 +128,7 @@ savings_map <- ggplot() +
   scale_fill_gradient(low = "white", high = "#B1182B", labels = my_scale) +
   guides(
     fill = guide_legend(
-      title = "Gains from trade\n by sellers (%BAU)",
+      title = "Gains from trade by sellers (%BAU)",
       frame.colour = "black",
       ticks.colour = "black"
     )
@@ -137,6 +137,7 @@ savings_map <- ggplot() +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0)) +
   theme(legend.position = "bottom",
+        legend.title.position = "top",
         axis.text = element_blank(),
         axis.ticks = element_blank()) +
   coord_sf(crs = "ESRI:54009")
@@ -145,7 +146,7 @@ savings_map <- ggplot() +
 lazy_ggsave(
   plot = savings_map,
   filename = "30_by_segment/savings_map",
-  width = 15,
+  width = 12,
   height = 8
 )
 

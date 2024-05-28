@@ -25,7 +25,9 @@ hsi <- readRDS(file = here("results", "output_data", "gains_from_trade_bubbles.r
   mutate(type = "HSI")
 abt <- readRDS(file = here("results", "output_data", "gains_from_trade_bubbles_abt.rds")) %>% 
   filter(near(r, 0.3)) %>% 
-  mutate(type = "ABT")
+  mutate(type = "ABT",
+         dif = mkt_tb_hsi - bau_tb_hsi,
+         pct = (dif / bau_tb_hsi) * 100)
 
 ## PROCESSING ##################################################################
 
@@ -40,21 +42,22 @@ data <- bind_rows(hsi, abt) %>%
 
 data %>%
   mutate(ratio = ratio * 100) %>%
-  mutate(TB = coalesce(mkt_tb_hsi, mkt_tb)) %>% 
+  # mutate(TB = coalesce(mkt_tb_hsi, mkt_tb)) %>% 
   select(bubble, type,
-         TB,
+         # TB,
+         pct,
          ratio) %>%
-  pivot_wider(values_from = c(ratio,  TB), 
+  pivot_wider(values_from = c(ratio, pct), 
               names_from = "type") %>%
   arrange(bubble) %>% 
-  mutate(TB_pct = ((TB_ABT - TB_HSI) / TB_HSI) * 100) %>% 
-  select(bubble, contains("ratio"), TB_pct) %>% 
+  # mutate(TB_pct = ((TB_ABT - TB_HSI) / TB_HSI) * 100) %>% 
+  select(bubble, contains("ratio"), pct_ABT) %>% 
   kableExtra::kbl(caption = "Comparison of gains from trade 
   for a 30-by-30 target using extent weighted by the habitat suitability index (labeled HSI)
   and using area-based targets (labeled ABT). The first column shows the bubble policy,
   the second and third columns show the gains from trade under each measure. The fourth
-  column shows the change in total conservation benefits, relative to benefits
-  under a market using  HSI-weighted area as a trading unit.",
+  column shows the change in total conservation benefits (HSI-weighted area), relative to benefits
+  under area-based conservation and no trade.",
                   label = "gains_from_trade_30_abt",
                   format = "latex",
                   booktabs = T,
