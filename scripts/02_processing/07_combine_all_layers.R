@@ -62,13 +62,7 @@ mpa_raster <-
 area_raster <- raster::area(benefits_raster)
 
 # Load the EEZ vector data
-eez_meow <-
-  st_read(here(
-    "clean_data",
-    "intersected_eez_and_meow.gpkg"
-  )) %>%
-  st_drop_geometry() %>%
-  as_tibble()
+eez_meow <- read_csv(here("clean_data", "intersected_eez_and_meow_feature_info.csv"))
 
 ## PROCESSING ##################################################################
 

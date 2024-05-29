@@ -30,11 +30,16 @@ eez_meow <- eez %>%
          province, pro_code,
          realm, rlm_code) 
 
+eez_meow_tbl <- eez_meow %>%
+  st_drop_geometry() %>%
+  as_tibble()
+
 ## Export -----------------------------------------------------------------------------------------------------------
 intersected_eez_and_meow_fn <- here("clean_data", "intersected_eez_and_meow.gpkg") # File name
 file.remove(intersected_eez_and_meow_fn)                                     # Remove any existing files
 st_write(obj = eez_meow, dsn = intersected_eez_and_meow_fn)                  # Write geopackage to disk
 
+write_csv(eez_meow_tbl, here("clean_data", "intersected_eez_and_meow_feature_info.csv"))
 # END OF SCRIPT ######################################################################################################
 
 
