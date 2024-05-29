@@ -1,6 +1,9 @@
 # Repository for: A market for 30x30 in the ocean
 ## By: Juan Carlos Villaseñor-Derbez, Christopher Costello & Andrew Plantinga
 
+[![DOI](https://zenodo.org/badge/252805165.svg)](https://zenodo.org/doi/10.5281/zenodo.11390658)
+
+
 > Please note this repository contains multiple branches.
 
 ## Reproducibility
