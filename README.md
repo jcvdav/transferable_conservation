@@ -3,19 +3,23 @@
 
 > Please note this repository contains multiple branches.
 
-## Repository structure 
+## Reproducibility
 
-The repository is set-up with `renv`. You should be able to have an identical copy of the R packages used here by running `renv::restore()`.
+The project was built using R in RStudio. All data and code needed to reproduce figures and tables in our paper is included in this repository. There are two ways you can interact with our materials.
 
-There is a script that loads some default options and values into the environment. It's not crucial, and it should be loaded directly by the `.Rprofile` file upon start-up (assuming you are running RStudio). Feel free to source it yourself.
+###1) Through RStudio
+The repository is set-up with `renv` package manager. You should be able to have an identical copy of the R packages used here by running `renv::activate()` followed by `renv::restore()`. Note that the `.Rprofile` file will attempt to source a script that loads some default options and values into the environment upon start-up (assuming you are running RStudio). Feel free to source it yourself, or remove it from the pipeline. You can then explore and run scripts independently.
 
-Alternatively, the project also has a [`Makefile`](https://github.com/jcvdav/transferable_conservation/blob/master/Makefile) that outlines the relation between input files, scripts, and output files needed to reproduce our results. To reproduce them, simply type `make -B` in your command line of preference. See below for a DAG representation of the makefile.
+###2) Through the command line
+Alternatively, the project also has a [`Makefile`](https://github.com/jcvdav/transferable_conservation/blob/master/Makefile) that outlines the relation between input files, scripts, and output files needed to reproduce our main results. To reproduce them, simply type `make -B` in your command line of preference. See below for a DAG representation of the makefile.
 
 ![](makefile-dag.png)
 
+## Repository structure 
+
 ### Data
 
-- Some raw data are available (in `raw_data`) when it was below GitHub's 100 MB size limit. Otherwise, it's probably best that you download it directly from the data provider's page. We're also happy to provide these data directly, simple e-mail me at `juancarlos@ucsb.edu`. Please indicate if you have a preferred delivery method.
+- Some raw data are available (in `raw_data`) when it was below GitHub's 100 MB size limit. Otherwise, the data are added with GitHub Large File Storage. If you have any trouble accessing them, we're also happy to provide these data directly. Simple e-mail me at `juancarlos@ucsb.edu`. Please indicate if you have a preferred delivery method.
 
 - Input data are provided in the `clean_data` folder.
 
