@@ -16,10 +16,8 @@ The project was built using R in RStudio. All data and code needed to reproduce 
 
 ![](makefile-dag.png)
 
-The repository is set-up with `renv` package manager. You should be able to have an identical copy of the R packages used here by running `renv::activate()` followed by `renv::restore()`. Note that the `.Rprofile` file will attempt to source a script that loads some default options and values into the environment upon start-up (assuming you are running RStudio). Feel free to source it yourself, or remove it from the pipeline. You can then explore and run scripts independently.
-
 ### If you want to replicate everything:
-Alternatively, the project also has a [`Makefile`](https://github.com/jcvdav/transferable_conservation/blob/master/Makefile) that outlines the relation between input files, scripts, and output files needed to reproduce our main results. To reproduce them, simply type `make -B` in your command line of preference. See below for a DAG representation of the makefile.
+The repository is set-up with `renv` package manager. You should be able to have an identical copy of the R packages used here by running `renv::activate()` followed by `renv::restore()`. Note that the `.Rprofile` file will attempt to source a script that loads some default options and values into the environment upon start-up (assuming you are running RStudio). Feel free to source it yourself, or remove it from the pipeline. You can then explore and run scripts independently.
 
 ![](makefile-dag.png)
 
