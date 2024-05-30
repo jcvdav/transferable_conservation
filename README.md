@@ -19,9 +19,7 @@ The project was built using R in RStudio. All data and code needed to reproduce 
 ### If you want to replicate everything:
 The repository is set-up with `renv` package manager. You should be able to have an identical copy of the R packages used here by running `renv::activate()` followed by `renv::restore()`. Note that the `.Rprofile` file will attempt to source a script that loads some default options and values into the environment upon start-up (assuming you are running RStudio). Feel free to source it yourself, or remove it from the pipeline. You can then explore and run scripts independently.
 
-## Repository structure 
-
-### Data
+## Data
 
 - Some raw data are available (in `raw_data`) when it was below GitHub's 100 MB size limit. Otherwise, the data are added with GitHub Large File Storage. If you have any trouble accessing them, we're also happy to provide these data directly. Simple e-mail me at `juancarlos@ucsb.edu`. Please indicate if you have a preferred delivery method.
 
