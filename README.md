@@ -31,8 +31,4 @@ The repository is set-up with `renv` package manager. You should be able to have
 
 - There is a csv file, requested by Science, which contains the data required to produce Figure 1 of the main paper.
 
-### Scripts
-
-- The scripts relevant to the analysis are found under `scripts/03_descriptive_content`, `scripts/04_analysis`, and `scripts/05_figures_and_tables`. Cleaning and processing scripts are also provided for reference.
-
 ---------
