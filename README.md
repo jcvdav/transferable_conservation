@@ -16,7 +16,7 @@ The project was built using R in RStudio. All data and code needed to reproduce 
 
 ![](makefile-dag.png)
 
-### If you want to replicate everything:
+### If you want to replicate everything (supplementary figures and tables, robustness tests, etc...):
 The repository is set-up with `renv` package manager. You should be able to have an identical copy of the R packages used here by running `renv::activate()` followed by `renv::restore()`. Note that the `.Rprofile` file will attempt to source a script that loads some default options and values into the environment upon start-up (assuming you are running RStudio). Feel free to source it yourself, or remove it from the pipeline. You can then explore and run scripts independently.
 
 ## Data
